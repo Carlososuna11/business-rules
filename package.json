@@ -1,0 +1,30 @@
+{
+  "name": "class-to-jsonschema",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "commit": "cz",
+    "release": "standard-version --no-verify",
+    "lint": "prettier --ignore-path .gitignore --check --plugin-search-dir=. . && eslint --ignore-path .gitignore .",
+    "format": "prettier --ignore-path .gitignore --write --plugin-search-dir=. ."
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@commitlint/cli": "^17.6.3",
+    "@commitlint/config-conventional": "^17.6.3",
+    "@commitlint/cz-commitlint": "^17.5.0",
+    "@tsconfig/recommended": "^1.0.2",
+    "@typescript-eslint/eslint-plugin": "^5.59.0",
+    "@typescript-eslint/parser": "^5.59.0",
+    "commitizen": "^4.3.0",
+    "eslint": "^8.39.0",
+    "husky": "^8.0.3",
+    "inquirer": "^8.2.5",
+    "prettier": "^2.8.8",
+    "standard-version": "^9.5.0",
+    "tslib": "^2.5.0",
+    "typescript": "^5.0.4"
+  }
+}
