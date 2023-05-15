@@ -11,5 +11,6 @@
     "strict": true,
     "target": "ES5",
     "experimentalDecorators": true
-  }
+  },
+  "include": ["src/**/*"]
 }

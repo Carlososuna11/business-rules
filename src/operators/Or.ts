@@ -8,7 +8,7 @@ export default class Or implements IOperator<boolean> {
 
   public execute(): boolean {
     return this.operators.some((operator) => {
-      typeof operator === 'boolean' ? operator : operator.execute();
+      return typeof operator === 'boolean' ? operator : operator.execute();
     });
   }
 }
