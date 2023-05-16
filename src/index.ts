@@ -34,4 +34,6 @@ console.log('CON:', new Con([1, '4', true], '4').execute());
 
 console.log('SUB:', new Sub(5, 3).execute());
 
+console.log('SUB:', new Sub(new Date('01-01-2021'), new Date('01-02-2021')).execute());
+
 console.log('SUM:', new Sum(-2, 3).execute());
