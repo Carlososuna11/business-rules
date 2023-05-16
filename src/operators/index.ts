@@ -5,6 +5,8 @@ import Or from './Or';
 import Not from './Not';
 import Xor from './Xor';
 import Eq from './Equal';
+import GT from './GreatherThan';
+import LT from './LessThan';
 
 // Operators hashMap
 const operators: { [key: string]: Constructor<IOperator<unknown>> } = {};
@@ -30,4 +32,6 @@ registerOperator('and')(And);
 registerOperator('or')(Or);
 registerOperator('not')(Not);
 registerOperator('xor')(Xor);
-registerOperator('eq')(Eq);
+registerOperator('equal')(Eq);
+registerOperator('gretaterThan')(GT);
+registerOperator('lessThan')(LT);
