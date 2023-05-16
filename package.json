@@ -9,7 +9,7 @@
     "dev": "ts-node-dev --respawn --transpile-only --no-notify src/index.ts",
     "release": "standard-version --no-verify",
     "lint": "prettier --ignore-path .gitignore --check --plugin-search-dir=. . && eslint --ignore-path .gitignore .",
-    "format": "prettier --ignore-path .gitignore --write --plugin-search-dir=. ."
+    "format": "prettier --write \"src/**/*.ts\""
   },
   "author": "",
   "license": "ISC",

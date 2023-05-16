@@ -7,21 +7,19 @@ import Upper from './Upper';
 const functions: FunctionMap<any> = {};
 
 export function getFunctions<T>(): {
-  [key: string]: Constructor<IFunction<T>>;
+	[key: string]: Constructor<IFunction<T>>;
 } {
-  return functions;
+	return functions;
 }
 
-export function registerFunction<T, S extends Constructor<IFunction<T>>>(
-  code: string
-) {
-  return function (ctor: S): S {
-    if (functions[code]) {
-      throw new Error(`Function with code ${code} already registered.`);
-    }
-    functions[code] = ctor;
-    return ctor;
-  };
+export function registerFunction<T, S extends Constructor<IFunction<T>>>(code: string) {
+	return function (ctor: S): S {
+		if (functions[code]) {
+			throw new Error(`Function with code ${code} already registered.`);
+		}
+		functions[code] = ctor;
+		return ctor;
+	};
 }
 
 // Register functions
