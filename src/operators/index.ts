@@ -4,6 +4,7 @@ import And from './And';
 import Or from './Or';
 import Not from './Not';
 import Xor from './Xor';
+import Eq from './Equal';
 
 // Operators hashMap
 const operators: { [key: string]: Constructor<IOperator<unknown>> } = {};
@@ -29,3 +30,4 @@ registerOperator('and')(And);
 registerOperator('or')(Or);
 registerOperator('not')(Not);
 registerOperator('xor')(Xor);
+registerOperator('eq')(Eq);
