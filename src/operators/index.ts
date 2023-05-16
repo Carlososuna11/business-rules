@@ -7,6 +7,9 @@ import Xor from './Xor';
 import Eq from './Equal';
 import GT from './GreatherThan';
 import LT from './LessThan';
+import Con from './Contains';
+import Sub from './Substract';
+import Sum from './Sum';
 
 // Operators hashMap
 const operators: { [key: string]: Constructor<IOperator<unknown>> } = {};
@@ -35,3 +38,6 @@ registerOperator('xor')(Xor);
 registerOperator('equal')(Eq);
 registerOperator('gretaterThan')(GT);
 registerOperator('lessThan')(LT);
+registerOperator('contains')(Con);
+registerOperator('substract')(Sub);
+registerOperator('sum')(Sum);

@@ -1,13 +1,13 @@
 import IOperator from './IOperator';
 
-export default class LessThan implements IOperator<boolean> {
+export default class Sum implements IOperator<number> {
 	left: number;
 	right: number;
 	constructor(left: number, right: number) {
 		this.left = left;
 		this.right = right;
 	}
-	execute(): boolean {
-		return this.left < this.right;
+	execute(): number {
+		return this.left + this.right;
 	}
 }
