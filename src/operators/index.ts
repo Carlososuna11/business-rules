@@ -13,6 +13,9 @@ import Sum from './Sum';
 import GreatherEqualThan from './GreatherEqualThan';
 import LessEqualThan from './LessEqualThan';
 import Other from './Other';
+import Multiply from './Multiply';
+import Divide from './Divide';
+import Remainder from './Remainder';
 
 // Operators hashMap
 const operators: { [key: string]: Constructor<IOperator<unknown>> } = {};
@@ -47,3 +50,6 @@ registerOperator('sum')(Sum);
 registerOperator('greatherEqualThan')(GreatherEqualThan);
 registerOperator('lessEqualThan')(LessEqualThan);
 registerOperator('other')(Other);
+registerOperator('multiply')(Multiply);
+registerOperator('divide')(Divide);
+registerOperator('remainder')(Remainder);

@@ -15,6 +15,9 @@ const Sum = operators['sum'];
 const GreatherEqualThan = operators['greatherEqualThan'];
 const LessEqualThan = operators['lessEqualThan'];
 const Other = operators['other'];
+const Multiply = operators['multiply'];
+const Divide = operators['divide'];
+const Remainder = operators['remainder'];
 
 // test operator
 
@@ -46,3 +49,9 @@ console.log('GTE:', new GreatherEqualThan(2, 3).execute());
 console.log('LTE:', new LessEqualThan(2, 3).execute());
 
 console.log('OTHER:', new Other(false, false, true).execute());
+
+console.log('MULTIPLY:', new Multiply(2.5, -3).execute());
+
+console.log('DIVIDE:', new Divide(3, -3).execute());
+
+console.log('REMAINDER:', new Remainder(6, 3).execute());
