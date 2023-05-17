@@ -18,6 +18,8 @@ const Other = operators['other'];
 const Multiply = operators['multiply'];
 const Divide = operators['divide'];
 const Remainder = operators['remainder'];
+const Root = operators['root'];
+const Exponentiation = operators['exponentiation'];
 
 // test operator
 
@@ -55,3 +57,7 @@ console.log('MULTIPLY:', new Multiply(2.5, -3).execute());
 console.log('DIVIDE:', new Divide(3, -3).execute());
 
 console.log('REMAINDER:', new Remainder(6, 3).execute());
+
+console.log('ROOT:', new Root(16,4).execute());
+
+console.log('EXPONENTIATION:', new Exponentiation(3, 3).execute());
