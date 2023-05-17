@@ -10,6 +10,8 @@ import LT from './LessThan';
 import Con from './Contains';
 import Sub from './Substract';
 import Sum from './Sum';
+import GTE from './GreatherThanOrEqual';
+import LTE from './LessThanOrEqual';
 
 // Operators hashMap
 const operators: { [key: string]: Constructor<IOperator<unknown>> } = {};
@@ -41,3 +43,5 @@ registerOperator('lessThan')(LT);
 registerOperator('contains')(Con);
 registerOperator('substract')(Sub);
 registerOperator('sum')(Sum);
+registerOperator('greaterThanOrEqual')(GTE);
+registerOperator('lessThanOrEqual')(LTE);

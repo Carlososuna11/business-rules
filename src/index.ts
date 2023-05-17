@@ -12,6 +12,8 @@ const LT = operators['lessThan'];
 const Con = operators['contains'];
 const Sub = operators['substract'];
 const Sum = operators['sum'];
+const GTE = operators['greaterThanOrEqual'];
+const LTE = operators['lessThanOrEqual'];
 
 // test operator
 
@@ -37,3 +39,7 @@ console.log('SUB:', new Sub(5, 3).execute());
 console.log('SUB:', new Sub(new Date('01-01-2021'), new Date('01-02-2021')).execute());
 
 console.log('SUM:', new Sum(-2, 3).execute());
+
+console.log('GTE:', new GTE(2, 3).execute());
+
+console.log('LTE:', new LTE(2, 3).execute());
