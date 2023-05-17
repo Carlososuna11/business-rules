@@ -1,6 +1,6 @@
 import IOperator from './IOperator';
 
-export default class LessThanOrEqual implements IOperator<boolean> {
+export default class LessEqualThan implements IOperator<boolean> {
 	left: number;
 	right: number;
 	constructor(left: number, right: number) {

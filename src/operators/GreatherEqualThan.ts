@@ -1,6 +1,6 @@
 import IOperator from './IOperator';
 
-export default class GreaterThanOrEqual implements IOperator<boolean> {
+export default class GreatherEqualThan implements IOperator<boolean> {
 	left: number;
 	right: number;
 	constructor(left: number, right: number) {
