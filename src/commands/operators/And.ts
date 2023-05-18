@@ -1,8 +1,14 @@
 import IOperator from './IOperator';
+import ICommand from '../ICommand';
+import { registerOperator } from '.';
 
+@registerOperator('and')
 export default class And implements IOperator<boolean> {
-  operators: (boolean | IOperator<boolean>)[];
-  constructor(...operators: (boolean | IOperator<boolean>)[]) {
+  id = 'and';
+  symbol = '&&';
+
+  operators: (ICommand<boolean> | boolean)[];
+  constructor(...operators: (ICommand<boolean> | boolean)[]) {
     this.operators = operators;
   }
 

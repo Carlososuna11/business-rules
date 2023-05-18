@@ -1,14 +1,14 @@
-import IData from './IData';
-import { Data } from '../types';
+import IContext from './IContext';
+import { Data } from '../../types';
+import { registerContextMethod } from './index';
 
-export default class Set implements IData<void> {
-  constructor(
-    private object: Data,
-    private key: string,
-    private value: unknown
-  ) {}
+@registerContextMethod('get')
+export default class Get implements IContext<unknown> {
+  id = 'get';
 
-  execute(): void {
+  constructor(private readonly object: Data, private readonly key: string) {}
+
+  execute(): unknown {
     const keys = this.key.split('.');
     if (!keys.length) return undefined;
     if (!Object.entries(this.object).length) return undefined;
@@ -37,15 +37,13 @@ export default class Set implements IData<void> {
           value = valueArray[index] as Data;
           continue;
         }
-        valueArray[index] = this.value;
-        return;
+        return valueArray[index];
       }
       if (typeof value[propertyKey] === 'object') {
         value = value[propertyKey] as Data;
         continue;
       }
-      value[propertyKey] = this.value;
-      return;
+      return value[propertyKey];
     }
   }
 }

@@ -1,18 +1,16 @@
-import { Constructor } from '../types';
+import { Constructor } from '../../types';
 import IOperator from './IOperator';
-import And from './And';
-import Or from './Or';
 
 // Operators hashMap
 const operators: { [key: string]: Constructor<IOperator<unknown>> } = {};
 
-export function getOperators(): {
+function getOperators(): {
   [key: string]: Constructor<IOperator<unknown>>;
 } {
   return operators;
 }
 
-export function registerOperator<T extends Constructor<IOperator<unknown>>>(
+function registerOperator<T extends Constructor<IOperator<unknown>>>(
   code: string
 ) {
   return function (ctor: T): T {
@@ -24,6 +22,4 @@ export function registerOperator<T extends Constructor<IOperator<unknown>>>(
   };
 }
 
-// Register operators
-registerOperator('and')(And);
-registerOperator('or')(Or);
+export { IOperator, getOperators, registerOperator };

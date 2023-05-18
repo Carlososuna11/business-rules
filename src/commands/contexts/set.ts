@@ -1,28 +1,18 @@
-import IData from './IData';
-import { Data } from '../types';
+import IContext from './IContext';
+import { Data } from '../../types';
+import ICommand from '../ICommand';
+import { registerContextMethod } from './index';
 
-export default class Get implements IData<unknown> {
-  /*
-    get a value from object,
-    the object is passed as the first argument
-    the key is passed as the second argument
+@registerContextMethod('set')
+export default class Set implements IContext<void> {
+  id = 'set';
+  constructor(
+    private object: Data,
+    private key: string,
+    private value: ICommand<unknown> | unknown
+  ) {}
 
-    example:
-    {
-        "$data.get": [
-            "user.name[0].first"
-        ]
-    }
-
-    will return the value of user.name
-
-    if the key is not found, it will return undefined
-    if the key is found but the value is undefined, it will return null
-   */
-
-  constructor(private readonly object: Data, private readonly key: string) {}
-
-  execute(): unknown {
+  execute(): void {
     const keys = this.key.split('.');
     if (!keys.length) return undefined;
     if (!Object.entries(this.object).length) return undefined;
@@ -51,13 +41,15 @@ export default class Get implements IData<unknown> {
           value = valueArray[index] as Data;
           continue;
         }
-        return valueArray[index];
+        valueArray[index] = this.value;
+        return;
       }
       if (typeof value[propertyKey] === 'object') {
         value = value[propertyKey] as Data;
         continue;
       }
-      return value[propertyKey];
+      value[propertyKey] = this.value;
+      return;
     }
   }
 }

@@ -1,25 +1,23 @@
-import { getOperators } from '../operators';
-import { getFunctions } from '../functions';
-import { getDataMethods } from '../data';
+import {
+  getOperators,
+  getFunctions,
+  getContextMethods,
+  ICommand,
+} from '../commands';
 import { ExpressionOptions, Data } from '../types';
-import IOperator from '../operators/IOperator';
-import IFunction from '../functions/IFunction';
-import IData from '../data/IData';
 
 // Composite pattern
 export const parseCondition = (
-  dataObject: Data,
+  contextObject: Data,
   conditionStructure: object
-) => {
+): ICommand<boolean> => {
   const options: ExpressionOptions = {
     $op: getOperators(),
     $fn: getFunctions(),
-    $data: getDataMethods(),
+    $ctx: getContextMethods(),
   };
 
-  const parseExpression = (
-    expression: object
-  ): IOperator<boolean> | IFunction<unknown> | IData<unknown> | object => {
+  const parseExpression = (expression: object): ICommand<unknown> | object => {
     const entries = Object.entries(expression);
     if (!entries.length) return expression;
 
@@ -36,8 +34,8 @@ export const parseCondition = (
     }
 
     // if type is $data, inject dataObject into args (first argument)
-    if (type === '$data') {
-      args.unshift(dataObject);
+    if (type === '$ctx') {
+      args.unshift(contextObject);
     }
     const Class = options[type][name];
     const subExpressions = (args as object[]).map((arg: unknown) => {
@@ -46,7 +44,7 @@ export const parseCondition = (
     return new Class(...subExpressions);
   };
 
-  return parseExpression(conditionStructure) as IOperator<boolean>;
+  return parseExpression(conditionStructure) as ICommand<boolean>;
 };
 
 export default parseCondition;
