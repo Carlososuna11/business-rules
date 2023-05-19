@@ -1,3 +1,3 @@
 export default interface IData<T> {
-  execute(): T;
+	execute(): T;
 }

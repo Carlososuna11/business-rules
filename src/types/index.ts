@@ -13,8 +13,8 @@ export type OperatorMap<T> = { [key: string]: Constructor<IOperator<T>> };
 export type DataMap<T> = { [key: string]: Constructor<IData<T>> };
 
 export type Data = {
-  [key: string]: unknown | Data;
+	[key: string]: unknown | Data;
 };
 export type ExpressionOptions = {
-  [key: string]: FunctionMap<unknown> | OperatorMap<unknown> | DataMap<unknown>;
+	[key: string]: FunctionMap<unknown> | OperatorMap<unknown> | DataMap<unknown>;
 };

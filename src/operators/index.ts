@@ -18,6 +18,7 @@ import Divide from './Divide';
 import Remainder from './Remainder';
 import Root from './Root';
 import Exponentiation from './Exponentiation';
+import IsNull from './IsNull';
 
 // Operators hashMap
 const operators: { [key: string]: Constructor<IOperator<unknown>> } = {};
@@ -57,3 +58,4 @@ registerOperator('divide')(Divide);
 registerOperator('remainder')(Remainder);
 registerOperator('root')(Root);
 registerOperator('exponentiation')(Exponentiation);
+registerOperator('isNull')(IsNull);

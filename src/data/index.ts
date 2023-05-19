@@ -7,21 +7,19 @@ import Set from './set';
 const dataMethods: { [key: string]: Constructor<IData<unknown>> } = {};
 
 export function getDataMethods(): {
-  [key: string]: Constructor<IData<unknown>>;
+	[key: string]: Constructor<IData<unknown>>;
 } {
-  return dataMethods;
+	return dataMethods;
 }
 
-export function registerDataMethod<T extends Constructor<IData<unknown>>>(
-  code: string
-) {
-  return function (ctor: T): T {
-    if (dataMethods[code]) {
-      throw new Error(`Data Method with code ${code} already registered.`);
-    }
-    dataMethods[code] = ctor;
-    return ctor;
-  };
+export function registerDataMethod<T extends Constructor<IData<unknown>>>(code: string) {
+	return function (ctor: T): T {
+		if (dataMethods[code]) {
+			throw new Error(`Data Method with code ${code} already registered.`);
+		}
+		dataMethods[code] = ctor;
+		return ctor;
+	};
 }
 
 // Register operators
