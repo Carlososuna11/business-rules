@@ -1,8 +1,6 @@
 import IOperator from './IOperator';
 import ICommand from '../ICommand';
-import { registerOperator } from '.';
 
-@registerOperator('or')
 export default class Or implements IOperator<boolean> {
 	id = 'or';
 	symbol = '||';

@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { registerOperator } from '.';
 import ICommand, { isCommand } from '../ICommand';
 import IOperator from './IOperator';
 
-@registerOperator('contains')
 export default class Contains implements IOperator<boolean> {
 	symbol = 'in';
 	id = 'contains';
@@ -16,11 +14,11 @@ export default class Contains implements IOperator<boolean> {
 		this.value = value;
 	}
 	execute(): boolean {
-		let value = isCommand(this.value) ? this.value.execute() : this.value;
+		// let value = isCommand(this.value) ? this.value.execute() : this.value;
 
-		// return this.collection.includes(value);
+		// // return this.collection.includes(value);
 
-		return true;
+		return isCommand(this.value);
 	}
 }
 

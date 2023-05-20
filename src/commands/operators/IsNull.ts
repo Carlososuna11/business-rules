@@ -1,8 +1,6 @@
 import IOperator from './IOperator';
 import ICommand, { isCommand } from '../ICommand';
-import { registerOperator } from '../index';
 
-@registerOperator('isNull')
 export default class IsNull implements IOperator<boolean> {
 	id = 'isNull';
 	symbol = 'isNull';

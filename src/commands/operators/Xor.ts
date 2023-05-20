@@ -1,8 +1,6 @@
 import IOperator from './IOperator';
-import { registerOperator } from '.';
 import ICommand from '../ICommand';
 
-@registerOperator('xor')
 export default class Xor implements IOperator<boolean> {
 	id = 'xor';
 	symbol = '^';

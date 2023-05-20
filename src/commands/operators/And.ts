@@ -1,8 +1,6 @@
 import IOperator from './IOperator';
 import ICommand from '../ICommand';
-import { registerOperator } from '.';
 
-@registerOperator('and')
 export default class And implements IOperator<boolean> {
 	id = 'and';
 	symbol = '&&';

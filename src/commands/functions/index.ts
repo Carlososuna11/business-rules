@@ -1,5 +1,6 @@
 import { Constructor } from '../../types';
 import IFunction from './IFunction';
+import Upper from './Upper';
 
 // hashMap
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -11,14 +12,13 @@ function getFunctions(): {
 	return functions;
 }
 
-function registerFunction<T extends Constructor<IFunction<unknown>>>(code: string) {
-	return function (ctor: T): T {
-		if (functions[code]) {
-			throw new Error(`Function with code ${code} already registered.`);
-		}
-		functions[code] = ctor;
-		return ctor;
-	};
+function registerFunction(id: string, _function: Constructor<IFunction<unknown>>): void {
+	if (functions[id]) {
+		throw new Error(`Function with id ${id} already registered.`);
+	}
+	functions[id] = _function;
 }
+
+registerFunction('upper', Upper);
 
 export { IFunction, getFunctions, registerFunction };

@@ -1,8 +1,6 @@
-import { registerOperator } from '.';
 import ICommand from '../ICommand';
 import IOperator from './IOperator';
 
-@registerOperator('not')
 export default class Not implements IOperator<boolean> {
 	symbol = '!';
 	id = 'not';

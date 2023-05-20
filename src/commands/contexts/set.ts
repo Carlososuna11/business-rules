@@ -1,9 +1,7 @@
 import IContext from './IContext';
 import { Data } from '../../types';
 import ICommand from '../ICommand';
-import { registerContextMethod } from './index';
 
-@registerContextMethod('set')
 export default class Set implements IContext<void> {
 	id = 'set';
 	constructor(private object: Data, private key: string, private value: ICommand<unknown> | unknown) {}

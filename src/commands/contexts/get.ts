@@ -1,8 +1,6 @@
 import IContext from './IContext';
 import { Data } from '../../types';
-import { registerContextMethod } from './index';
 
-@registerContextMethod('get')
 export default class Get implements IContext<unknown> {
 	id = 'get';
 
