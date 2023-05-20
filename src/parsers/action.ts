@@ -1,22 +1,25 @@
-import { getOperators } from '../operators';
-import { getFunctions } from '../functions';
-import { getDataMethods } from '../data';
+import {
+  getOperators,
+  getFunctions,
+  getContextMethods,
+  ICommand,
+} from '../commands';
 import { ExpressionOptions, Data } from '../types';
-import IOperator from '../operators/IOperator';
-import IFunction from '../functions/IFunction';
-import IData from '../data/IData';
 
 // Composite pattern
-const parseAction = (dataObject: Data, actionStructure: object): IFunction<unknown> => {
-	const options: ExpressionOptions = {
-		$op: getOperators(),
-		$fn: getFunctions(),
-		$data: getDataMethods(),
-	};
+const parseAction = (
+  contextObject: Data,
+  actionStructure: object
+): ICommand<unknown> => {
+  const options: ExpressionOptions = {
+    $op: getOperators(),
+    $fn: getFunctions(),
+    $ctx: getContextMethods(),
+  };
 
-	const parseExpression = (expression: object): IOperator<unknown> | IFunction<unknown> | IData<unknown> | object => {
-		const entries = Object.entries(expression);
-		if (!entries.length) return expression;
+  const parseExpression = (expression: object): ICommand<unknown> | object => {
+    const entries = Object.entries(expression);
+    if (!entries.length) return expression;
 
 		const [token, args] = entries[0];
 		const [type, name] = token.split('.');
@@ -30,10 +33,10 @@ const parseAction = (dataObject: Data, actionStructure: object): IFunction<unkno
 			throw new Error(`Arguments for ${token} must be an array`);
 		}
 
-		// if type is $data, inject dataObject into args (first argument)
-		if (type === '$data') {
-			args.unshift(dataObject);
-		}
+    // if type is $ctx, add contextObject into args (first argument)
+    if (type === '$ctx') {
+      args.unshift(contextObject);
+    }
 
 		const Class = options[type][name];
 		const subExpressions = (args as object[]).map((arg: unknown) => {
@@ -42,7 +45,7 @@ const parseAction = (dataObject: Data, actionStructure: object): IFunction<unkno
 		return new Class(...subExpressions);
 	};
 
-	return parseExpression(actionStructure) as IFunction<unknown> | IData<unknown>;
+  return parseExpression(actionStructure) as ICommand<unknown>;
 };
 
 export default parseAction;

@@ -1,7 +1,7 @@
+import Get from '../commands/contexts/get';
+import Set from '../commands/contexts/set';
 import { Constructor } from '../types';
 import IData from './IData';
-import Get from './get';
-import Set from './set';
 
 // Operators hashMap
 const dataMethods: { [key: string]: Constructor<IData<unknown>> } = {};

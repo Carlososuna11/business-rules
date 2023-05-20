@@ -1,6 +1,6 @@
-import IFunction from '../functions/IFunction';
-import IOperator from '../operators/IOperator';
-import IData from '../data/IData';
+import IFunction from '../commands/functions/IFunction';
+import IOperator from '../commands/operators/IOperator';
+import IContext from '../commands/contexts/IContext';
 
 export type Constructor<T> = {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -10,11 +10,14 @@ export type Constructor<T> = {
 
 export type FunctionMap<T> = { [key: string]: Constructor<IFunction<T>> };
 export type OperatorMap<T> = { [key: string]: Constructor<IOperator<T>> };
-export type DataMap<T> = { [key: string]: Constructor<IData<T>> };
+export type ContextMap<T> = { [key: string]: Constructor<IContext<T>> };
 
 export type Data = {
 	[key: string]: unknown | Data;
 };
 export type ExpressionOptions = {
-	[key: string]: FunctionMap<unknown> | OperatorMap<unknown> | DataMap<unknown>;
+  [key: string]:
+    | FunctionMap<unknown>
+    | OperatorMap<unknown>
+    | ContextMap<unknown>;
 };

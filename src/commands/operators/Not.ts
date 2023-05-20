@@ -1,8 +1,14 @@
+import { registerOperator } from '.';
+import ICommand from '../ICommand';
 import IOperator from './IOperator';
 
+@registerOperator('not')
 export default class Not implements IOperator<boolean> {
-	operators: (boolean | IOperator<boolean>)[];
-	constructor(...operators: (boolean | IOperator<boolean>)[]) {
+	symbol = '!';
+	id = 'not';
+
+	operators: (boolean | ICommand<boolean>)[];
+	constructor(...operators: (boolean | ICommand<boolean>)[]) {
 		this.operators = operators;
 	}
 

@@ -1,24 +1,10 @@
-import IData from './IData';
-import { Data } from '../types';
+import IContext from './IContext';
+import { Data } from '../../types';
+import { registerContextMethod } from './index';
 
-export default class Get implements IData<unknown> {
-	/*
-    get a value from object,
-    the object is passed as the first argument
-    the key is passed as the second argument
-
-    example:
-    {
-        "$data.get": [
-            "user.name[0].first"
-        ]
-    }
-
-    will return the value of user.name
-
-    if the key is not found, it will return undefined
-    if the key is found but the value is undefined, it will return null
-   */
+@registerContextMethod('get')
+export default class Get implements IContext<unknown> {
+	id = 'get';
 
 	constructor(private readonly object: Data, private readonly key: string) {}
 
