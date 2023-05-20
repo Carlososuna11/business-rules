@@ -16,8 +16,5 @@ export type Data = {
 	[key: string]: unknown | Data;
 };
 export type ExpressionOptions = {
-  [key: string]:
-    | FunctionMap<unknown>
-    | OperatorMap<unknown>
-    | ContextMap<unknown>;
+	[key: string]: FunctionMap<unknown> | OperatorMap<unknown> | ContextMap<unknown>;
 };

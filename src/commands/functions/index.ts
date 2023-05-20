@@ -6,21 +6,19 @@ import IFunction from './IFunction';
 const functions: { [key: string]: Constructor<IFunction<unknown>> } = {};
 
 function getFunctions(): {
-  [key: string]: Constructor<IFunction<unknown>>;
+	[key: string]: Constructor<IFunction<unknown>>;
 } {
-  return functions;
+	return functions;
 }
 
-function registerFunction<T extends Constructor<IFunction<unknown>>>(
-  code: string
-) {
-  return function (ctor: T): T {
-    if (functions[code]) {
-      throw new Error(`Function with code ${code} already registered.`);
-    }
-    functions[code] = ctor;
-    return ctor;
-  };
+function registerFunction<T extends Constructor<IFunction<unknown>>>(code: string) {
+	return function (ctor: T): T {
+		if (functions[code]) {
+			throw new Error(`Function with code ${code} already registered.`);
+		}
+		functions[code] = ctor;
+		return ctor;
+	};
 }
 
 export { IFunction, getFunctions, registerFunction };

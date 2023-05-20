@@ -5,12 +5,8 @@ import { registerContextMethod } from './index';
 
 @registerContextMethod('set')
 export default class Set implements IContext<void> {
-  id = 'set';
-  constructor(
-    private object: Data,
-    private key: string,
-    private value: ICommand<unknown> | unknown
-  ) {}
+	id = 'set';
+	constructor(private object: Data, private key: string, private value: ICommand<unknown> | unknown) {}
 
 	execute(): void {
 		const keys = this.key.split('.');

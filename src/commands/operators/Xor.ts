@@ -2,19 +2,17 @@ import IOperator from './IOperator';
 import { registerOperator } from '.';
 import ICommand from '../ICommand';
 
-
-
 @registerOperator('xor')
 export default class Xor implements IOperator<boolean> {
-  id = 'xor';
-  symbol = '^';
+	id = 'xor';
+	symbol = '^';
 
-  operators: (ICommand<boolean> | boolean)[];
+	operators: (ICommand<boolean> | boolean)[];
 	constructor(...operators: (ICommand<boolean> | boolean)[]) {
-    this.operators = operators;
-}
+		this.operators = operators;
+	}
 
-		execute(): boolean {
+	execute(): boolean {
 		const booleanOperators = this.operators.filter((operator) => typeof operator === 'boolean') as boolean[];
 		const operatorOperators = this.operators.filter((operator) => typeof operator === 'object') as ICommand<boolean>[];
 
@@ -33,4 +31,3 @@ export default class Xor implements IOperator<boolean> {
 		return result;
 	}
 }
-

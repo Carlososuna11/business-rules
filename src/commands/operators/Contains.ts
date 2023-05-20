@@ -16,7 +16,6 @@ export default class Contains implements IOperator<boolean> {
 		this.value = value;
 	}
 	execute(): boolean {
-
 		let value = isCommand(this.value) ? this.value.execute() : this.value;
 
 		// return this.collection.includes(value);

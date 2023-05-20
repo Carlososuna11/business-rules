@@ -13,12 +13,13 @@ export default class Equal<T> implements IOperator<boolean> {
 	id = 'equal';
 
 	execute(): boolean {
-		return this.values.reduce((prev, curr) => {
-			let previous = isCommand(prev) ? prev.execute() : prev;
-			let current = isCommand(curr) ? curr.execute() : curr;
+		return (
+			this.values.reduce((prev, curr) => {
+				let previous = isCommand(prev) ? prev.execute() : prev;
+				let current = isCommand(curr) ? curr.execute() : curr;
 
-			return previous === current;
-
-		}) != false;
+				return previous === current;
+			}) != false
+		);
 	}
 }

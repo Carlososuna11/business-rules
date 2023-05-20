@@ -4,13 +4,13 @@ import { registerOperator } from '.';
 
 @registerOperator('and')
 export default class And implements IOperator<boolean> {
-  id = 'and';
-  symbol = '&&';
+	id = 'and';
+	symbol = '&&';
 
-  operators: (ICommand<boolean> | boolean)[];
-  constructor(...operators: (ICommand<boolean> | boolean)[]) {
-    this.operators = operators;
-  }
+	operators: (ICommand<boolean> | boolean)[];
+	constructor(...operators: (ICommand<boolean> | boolean)[]) {
+		this.operators = operators;
+	}
 
 	execute(): boolean {
 		return this.operators.every((operator) => {

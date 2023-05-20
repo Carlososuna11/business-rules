@@ -1,25 +1,17 @@
-import {
-  getOperators,
-  getFunctions,
-  getContextMethods,
-  ICommand,
-} from '../commands';
+import { getOperators, getFunctions, getContextMethods, ICommand } from '../commands';
 import { ExpressionOptions, Data } from '../types';
 
 // Composite pattern
-export const parseCondition = (
-  contextObject: Data,
-  conditionStructure: object
-): ICommand<boolean> => {
-  const options: ExpressionOptions = {
-    $op: getOperators(),
-    $fn: getFunctions(),
-    $ctx: getContextMethods(),
-  };
+export const parseCondition = (contextObject: Data, conditionStructure: object): ICommand<boolean> => {
+	const options: ExpressionOptions = {
+		$op: getOperators(),
+		$fn: getFunctions(),
+		$ctx: getContextMethods(),
+	};
 
-  const parseExpression = (expression: object): ICommand<unknown> | object => {
-    const entries = Object.entries(expression);
-    if (!entries.length) return expression;
+	const parseExpression = (expression: object): ICommand<unknown> | object => {
+		const entries = Object.entries(expression);
+		if (!entries.length) return expression;
 
 		const [token, args] = entries[0];
 		const [type, name] = token.split('.');
@@ -33,18 +25,18 @@ export const parseCondition = (
 			throw new Error(`Arguments for ${token} must be an array`);
 		}
 
-    // if type is $data, inject dataObject into args (first argument)
-    if (type === '$ctx') {
-      args.unshift(contextObject);
-    }
-    const Class = options[type][name];
-    const subExpressions = (args as object[]).map((arg: unknown) => {
-      return typeof arg === 'object' && arg ? parseExpression(arg) : arg;
-    });
-    return new Class(...subExpressions);
-  };
+		// if type is $data, inject dataObject into args (first argument)
+		if (type === '$ctx') {
+			args.unshift(contextObject);
+		}
+		const Class = options[type][name];
+		const subExpressions = (args as object[]).map((arg: unknown) => {
+			return typeof arg === 'object' && arg ? parseExpression(arg) : arg;
+		});
+		return new Class(...subExpressions);
+	};
 
-  return parseExpression(conditionStructure) as ICommand<boolean>;
+	return parseExpression(conditionStructure) as ICommand<boolean>;
 };
 
 export default parseCondition;

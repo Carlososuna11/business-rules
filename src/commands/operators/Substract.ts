@@ -1,22 +1,20 @@
-import { registerOperator } from ".";
-import IOperator from "../../operators/IOperator";
-import ICommand, { isCommand } from "../ICommand";
+import { registerOperator } from '.';
+import IOperator from '../../operators/IOperator';
+import ICommand, { isCommand } from '../ICommand';
 
 @registerOperator('substract')
 export default class Substract implements IOperator<number | Date> {
-  id = 'substract';
-  symbol = '-';
+	id = 'substract';
+	symbol = '-';
 
-left: number | Date  | ICommand<number | Date>;
+	left: number | Date | ICommand<number | Date>;
 	right: number | Date | ICommand<number | Date>;
 	constructor(left: number | Date | ICommand<number | Date>, right: number | Date | ICommand<number | Date>) {
 		this.left = left;
 		this.right = right;
 	}
 
-
 	execute(): number | Date {
-
 		let leftOperand = isCommand(this.left) ? this.left.execute() : this.left;
 		let rightOperand = isCommand(this.right) ? this.right.execute() : this.right;
 
@@ -32,4 +30,3 @@ left: number | Date  | ICommand<number | Date>;
 }
 
 //TODO: Add operator.execute
-

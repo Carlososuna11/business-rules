@@ -5,7 +5,7 @@ import IOperator from './IOperator';
 @registerOperator('greatherEqualThan')
 export default class GreatherEqualThan implements IOperator<boolean> {
 	symbol = '>=';
-	id= 'greatherEqualThan';
+	id = 'greatherEqualThan';
 
 	left: number | ICommand<number>;
 	right: number | ICommand<number>;
@@ -14,10 +14,8 @@ export default class GreatherEqualThan implements IOperator<boolean> {
 		this.right = right;
 	}
 	execute(): boolean {
-
 		let leftOperand = typeof this.left === 'number' ? this.left : this.left.execute();
 		let rightOperand = typeof this.right === 'number' ? this.right : this.right.execute();
-
 
 		return leftOperand >= rightOperand;
 	}

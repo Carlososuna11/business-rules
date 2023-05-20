@@ -1,4 +1,4 @@
-import { getOperators } from "./commands/operators";
+import { getOperators } from './commands/operators';
 
 const operators = getOperators();
 

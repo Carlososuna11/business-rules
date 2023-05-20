@@ -4,8 +4,8 @@ import IOperator from './IOperator';
 
 @registerOperator('remainder')
 export default class Remainder implements IOperator<number> {
-  id = 'remainder';
-  symbol = '%';
+	id = 'remainder';
+	symbol = '%';
 
 	left: number | ICommand<number>;
 	right: number | ICommand<number>;
@@ -14,9 +14,8 @@ export default class Remainder implements IOperator<number> {
 		this.right = right;
 	}
 	execute(): number {
-
-		let rightOperand  = typeof this.right === 'number' ? this.right : this.right.execute();
-		let leftOperand  = typeof this.left === 'number' ? this.left : this.left.execute();
+		let rightOperand = typeof this.right === 'number' ? this.right : this.right.execute();
+		let leftOperand = typeof this.left === 'number' ? this.left : this.left.execute();
 		return leftOperand % rightOperand;
 	}
 }
