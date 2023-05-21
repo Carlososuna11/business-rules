@@ -2,23 +2,19 @@ import ICommand, { isCommand } from '../ICommand';
 import IOperator from './IOperator';
 
 export default class NotEqual<T> implements IOperator<boolean> {
-	id = 'notEqual';
 	symbol = '!=';
+	id = 'notEqual';
 
-	values: (T | ICommand<T> | boolean)[];
-
-	constructor(...values: (T | ICommand<T> | boolean)[]) {
-		this.values = values;
+	left: boolean | ICommand<boolean>;
+	right: boolean | ICommand<boolean>;
+	constructor(left: boolean | ICommand<boolean>, right: boolean | ICommand<boolean>) {
+		this.left = left;
+		this.right = right;
 	}
-
 	execute(): boolean {
-		return (
-			this.values.reduce((prev, curr) => {
-				const previous = isCommand(prev) ? prev.execute() : prev;
-				const current = isCommand(curr) ? curr.execute() : curr;
+		const leftOperand = typeof this.left === 'boolean' ? this.left : this.left.execute();
+		const rightOperand = typeof this.right === 'boolean' ? this.right : this.right.execute();
 
-				return previous !== current;
-			}) != false
-		);
+		return leftOperand !== rightOperand;
 	}
 }
