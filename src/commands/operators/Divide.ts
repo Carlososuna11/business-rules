@@ -1,7 +1,7 @@
 import ICommand from '../ICommand';
 import IOperator from './IOperator';
 
-export default class Sum implements IOperator<number> {
+export default class Divide implements IOperator<number> {
 	id = 'divide';
 	symbol = '/';
 

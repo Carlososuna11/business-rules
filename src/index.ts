@@ -72,7 +72,7 @@ console.log('OPERATORS: ', operators);
 const data = {
 	user: {
 		name: 'John',
-		age: 20,
+		age: 19,
 		cars: ['Ford', 'BMW', 'Fiat'],
 	},
 };
@@ -111,3 +111,5 @@ if (conditionResult.execute()) {
 
 	console.log('ACTION RESULT: ', actionResult.execute());
 }
+
+console.log('DATA: ', data);

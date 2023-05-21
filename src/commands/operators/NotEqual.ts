@@ -1,8 +1,8 @@
 import ICommand, { isCommand } from '../ICommand';
 import IOperator from './IOperator';
 
-export default class Other<T> implements IOperator<boolean> {
-	id = 'other';
+export default class NotEqual<T> implements IOperator<boolean> {
+	id = 'notEqual';
 	symbol = '!=';
 
 	values: (T | ICommand<T> | boolean)[];

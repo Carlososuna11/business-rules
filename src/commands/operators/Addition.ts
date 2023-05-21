@@ -1,8 +1,8 @@
 import IOperator from './IOperator';
 import ICommand from '../ICommand';
 
-export default class Sum implements IOperator<number> {
-	id = 'sum';
+export default class Addition implements IOperator<number> {
+	id = 'addition';
 	symbol = '+';
 
 	left: number | ICommand<number>;
