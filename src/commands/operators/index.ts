@@ -38,7 +38,6 @@ function registerOperator(id: string, operator: Constructor<IOperator<unknown>>)
 registerOperator('additon', Addition);
 registerOperator('and', And);
 registerOperator('contains', Contains);
-registerOperator('equal', Equal);
 registerOperator('divide', Divide);
 registerOperator('equal', Equal);
 registerOperator('exponentiation', Exponentiation);
@@ -55,6 +54,5 @@ registerOperator('remainder', Remainder);
 registerOperator('root', Root);
 // registerOperator('subtraction', Substracion)
 registerOperator('xor', Xor);
-
 
 export { IOperator, getOperators, registerOperator };

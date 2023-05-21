@@ -1,30 +1,23 @@
-// import IOperator from './IOperator';
-// import ICommand, { isCommand } from '../ICommand';
+import ICommand from '../ICommand';
+import IOperator from './IOperator';
 
-// export default class Substract implements IOperator<number | Date> {
-// 	id = 'substract';
-// 	symbol = '-';
+export default class Substraction implements IOperator<number> {
+	id = 'substraction';
+	symbol = '-';
 
-// 	left: number | Date | ICommand<number | Date>;
-// 	right: number | Date | ICommand<number | Date>;
-// 	constructor(left: number | Date | ICommand<number | Date>, right: number | Date | ICommand<number | Date>) {
-// 		this.left = left;
-// 		this.right = right;
-// 	}
+	left: number | string | ICommand<number | string>;
+	right: number | string | ICommand<number | string>;
 
-// 	execute(): number | Date {
-// 		const leftOperand = isCommand(this.left) ? this.left.execute() : this.left;
-// 		const rightOperand = isCommand(this.right) ? this.right.execute() : this.right;
+	constructor(left: number | string | ICommand<number | string>, right: number | string | ICommand<number | string>) {
+		this.left = left;
+		this.right = right;
+	}
+	execute(): number {
+		const rightOperand =
+			typeof this.right === 'number' || typeof this.right === 'string' ? this.right : this.right.execute();
+		const leftOperand =
+			typeof this.left === 'number' || typeof this.left === 'string' ? this.left : this.left.execute();
 
-// 		if (this.left instanceof Date && this.right instanceof Date) {
-// 			return new Date(this.left.getDate() - this.right.getDate());
-// 			// } else if (this.left instanceof Date && typeof this.right === 'number') {
-// 			//     return new Date(this.left.getTime() - this.right);
-// 		} else if (typeof this.left === 'number' && typeof this.right === 'number') {
-// 			return this.left - this.right;
-// 		}
-// 		throw new Error('Invalid operands, must be the same type');
-// 	}
-// }
-
-// //TODO: Add operator.execute
+		return Number(leftOperand) - Number(rightOperand);
+	}
+}

@@ -1,20 +1,22 @@
 import ICommand from '../ICommand';
 import IOperator from './IOperator';
-
 export default class Exponentiation implements IOperator<number> {
-	symbol = '**';
 	id = 'exponentiation';
+	symbol = '**';
 
-	base: number | ICommand<number>;
-	exponent: number | ICommand<number>;
-	constructor(base: number | ICommand<number>, exponent: number | ICommand<number>) {
-		this.exponent = exponent;
-		this.base = base;
+	left: number | string | ICommand<number | string>;
+	right: number | string | ICommand<number | string>;
+
+	constructor(left: number | string | ICommand<number | string>, right: number | string | ICommand<number | string>) {
+		this.left = left;
+		this.right = right;
 	}
 	execute(): number {
-		const baseOperand = typeof this.base === 'number' ? this.base : this.base.execute();
-		const exponentOperand = typeof this.exponent === 'number' ? this.exponent : this.exponent.execute();
+		const rightOperand =
+			typeof this.right === 'number' || typeof this.right === 'string' ? this.right : this.right.execute();
+		const leftOperand =
+			typeof this.left === 'number' || typeof this.left === 'string' ? this.left : this.left.execute();
 
-		return baseOperand ** exponentOperand;
+		return Number(leftOperand) ** Number(rightOperand);
 	}
 }

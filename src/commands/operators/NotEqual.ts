@@ -5,15 +5,15 @@ export default class NotEqual<T> implements IOperator<boolean> {
 	symbol = '!=';
 	id = 'notEqual';
 
-	left: boolean | ICommand<boolean>;
-	right: boolean | ICommand<boolean>;
-	constructor(left: boolean | ICommand<boolean>, right: boolean | ICommand<boolean>) {
+	left: T | ICommand<T>;
+	right: T | ICommand<T>;
+	constructor(left: T | ICommand<T>, right: T | ICommand<T>) {
 		this.left = left;
 		this.right = right;
 	}
 	execute(): boolean {
-		const leftOperand = typeof this.left === 'boolean' ? this.left : this.left.execute();
-		const rightOperand = typeof this.right === 'boolean' ? this.right : this.right.execute();
+		const leftOperand = isCommand(this.left) ? this.left.execute() : this.left;
+		const rightOperand = isCommand(this.right) ? this.right.execute() : this.right;
 
 		return leftOperand !== rightOperand;
 	}

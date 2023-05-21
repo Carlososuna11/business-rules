@@ -1,10 +1,11 @@
 import { getOperators } from './commands/operators';
+import Addition from './commands/operators/Addition';
 
 import { parseAction, parseCondition } from './parsers';
 
 const operators = getOperators();
 
-console.log('OPERATORS: ', operators);
+// console.log('OPERATORS: ', operators);
 
 // const And = operators['and'];
 // const Or = operators['or'];
@@ -15,7 +16,6 @@ console.log('OPERATORS: ', operators);
 // const LessThan = operators['lessThan'];
 // const Contains = operators['contains'];
 // const Substract = operators['substract'];
-// const Sum = operators['sum'];
 // const GreatherEqualThan = operators['greatherEqualThan'];
 // const LessEqualThan = operators['lessEqualThan'];
 // const Other = operators['other'];
@@ -37,7 +37,6 @@ console.log('OPERATORS: ', operators);
 // console.log('XOR:', new Xor(true, false, true, false, true).execute());
 
 // console.log('EQ:', new Equal(true, true, true).execute());
-// // console.log('EQ:', new Eq('1', 1).execute());
 
 // console.log('GT:', new GreaterThan(3, 2).execute());
 
@@ -49,7 +48,7 @@ console.log('OPERATORS: ', operators);
 
 // console.log('SUB:', new Substract(new Date('01-01-2021'), new Date('01-02-2021')).execute());
 
-// console.log('SUM:', new Sum(-2, 3).execute());
+// console.log('ADDITION:', new Addition('2', 1).execute());
 
 // console.log('GTE:', new GreatherEqualThan(2, 3).execute());
 
@@ -104,12 +103,12 @@ const action = {
 
 const conditionResult = parseCondition(data, condition);
 
-console.log('CONDITION RESULT: ', conditionResult.execute());
+// console.log('CONDITION RESULT: ', conditionResult.execute());
 
 if (conditionResult.execute()) {
 	const actionResult = parseAction(data, action);
 
-	console.log('ACTION RESULT: ', actionResult.execute());
+	// console.log('ACTION RESULT: ', actionResult.execute());
 }
 
-console.log('DATA: ', data);
+// console.log('DATA: ', data);

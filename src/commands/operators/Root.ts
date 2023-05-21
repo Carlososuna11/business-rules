@@ -5,16 +5,22 @@ export default class Root implements IOperator<number> {
 	id = 'root';
 	symbol = 'sqrt';
 
-	radicand: number | ICommand<number>;
-	index: number | ICommand<number>;
-	constructor(radicand: number | ICommand<number>, index: number | ICommand<number>) {
-		this.index = index;
+	radicand: number | string | ICommand<number | string>;
+	index: number | string | ICommand<number | string>;
+
+	constructor(
+		radicand: number | string | ICommand<number | string>,
+		index: number | string | ICommand<number | string>
+	) {
 		this.radicand = radicand;
+		this.index = index;
 	}
 	execute(): number {
-		const radicandOperand = typeof this.radicand === 'number' ? this.radicand : this.radicand.execute();
-		const indexOperand = typeof this.index === 'number' ? this.index : this.index.execute();
+		const indexOperand =
+			typeof this.index === 'number' || typeof this.index === 'string' ? this.index : this.index.execute();
+		const radicandOperand =
+			typeof this.radicand === 'number' || typeof this.radicand === 'string' ? this.radicand : this.radicand.execute();
 
-		return Math.pow(radicandOperand, 1 / indexOperand);
+		return Math.pow(Number(radicandOperand), 1 / Number(indexOperand));
 	}
 }
