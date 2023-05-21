@@ -1,5 +1,7 @@
 import { getOperators } from './commands/operators';
 import Addition from './commands/operators/Addition';
+import Between from './commands/operators/Between';
+import Like from './commands/operators/Like';
 
 import { parseAction, parseCondition } from './parsers';
 
@@ -7,26 +9,28 @@ const operators = getOperators();
 
 // console.log('OPERATORS: ', operators);
 
-// const And = operators['and'];
-// const Or = operators['or'];
-// const Not = operators['not'];
-// const Xor = operators['xor'];
-// const Equal = operators['equal'];
-// const GreaterThan = operators['gretaterThan'];
-// const LessThan = operators['lessThan'];
-// const Contains = operators['contains'];
-// const Substract = operators['substract'];
-// const GreatherEqualThan = operators['greatherEqualThan'];
-// const LessEqualThan = operators['lessEqualThan'];
-// const Other = operators['other'];
-// const Multiply = operators['multiply'];
-// const Divide = operators['divide'];
-// const Remainder = operators['remainder'];
-// const Root = operators['root'];
-// const Exponentiation = operators['exponentiation'];
-// const IsNull = operators['isNull'];
-
 // // test operator
+
+// const currentDate = new Date();
+// const startDate = new Date('2021-01-01');
+// const endDate = new Date('2024-01-31');
+
+// const betweenOp = new Between<Date>(currentDate, startDate, endDate);
+// console.log(betweenOp.execute()); // depende de la fecha actual
+
+// const expression = 'Hola mundo';
+// const pattern = 'Ho';
+
+// const likeOperator = new Like(expression, pattern, 'BEGIN');
+
+// console.log(likeOperator.execute()); // true
+
+// const expression2 = 'Hola mundo';
+// const pattern2 = 'mu';
+
+// const likeOperator2 = new Like(expression2, pattern2, 'END');
+
+// console.log(likeOperator2.execute()); // false
 
 // console.log('AND: ', new And(true, new Or(true, false)).execute());
 

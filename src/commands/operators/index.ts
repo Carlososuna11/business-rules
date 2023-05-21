@@ -5,7 +5,6 @@ import Or from './Or';
 import Equal from './Equal';
 import GreaterThan from './GreaterThan';
 import Addition from './Addition';
-import Contains from './Contains';
 import Divide from './Divide';
 import Exponentiation from './Exponentiation';
 import GreatherEqualThan from './GreaterEqualThan';
@@ -18,6 +17,10 @@ import NotEqual from './NotEqual';
 import Remainder from './Remainder';
 import Root from './Root';
 import Xor from './Xor';
+import Contain from './Contain';
+import In from './In';
+import Like from './Like';
+import Between from './Between';
 // Operators hashMap
 const operators: { [key: string]: Constructor<IOperator<unknown>> } = {};
 
@@ -37,15 +40,18 @@ function registerOperator(id: string, operator: Constructor<IOperator<unknown>>)
 // Todo: register operators
 registerOperator('additon', Addition);
 registerOperator('and', And);
-registerOperator('contains', Contains);
+registerOperator('betwwen', Between);
+registerOperator('contain', Contain);
 registerOperator('divide', Divide);
 registerOperator('equal', Equal);
 registerOperator('exponentiation', Exponentiation);
 registerOperator('greaterEqualThan', GreatherEqualThan);
 registerOperator('greaterThan', GreaterThan);
+registerOperator('in', In);
 registerOperator('isNull', IsNull);
 registerOperator('lessEqualThan', LessEqualThan);
 registerOperator('lessThan', LessThan);
+registerOperator('like', Like);
 registerOperator('multiply', Multiply);
 registerOperator('not', Not);
 registerOperator('notEqual', NotEqual);
