@@ -2,6 +2,9 @@ import { getOperators } from './commands/operators';
 import Addition from './commands/operators/Addition';
 import Between from './commands/operators/Between';
 import Like from './commands/operators/Like';
+import SetDifference from './commands/operators/SetDifference';
+import SetSymmetricDifference from './commands/operators/SetSymmetricDifference';
+import Union from './commands/operators/SetUnion';
 
 import { parseAction, parseCondition } from './parsers';
 
@@ -10,6 +13,28 @@ const operators = getOperators();
 // console.log('OPERATORS: ', operators);
 
 // // test operator
+
+// const set1 = new Set([1, 2, 3]);
+// const set2 = new Set([2, 3, 4]);
+// const set3 = new Set([3, 4, 5]);
+// const setDifference = new SetSymmetricDifference(set1, set2, set3);
+// console.log(setDifference.execute()); // Output: Set { 1, 5 }
+
+// const set1 = new Set([1, 2, 3,5,6]);
+// const set2 = new Set([1, 2, 3]);
+// const set3 = new Set([1, 6, 3]);
+
+// const setDifference = new SetDifference(set1, set2, set3);
+// const result = setDifference.execute(); // Resultado: Set {}ltado: Set [ 1 ]
+
+// console.log('SET DIFFERENCE: ', result);
+
+// const set1 = new Set([1, 2, 3]);
+// const set2 = new Set([3, 4, 5]);
+// const unionOperator = new Union(set1, set2);
+// const unionSet = unionOperator.execute(); // Set [1, 2, 3, 4, 5]
+
+// console.log('UNION: ', unionSet);
 
 // const currentDate = new Date();
 // const startDate = new Date('2021-01-01');

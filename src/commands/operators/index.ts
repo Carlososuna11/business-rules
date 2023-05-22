@@ -21,6 +21,13 @@ import Contain from './Contain';
 import In from './In';
 import Like from './Like';
 import Between from './Between';
+import Substraction from './Substraction';
+import Intersection from './SetIntersection';
+import Union from './SetUnion';
+import SetIntersection from './SetIntersection';
+import SetUnion from './SetUnion';
+import SetDifference from './SetDifference';
+import SetSymmetricDifference from './SetSymmetricDifference';
 // Operators hashMap
 const operators: { [key: string]: Constructor<IOperator<unknown>> } = {};
 
@@ -58,7 +65,11 @@ registerOperator('notEqual', NotEqual);
 registerOperator('or', Or);
 registerOperator('remainder', Remainder);
 registerOperator('root', Root);
-// registerOperator('subtraction', Substracion)
+registerOperator('setDifference', SetDifference);
+registerOperator('setIntersection', SetIntersection);
+registerOperator('setSymmetricDifference', SetSymmetricDifference);
+registerOperator('setUnion', SetUnion);
+registerOperator('subtraction', Substraction);
 registerOperator('xor', Xor);
 
 export { IOperator, getOperators, registerOperator };
