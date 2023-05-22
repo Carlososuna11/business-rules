@@ -21,8 +21,6 @@ export default class Set implements IContext<void> {
 				propertyKey = key.replace(`[${indexMatch[0]}]`, '');
 			}
 
-			if (value[propertyKey] === undefined) return undefined;
-
 			if (index !== undefined) {
 				if (!Array.isArray(value[propertyKey])) {
 					throw new Error(`Cannot access index ${index} of ${propertyKey}`);

@@ -13,7 +13,7 @@ export default class SetSymmetricDifference<T> implements IOperator<Set<T>> {
 
 	execute(): Set<T> {
 		const result: Set<T> = new Set();
-		let allValues: Set<T> = new Set();
+		const allValues: Set<T> = new Set();
 
 		for (const set of this.sets) {
 			const values = isCommand(set) ? set.execute() : set;

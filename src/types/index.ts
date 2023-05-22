@@ -18,3 +18,23 @@ export type Data = {
 export type ExpressionOptions = {
 	[key: string]: FunctionMap<unknown> | OperatorMap<unknown> | ContextMap<unknown>;
 };
+
+export type RuleObject = {
+	name: string;
+	condition: Data;
+	description?: string;
+	actions?: Data[];
+};
+
+export type RuleResult = {
+	name: string;
+	fired: boolean;
+	actions?: unknown[];
+};
+
+export type EngineResult = {
+	elapsed: number;
+	fired: number;
+	results: RuleResult[];
+	context: object;
+};

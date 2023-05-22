@@ -1,4 +1,2 @@
-import parseCondition from './condition';
-import parseAction from './action';
-
-export { parseCondition, parseAction };
+export { default as parseCondition } from './condition';
+export { default as parseAction } from './action';

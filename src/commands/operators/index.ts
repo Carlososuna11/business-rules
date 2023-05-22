@@ -22,8 +22,6 @@ import In from './In';
 import Like from './Like';
 import Between from './Between';
 import Substraction from './Substraction';
-import Intersection from './SetIntersection';
-import Union from './SetUnion';
 import SetIntersection from './SetIntersection';
 import SetUnion from './SetUnion';
 import SetDifference from './SetDifference';

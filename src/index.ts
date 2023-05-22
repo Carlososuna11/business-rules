@@ -1,143 +1,156 @@
-import { getOperators } from './commands/operators';
-import Addition from './commands/operators/Addition';
-import Between from './commands/operators/Between';
-import Like from './commands/operators/Like';
-import SetDifference from './commands/operators/SetDifference';
-import SetSymmetricDifference from './commands/operators/SetSymmetricDifference';
-import Union from './commands/operators/SetUnion';
+import { Engine } from './engine';
+import { RuleObject } from './types';
 
-import { parseAction, parseCondition } from './parsers';
-
-const operators = getOperators();
-
-// console.log('OPERATORS: ', operators);
-
-// // test operator
-
-// const set1 = new Set([1, 2, 3]);
-// const set2 = new Set([2, 3, 4]);
-// const set3 = new Set([3, 4, 5]);
-// const setDifference = new SetSymmetricDifference(set1, set2, set3);
-// console.log(setDifference.execute()); // Output: Set { 1, 5 }
-
-// const set1 = new Set([1, 2, 3,5,6]);
-// const set2 = new Set([1, 2, 3]);
-// const set3 = new Set([1, 6, 3]);
-
-// const setDifference = new SetDifference(set1, set2, set3);
-// const result = setDifference.execute(); // Resultado: Set {}ltado: Set [ 1 ]
-
-// console.log('SET DIFFERENCE: ', result);
-
-// const set1 = new Set([1, 2, 3]);
-// const set2 = new Set([3, 4, 5]);
-// const unionOperator = new Union(set1, set2);
-// const unionSet = unionOperator.execute(); // Set [1, 2, 3, 4, 5]
-
-// console.log('UNION: ', unionSet);
-
-// const currentDate = new Date();
-// const startDate = new Date('2021-01-01');
-// const endDate = new Date('2024-01-31');
-
-// const betweenOp = new Between<Date>(currentDate, startDate, endDate);
-// console.log(betweenOp.execute()); // depende de la fecha actual
-
-// const expression = 'Hola mundo';
-// const pattern = 'Ho';
-
-// const likeOperator = new Like(expression, pattern, 'BEGIN');
-
-// console.log(likeOperator.execute()); // true
-
-// const expression2 = 'Hola mundo';
-// const pattern2 = 'mu';
-
-// const likeOperator2 = new Like(expression2, pattern2, 'END');
-
-// console.log(likeOperator2.execute()); // false
-
-// console.log('AND: ', new And(true, new Or(true, false)).execute());
-
-// console.log('OR: ', new Or(false, true).execute());
-
-// console.log('NOT:', new Not(false, true, false).execute());
-
-// console.log('XOR:', new Xor(true, false, true, false, true).execute());
-
-// console.log('EQ:', new Equal(true, true, true).execute());
-
-// console.log('GT:', new GreaterThan(3, 2).execute());
-
-// console.log('LT:', new LessThan(2, 3).execute());
-
-// console.log('CON:', new Contains([1, '4', true], '4').execute());
-
-// console.log('SUB:', new Substract(5, 3).execute());
-
-// console.log('SUB:', new Substract(new Date('01-01-2021'), new Date('01-02-2021')).execute());
-
-// console.log('ADDITION:', new Addition('2', 1).execute());
-
-// console.log('GTE:', new GreatherEqualThan(2, 3).execute());
-
-// console.log('LTE:', new LessEqualThan(2, 3).execute());
-
-// console.log('OTHER:', new Other(false, false, true).execute());
-
-// console.log('MULTIPLY:', new Multiply(2.5, -3).execute());
-
-// console.log('DIVIDE:', new Divide(3, -3).execute());
-
-// console.log('REMAINDER:', new Remainder(6, 3).execute());
-
-// console.log('ROOT:', new Root(16, 4).execute());
-
-// console.log('EXPONENTIATION:', new Exponentiation(3, 3).execute());
-
-// console.log('IS NULL:', new IsNull(2, null).execute());
-
-const data = {
-	user: {
-		name: 'John',
-		age: 19,
-		cars: ['Ford', 'BMW', 'Fiat'],
-	},
-};
-
-const condition = {
-	'$op.and': [
-		{
-			'$op.equal': [
-				{
-					'$ctx.get': ['user.name'],
-				},
-				'John',
-			],
-		},
-		{
-			'$op.greaterThan': [
-				{
-					'$ctx.get': ['user.age'],
-				},
-				18,
-			],
-		},
-	],
-};
-
-const action = {
-	'$ctx.set': ['user.age', 50],
-};
-
-const conditionResult = parseCondition(data, condition);
-
-// console.log('CONDITION RESULT: ', conditionResult.execute());
-
-if (conditionResult.execute()) {
-	const actionResult = parseAction(data, action);
-
-	// console.log('ACTION RESULT: ', actionResult.execute());
+interface User {
+	name: string;
+	age: number;
+	email: string;
+	address: string;
+	phoneNumber?: string;
+	rates: boolean[];
 }
 
-// console.log('DATA: ', data);
+// generados con ChatGPT xd
+const users: User[] = [
+	{
+		name: 'Ana García',
+		age: 28,
+		email: 'ana.garcia@mail.com',
+		address: 'Calle Mayor, 4',
+		phoneNumber: '+34 123 456 789',
+		rates: [true, false, true],
+	},
+	{
+		name: 'Juan Pérez',
+		age: 35,
+		email: 'juan.perez@mail.com',
+		address: 'Calle Gran Vía, 20',
+		phoneNumber: undefined,
+		rates: [true, false, true],
+	},
+	{
+		name: 'María Rodríguez',
+		age: 42,
+		email: 'maria.rodriguez@mail.com',
+		address: 'Calle Alcalá, 15',
+		phoneNumber: undefined,
+		rates: [true, false, true],
+	},
+	{
+		name: 'Pedro Sánchez',
+		age: 55,
+		email: 'pedro.sanchez@mail.com',
+		address: 'Avenida de la Constitución, 8',
+		phoneNumber: '+34 111 111 111',
+		rates: [true, false, true],
+	},
+	{
+		name: 'Lucía Fernández',
+		age: 30,
+		email: 'lucia.fernandez@mail.com',
+		address: 'Calle San Bernardo, 12',
+		phoneNumber: '+34 222 222 222',
+		rates: [true, false, true],
+	},
+	{
+		name: 'Javier Martínez',
+		age: 43,
+		email: 'javier.martinez@mail.com',
+		address: 'Calle Bravo Murillo, 100',
+		phoneNumber: '+34 333 333 333',
+		rates: [true, false, false],
+	},
+	{
+		name: 'Sara González',
+		age: 25,
+		email: 'sara.gonzalez@mail.com',
+		address: 'Calle Fuencarral, 80',
+		phoneNumber: '+34 444 444 444',
+		rates: [true, false, true],
+	},
+	{
+		name: 'David García',
+		age: 20,
+		email: 'david.garcia@mail.com',
+		address: 'Calle Toledo, 30',
+		phoneNumber: '+34 777 777 777',
+		rates: [true, false, true],
+	},
+	{
+		name: 'Luisa Pérez',
+		age: 37,
+		email: 'luisa.perez@mail.com',
+		address: 'Calle Almagro, 6',
+		phoneNumber: '+34 888 888 888',
+		rates: [true, false, false],
+	},
+	{
+		name: 'Carlos Gómez',
+		age: 50,
+		email: 'carlos.gomez@mail.com',
+		address: 'Calle Serrano, 10',
+		phoneNumber: '+34 999 999 999',
+		rates: [true, false, false],
+	},
+];
+
+const rules: RuleObject[] = [
+	{
+		name: 'Set Admin',
+		description: 'Si el usuario es mayor de 30 años, asignarle el rol de "admin".',
+		condition: {
+			'$op.greaterThan': [
+				{
+					'$ctx.get': ['age'],
+				},
+				30,
+			],
+		},
+		actions: [
+			{
+				'$ctx.set': ['role', 'admin'],
+			},
+		],
+	},
+	{
+		name: 'Rule 2',
+		description:
+			'Si el usuario tiene el numero de telefono vacio, rellenarlo con el numero de telefono de la empresa. y agregar un atributo de setPhoneNumber a true',
+		condition: {
+			'$op.equal': [
+				{
+					'$ctx.get': ['phoneNumber'],
+				},
+				undefined,
+			],
+		},
+		actions: [
+			{
+				'$ctx.set': ['phoneNumber', '+34 123 456 789'],
+			},
+			{
+				'$ctx.set': ['setPhoneNumber', true],
+			},
+		],
+	},
+	{
+		name: 'Rule 3',
+		description:
+			'Si la primera valoración es negativa (false), enviar un email al usuario con una encuesta de satisfacción.',
+		condition: {
+			'$op.equal': [
+				{
+					'$ctx.get': ['rates[0]'],
+				},
+				false,
+			],
+		},
+		actions: undefined,
+	},
+];
+
+const engine = new Engine(rules);
+
+const responses = users.map((user) => engine.evaluate(user));
+
+console.log(responses);
