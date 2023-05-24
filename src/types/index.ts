@@ -40,7 +40,6 @@ export type RuleResult = {
 export type EngineResult = {
 	elapsed: number;
 	fired: RuleResult[];
-	discarted: RuleResult[];
 	context: Data;
 };
 
@@ -55,4 +54,10 @@ export type ConflictResolutionStrategies = 'specificity' | 'priority' | 'order';
 export type LoggerOptions = {
 	filter?: { error: boolean; debug: boolean; warn: boolean; info: boolean };
 	delegate?: CallableFunction;
+};
+
+export type DelegatorOptions = {
+	preAction?: (...args: unknown[]) => unknown;
+	condition?: (...args: unknown[]) => unknown;
+	postAction?: (...args: unknown[]) => unknown;
 };

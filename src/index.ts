@@ -114,6 +114,8 @@ const rules: RuleObject[] = [
 	},
 	{
 		name: 'Rule 2',
+		final: true,
+		priority: 1,
 		description:
 			'Si el usuario tiene el numero de telefono vacio, rellenarlo con el numero de telefono de la empresa. y agregar un atributo de setPhoneNumber a true',
 		condition: {
@@ -145,12 +147,25 @@ const rules: RuleObject[] = [
 				false,
 			],
 		},
-		preActions: undefined,
+		preActions: [
+			{
+				'$ctx.set': [
+					'extra.emailUpper',
+					{
+						'$fn.upper': [
+							{
+								'$ctx.get': ['data.email'],
+							},
+						],
+					},
+				],
+			},
+		],
 	},
 ];
 
 const engine = new Engine(rules, { filter: { error: true, debug: true, warn: true, info: true } });
 
-const responses = users.map((user) => engine.evaluate(user, ['specificity']));
+const responses = users.map((user) => engine.evaluate(user, ['priority']));
 
 console.log(responses[1]);

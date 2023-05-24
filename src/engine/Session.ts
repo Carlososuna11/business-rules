@@ -4,9 +4,10 @@ import { RuleResult } from '../types';
 export default class Session<R extends AbstractRule> {
 	constructor(
 		public fired: RuleResult[] = [],
-		public discarted: RuleResult[] = [],
 		public ruleConditionResult: Map<string, boolean | undefined> = new Map<string, boolean>(),
-		public ruleActionResult: Map<string, RuleResult> = new Map<string, RuleResult>()
+		public activationGroupConditionResult: Map<string, boolean | undefined> = new Map<string, boolean>(),
+		public ruleActionResult: Map<string, RuleResult> = new Map<string, RuleResult>(),
+		public finalRule: R | undefined = undefined
 	) {}
 
 	getTrueRules(rules: R[]): R[] {

@@ -1,7 +1,7 @@
 import IContext from './IContext';
 import { Data } from '../../types';
 import { AbstractContextData } from '../../context';
-import ICommand from '../ICommand';
+import ICommand, { isCommand } from '../ICommand';
 
 export default class Set<T extends AbstractContextData> implements IContext<void> {
 	id = 'set';
@@ -35,14 +35,14 @@ export default class Set<T extends AbstractContextData> implements IContext<void
 					value = valueArray[index] as Data;
 					continue;
 				}
-				valueArray[index] = this.value;
+				valueArray[index] = isCommand(this.value) ? this.value.execute() : this.value;
 				return;
 			}
 			if (typeof value[propertyKey] === 'object') {
 				value = value[propertyKey] as Data;
 				continue;
 			}
-			value[propertyKey] = this.value;
+			value[propertyKey] = isCommand(this.value) ? this.value.execute() : this.value;
 			return;
 		}
 	}

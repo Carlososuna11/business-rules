@@ -1,6 +1,14 @@
 import IEngine from './IEngine';
 import { Rule, ConflictResolution, Delegator, RuleObserver } from '../rule';
-import { RuleObject, EngineResult, Data, ConflictResolutionStrategies, RuleResult, LoggerOptions } from '../types';
+import {
+	RuleObject,
+	EngineResult,
+	Data,
+	ConflictResolutionStrategies,
+	RuleResult,
+	LoggerOptions,
+	DelegatorOptions,
+} from '../types';
 import { ContextData } from '../context';
 import Session from './Session';
 import { Logger } from '../utils';
@@ -27,7 +35,11 @@ export default class Engine implements IEngine<ContextData, Rule> {
 		});
 	}
 
-	public evaluate(obj: object, strategies: ConflictResolutionStrategies[] = []): EngineResult {
+	public evaluate(
+		obj: object,
+		strategies: ConflictResolutionStrategies[] = [],
+		delegatorOptions: DelegatorOptions = {}
+	): EngineResult {
 		const start = Date.now();
 		this.contextData.reset();
 		const conflictResolution = new ConflictResolution<Rule>(strategies);
@@ -35,23 +47,23 @@ export default class Engine implements IEngine<ContextData, Rule> {
 		this.contextData.data = RuleObserver(obj as Data, (segment: unknown) => delegator.delegate(segment));
 		const session = new Session<Rule>();
 
-		// fire pre actions
+		const rules = session.resolveConflicts(this.rules, conflictResolution);
 
-		this.rules.forEach((rule) => {
-			this.firePreAction(rule, delegator);
+		rules.forEach((rule) => {
+			this.firePreAction(rule, delegator, delegatorOptions.preAction);
 		});
 
 		// evaluate rules
-		this.rules.forEach((rule) => {
-			this.evaluateRule(rule, delegator, session);
-		});
+		for (const rule of rules) {
+			this.evaluateRule(rule, delegator, session, delegatorOptions.condition);
+			if (session.finalRule) break;
+		}
 
-		const trueRules = session.getTrueRules(this.rules);
-		const sortedRules = session.resolveConflicts(trueRules, conflictResolution);
+		const trueRules = session.getTrueRules(rules);
 
 		// fire post actions
-		sortedRules.forEach((rule) => {
-			this.firePostAction(rule, delegator, session);
+		trueRules.forEach((rule) => {
+			this.firePostAction(rule, delegator, session, delegatorOptions.postAction);
 		});
 
 		const end = Date.now();
@@ -59,7 +71,6 @@ export default class Engine implements IEngine<ContextData, Rule> {
 		return {
 			elapsed: time,
 			fired: session.fired,
-			discarted: session.discarted,
 			context: this.contextData.getContextData(),
 		};
 	}
@@ -67,17 +78,37 @@ export default class Engine implements IEngine<ContextData, Rule> {
 	private evaluateRule(
 		rule: Rule,
 		delegator: Delegator<(...args: unknown[]) => unknown>,
-		session: Session<Rule>
+		session: Session<Rule>,
+		delegatorFunction?: (...args: unknown[]) => unknown
 	): void {
-		try {
-			delegator.set((segment: unknown) => {
-				const segmentName = Delegator.getSegmentName(segment);
-				// logger
-				this.logger.debug({
-					message: `Access context segment \`${segmentName}\` in rule evaluation`,
-					rule: rule.name,
-				});
+		//
+		if (rule.activationGroup && session.activationGroupConditionResult.get(rule.activationGroup)) {
+			session.ruleConditionResult.set(rule.id, undefined);
+			this.logger.debug({
+				message: `Discard rule \`${rule.name}\` because activation group \`${rule.activationGroup}\` is already activated`,
 			});
+			return;
+		}
+		try {
+			if (delegatorFunction) {
+				delegator.set(delegatorFunction);
+			} else {
+				delegator.set((segment: unknown) => {
+					const segmentName = Delegator.getSegmentName(segment);
+					// logger
+					this.logger.debug({
+						message: `Access context segment \`${segmentName}\` in rule evaluation`,
+						rule: rule.name,
+					});
+				});
+			}
+			const ruleEvaluation = rule.evaluate();
+			if (ruleEvaluation && rule.final) {
+				session.finalRule = rule;
+			}
+			if (ruleEvaluation && rule.activationGroup) {
+				session.activationGroupConditionResult.set(rule.activationGroup, true);
+			}
 			session.ruleConditionResult.set(rule.id, rule.evaluate());
 		} catch (error) {
 			this.logger.error({
@@ -91,16 +122,24 @@ export default class Engine implements IEngine<ContextData, Rule> {
 		}
 	}
 
-	private firePreAction(rule: Rule, delegator: Delegator<(...args: unknown[]) => unknown>): void {
+	private firePreAction(
+		rule: Rule,
+		delegator: Delegator<(...args: unknown[]) => unknown>,
+		delegatorFunction?: (...args: unknown[]) => unknown
+	): void {
 		try {
-			delegator.set((segment: unknown) => {
-				const segmentName = Delegator.getSegmentName(segment);
-				// logger
-				this.logger.debug({
-					message: `Access context segment \`${segmentName}\` in pre actions`,
-					rule: rule.name,
+			if (delegatorFunction) {
+				delegator.set(delegatorFunction);
+			} else {
+				delegator.set((segment: unknown) => {
+					const segmentName = Delegator.getSegmentName(segment);
+					// logger
+					this.logger.debug({
+						message: `Access context segment \`${segmentName}\` in pre actions`,
+						rule: rule.name,
+					});
 				});
-			});
+			}
 			rule.executePreActions();
 		} catch (error) {
 			this.logger.error({
@@ -115,31 +154,40 @@ export default class Engine implements IEngine<ContextData, Rule> {
 	private firePostAction(
 		rule: Rule,
 		delegator: Delegator<(...args: unknown[]) => unknown>,
-		session: Session<Rule>
+		session: Session<Rule>,
+		delegatorFunction?: (...args: unknown[]) => unknown
 	): void {
 		try {
-			delegator.set((segment: unknown) => {
-				const segmentName = Delegator.getSegmentName(segment);
-				// logger
-				this.logger.debug({
-					message: `Access context segment \`${segmentName}\` in post actions`,
-					rule: rule.name,
+			if (delegatorFunction) {
+				delegator.set(delegatorFunction);
+			} else {
+				delegator.set((segment: unknown) => {
+					const segmentName = Delegator.getSegmentName(segment);
+					// logger
+					this.logger.debug({
+						message: `Access context segment \`${segmentName}\` in post actions`,
+						rule: rule.name,
+					});
 				});
-			});
+			}
 			session.ruleActionResult.set(rule.id, rule.executePostActions());
 			session.fired.push(session.ruleActionResult.get(rule.id) as RuleResult);
+			if (rule.activationGroup) {
+				this.logger.debug({
+					message: `Activation group \`${rule.activationGroup}\` fired`,
+				});
+			}
+			if (rule.final) {
+				this.logger.debug({
+					message: `Final rule \`${rule.name}\` fired`,
+				});
+			}
 		} catch (error) {
 			this.logger.error({
-				message: `Error executing pre actions for rule`,
+				message: `Error executing post actions for rule. Rule not fired`,
 				rule: rule.name,
 				error: error instanceof Error ? error : new Error(String(error)),
 			});
-			session.ruleActionResult.set(rule.id, {
-				name: rule.name,
-				fired: false,
-				discarted: true,
-			});
-			session.discarted.push(session.ruleActionResult.get(rule.id) as RuleResult);
 		} finally {
 			delegator.unset();
 		}
