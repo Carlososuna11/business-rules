@@ -101,12 +101,12 @@ const rules: RuleObject[] = [
 		condition: {
 			'$op.greaterThan': [
 				{
-					'$ctx.get': ['age'],
+					'$ctx.get': ['data.age'],
 				},
 				30,
 			],
 		},
-		actions: [
+		postActions: [
 			{
 				'$ctx.set': ['role', 'admin'],
 			},
@@ -119,17 +119,17 @@ const rules: RuleObject[] = [
 		condition: {
 			'$op.equal': [
 				{
-					'$ctx.get': ['phoneNumber'],
+					'$ctx.get': ['data.phoneNumber'],
 				},
 				undefined,
 			],
 		},
-		actions: [
+		postActions: [
 			{
-				'$ctx.set': ['phoneNumber', '+34 123 456 789'],
+				'$ctx.set': ['data.phoneNumber', '+34 123 456 789'],
 			},
 			{
-				'$ctx.set': ['setPhoneNumber', true],
+				'$ctx.set': ['data.setPhoneNumber', true],
 			},
 		],
 	},
@@ -140,17 +140,17 @@ const rules: RuleObject[] = [
 		condition: {
 			'$op.equal': [
 				{
-					'$ctx.get': ['rates[0]'],
+					'$ctx.get': ['data.rates[0]'],
 				},
 				false,
 			],
 		},
-		actions: undefined,
+		preActions: undefined,
 	},
 ];
 
-const engine = new Engine(rules);
+const engine = new Engine(rules, { filter: { error: true, debug: true, warn: true, info: true } });
 
-const responses = users.map((user) => engine.evaluate(user));
+const responses = users.map((user) => engine.evaluate(user, ['specificity']));
 
-console.log(responses);
+console.log(responses[1]);

@@ -1,17 +1,19 @@
 import IContext from './IContext';
+import { AbstractContextData } from '../../context';
 import { Data } from '../../types';
 
-export default class Get implements IContext<unknown> {
+export default class Get<T extends AbstractContextData> implements IContext<unknown> {
 	id = 'get';
 
-	constructor(private readonly object: Data, private readonly key: string) {}
+	constructor(private readonly contextData: T, private readonly key: string) {}
 
 	execute(): unknown {
+		const context: Data = this.contextData.getContextData();
 		const keys = this.key.split('.');
 		if (!keys.length) return undefined;
-		if (!Object.entries(this.object).length) return undefined;
+		if (!Object.entries(context).length) return undefined;
 
-		let value = this.object;
+		let value = context;
 		for (const key of keys) {
 			const indexMatch = key.match(/[(\d+)]/);
 			let propertyKey = key;

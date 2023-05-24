@@ -1,17 +1,19 @@
 import IContext from './IContext';
 import { Data } from '../../types';
+import { AbstractContextData } from '../../context';
 import ICommand from '../ICommand';
 
-export default class Set implements IContext<void> {
+export default class Set<T extends AbstractContextData> implements IContext<void> {
 	id = 'set';
-	constructor(private object: Data, private key: string, private value: ICommand<unknown> | unknown) {}
+	constructor(private contextData: T, private key: string, private value: ICommand<unknown> | unknown) {}
 
 	execute(): void {
+		const context: Data = this.contextData.getContextData();
 		const keys = this.key.split('.');
 		if (!keys.length) return undefined;
-		if (!Object.entries(this.object).length) return undefined;
+		if (!Object.entries(context).length) return undefined;
 
-		let value = this.object;
+		let value = context;
 		for (const key of keys) {
 			const indexMatch = key.match(/[(\d+)]/);
 			let propertyKey = key;

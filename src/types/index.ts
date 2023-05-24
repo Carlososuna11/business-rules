@@ -23,18 +23,36 @@ export type RuleObject = {
 	name: string;
 	condition: Data;
 	description?: string;
-	actions?: Data[];
+	final?: boolean;
+	priority?: number;
+	activationGroup?: string;
+	preActions?: Data[];
+	postActions?: Data[];
 };
 
 export type RuleResult = {
 	name: string;
 	fired: boolean;
+	discarted: boolean;
 	actions?: unknown[];
 };
 
 export type EngineResult = {
 	elapsed: number;
-	fired: number;
-	results: RuleResult[];
-	context: object;
+	fired: RuleResult[];
+	discarted: RuleResult[];
+	context: Data;
+};
+
+export type LoggerLevels = 'debug' | 'error' | 'warn' | 'info';
+
+export type LoggerMethods = {
+	[key in LoggerLevels]: CallableFunction;
+};
+
+export type ConflictResolutionStrategies = 'specificity' | 'priority' | 'order';
+
+export type LoggerOptions = {
+	filter?: { error: boolean; debug: boolean; warn: boolean; info: boolean };
+	delegate?: CallableFunction;
 };
