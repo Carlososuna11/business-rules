@@ -1,3 +1,6 @@
+import Lower from './commands/functions/Lower';
+import Max from './commands/functions/Max';
+import Upper from './commands/functions/Upper';
 import { Engine } from './engine';
 import { RuleObject } from './types';
 

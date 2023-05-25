@@ -1,6 +1,11 @@
 import { Constructor } from '../../types';
+import Average from './Average';
 import IFunction from './IFunction';
-import Lower from './Lowers';
+import Lower from './Lower';
+import Max from './Max';
+import MaxDate from './MaxDate';
+import Min from './Min';
+import MinDate from './MinDate';
 import Upper from './Upper';
 
 // hashMap
@@ -22,5 +27,10 @@ function registerFunction(id: string, _function: Constructor<IFunction<unknown>>
 
 registerFunction('upper', Upper);
 registerFunction('lower', Lower);
+registerFunction('max', Max);
+registerFunction('min', Min);
+registerFunction('maxDate', MaxDate);
+registerFunction('minDate', MinDate);
+registerFunction('average', Average);
 
 export { IFunction, getFunctions, registerFunction };
