@@ -5,18 +5,14 @@ export default class IsNull implements IOperator<boolean> {
 	id = 'isNull';
 	symbol = 'isNull';
 
-	operators: (ICommand<unknown> | unknown)[];
-	constructor(...operators: (ICommand<unknown> | unknown)[]) {
-		this.operators = operators;
+	operator: ICommand<unknown> | unknown;
+	constructor(operator: ICommand<unknown> | unknown) {
+		this.operator = operator;
 	}
 
 	execute(): boolean {
-		return this.operators.some((operator) => {
-			if (isCommand(operator)) {
-				const value = operator.execute();
-				return value === null || value === undefined;
-			}
-			return operator === null || operator === undefined;
-		});
+		return isCommand(this.operator)
+			? this.operator.execute() === null || this.operator.execute() === undefined
+			: this.operator === null || this.operator === undefined;
 	}
 }

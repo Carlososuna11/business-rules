@@ -1,15 +1,19 @@
 import ICommand, { isCommand } from '../ICommand';
 import IOperator from './IOperator';
 
-export default class Between<T> implements IOperator<boolean> {
+export default class Between implements IOperator<boolean> {
 	symbol = 'between';
 	id = 'between';
 
-	value: T | ICommand<T>;
-	minValue: T | ICommand<T>;
-	maxValue: T | ICommand<T>;
+	value: number | string | Date | ICommand<number | string | Date>;
+	minValue: number | string | Date | ICommand<number | string | Date>;
+	maxValue: number | string | Date | ICommand<number | string | Date>;
 
-	constructor(value: T | ICommand<T>, minValue: T | ICommand<T>, maxValue: T | ICommand<T>) {
+	constructor(
+		value: number | string | Date | ICommand<number | string | Date>,
+		minValue: number | string | Date | ICommand<number | string | Date>,
+		maxValue: number | string | Date | ICommand<number | string | Date>
+	) {
 		this.value = value;
 		this.minValue = minValue;
 		this.maxValue = maxValue;

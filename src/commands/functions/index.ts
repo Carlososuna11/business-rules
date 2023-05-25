@@ -1,5 +1,6 @@
 import { Constructor } from '../../types';
 import IFunction from './IFunction';
+import Lower from './Lowers';
 import Upper from './Upper';
 
 // hashMap
@@ -20,5 +21,6 @@ function registerFunction(id: string, _function: Constructor<IFunction<unknown>>
 }
 
 registerFunction('upper', Upper);
+registerFunction('lower', Lower);
 
 export { IFunction, getFunctions, registerFunction };
