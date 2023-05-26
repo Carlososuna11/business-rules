@@ -23,4 +23,8 @@ export default class Root implements IOperator<number> {
 
 		return Math.pow(Number(radicandOperand), 1 / Number(indexOperand));
 	}
+
+	toString(): string {
+		return `${this.symbol}(${this.radicand.toString()}, ${this.index.toString()})`;
+	}
 }

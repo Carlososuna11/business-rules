@@ -20,4 +20,13 @@ export default class SetUnion<T> implements IOperator<Set<T>> {
 			return acc;
 		}, new Set<T>());
 	}
+
+	toString(): string {
+		const str = this.sets
+			.map((set) => {
+				return isCommand(set) ? set.toString() : JSON.stringify([...set]);
+			})
+			.join(` ${this.symbol} `);
+		return `(${str})`;
+	}
 }

@@ -19,4 +19,10 @@ export default class In<T> implements IOperator<boolean> {
 
 		return property in object;
 	}
+
+	toString(): string {
+		return `${isCommand(this.object) ? this.object.toString() : String(this.object)} ${this.symbol} ${
+			isCommand(this.property) ? this.property.toString() : String(this.property)
+		}`;
+	}
 }

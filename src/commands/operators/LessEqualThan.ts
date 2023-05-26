@@ -19,4 +19,8 @@ export default class LessEqualThan implements IOperator<boolean> {
 
 		return Number(leftOperand) <= Number(rightOperand);
 	}
+
+	toString(): string {
+		return `${this.left.toString()} ${this.symbol} ${this.right.toString()}`;
+	}
 }

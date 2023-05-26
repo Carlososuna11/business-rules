@@ -15,4 +15,13 @@ export default class Or implements IOperator<boolean> {
 			return typeof operator === 'boolean' ? operator : operator.execute();
 		});
 	}
+
+	toString(): string {
+		const str = this.operators
+			.map((operator) => {
+				return typeof operator === 'boolean' ? operator : operator.toString();
+			})
+			.join(` ${this.symbol} `);
+		return `(${str})`;
+	}
 }

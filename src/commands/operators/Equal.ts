@@ -17,4 +17,10 @@ export default class Equal<T> implements IOperator<boolean> {
 
 		return leftOperand === rightOperand;
 	}
+
+	toString(): string {
+		return `${isCommand(this.left) ? this.left.toString() : String(this.left)} ${this.symbol} ${
+			isCommand(this.left) ? this.left.toString() : String(this.left)
+		}`;
+	}
 }

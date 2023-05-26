@@ -30,4 +30,13 @@ export default class SetSymmetricDifference<T> implements IOperator<Set<T>> {
 
 		return result;
 	}
+
+	toString(): string {
+		const str = this.sets
+			.map((set) => {
+				return isCommand(set) ? set.toString() : JSON.stringify([...set]);
+			})
+			.join(` ${this.symbol} `);
+		return `(${str})`;
+	}
 }

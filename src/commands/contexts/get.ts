@@ -46,4 +46,8 @@ export default class Get<T extends AbstractContextData> implements IContext<unkn
 			return value[propertyKey];
 		}
 	}
+
+	toString(): string {
+		return `${this.key}`;
+	}
 }

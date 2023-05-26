@@ -8,4 +8,8 @@ export default class Upper implements IFuntion<string> {
 	execute(): string {
 		return typeof this.value === 'string' ? this.value.toUpperCase() : this.value.execute().toUpperCase();
 	}
+
+	toString(): string {
+		return `${this.id}(${this.value.toString()})`;
+	}
 }

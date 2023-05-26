@@ -1,6 +1,5 @@
 import { Engine } from './engine';
 import { RuleObject } from './types';
-
 interface User {
 	name: string;
 	age: number;

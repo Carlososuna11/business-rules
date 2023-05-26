@@ -20,4 +20,13 @@ export default class Xor implements IOperator<boolean> {
 			}) != false
 		);
 	}
+
+	toString(): string {
+		const str = this.operators
+			.map((operator) => {
+				return typeof operator === 'boolean' ? operator : operator.toString();
+			})
+			.join(` ${this.symbol} `);
+		return `(${str})`;
+	}
 }

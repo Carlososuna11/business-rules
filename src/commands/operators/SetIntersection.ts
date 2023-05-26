@@ -18,4 +18,13 @@ export default class SetIntersection<T> implements IOperator<Set<T>> {
 			return new Set([...accumulator].filter((element) => currentSet.has(element)));
 		});
 	}
+
+	toString(): string {
+		const str = this.sets
+			.map((set) => {
+				return isCommand(set) ? set.toString() : JSON.stringify([...set]);
+			})
+			.join(` ${this.symbol} `);
+		return `(${str})`;
+	}
 }

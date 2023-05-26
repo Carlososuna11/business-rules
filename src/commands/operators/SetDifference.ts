@@ -18,4 +18,13 @@ export default class SetDifference implements IOperator<Set<unknown>> {
 			return new Set([...result].filter((value) => !set.has(value)));
 		}, firstSet);
 	}
+
+	toString(): string {
+		const str = this.sets
+			.map((set) => {
+				return isCommand(set) ? set.toString() : JSON.stringify([...set]);
+			})
+			.join(` ${this.symbol} `);
+		return `(${str})`;
+	}
 }

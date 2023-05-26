@@ -22,4 +22,8 @@ export default class Between<T> implements IOperator<boolean> {
 
 		return val >= min && val <= max;
 	}
+
+	toString(): string {
+		return '';
+	}
 }

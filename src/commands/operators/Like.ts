@@ -1,6 +1,7 @@
 import ICommand, { isCommand } from '../ICommand';
 import IOperator from './IOperator';
 
+// TODO: remove and use RegExp instead
 export default class Like implements IOperator<boolean> {
 	id = 'like';
 	symbol = 'LIKE';

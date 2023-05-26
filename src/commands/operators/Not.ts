@@ -5,14 +5,13 @@ export default class Not implements IOperator<boolean> {
 	symbol = '!';
 	id = 'not';
 
-	operators: (boolean | ICommand<boolean>)[];
-	constructor(...operators: (boolean | ICommand<boolean>)[]) {
-		this.operators = operators;
-	}
+	constructor(public operand: boolean | ICommand<boolean>) {}
 
 	public execute(): boolean {
-		return this.operators.every((operator) => {
-			return typeof operator === 'boolean' ? !operator : !operator.execute();
-		});
+		return typeof this.operand === 'boolean' ? !this.operand : !this.operand.execute();
+	}
+
+	public toString(): string {
+		return `${this.symbol}(${this.operand.toString()})`;
 	}
 }

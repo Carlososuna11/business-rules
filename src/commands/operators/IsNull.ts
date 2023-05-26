@@ -3,20 +3,15 @@ import ICommand, { isCommand } from '../ICommand';
 
 export default class IsNull implements IOperator<boolean> {
 	id = 'isNull';
-	symbol = 'isNull';
-
-	operators: (ICommand<unknown> | unknown)[];
-	constructor(...operators: (ICommand<unknown> | unknown)[]) {
-		this.operators = operators;
-	}
+	symbol = 'is Null';
+	constructor(public operator: ICommand<unknown> | unknown) {}
 
 	execute(): boolean {
-		return this.operators.some((operator) => {
-			if (isCommand(operator)) {
-				const value = operator.execute();
-				return value === null || value === undefined;
-			}
-			return operator === null || operator === undefined;
-		});
+		const value = isCommand(this.operator) ? this.operator.execute() : this.operator;
+		return value === null || value === undefined;
+	}
+
+	toString(): string {
+		return `${isCommand(this.operator) ? this.operator.toString() : String(this.operator)} ${this.symbol}`;
 	}
 }

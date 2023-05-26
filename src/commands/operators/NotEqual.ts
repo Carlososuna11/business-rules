@@ -17,4 +17,10 @@ export default class NotEqual<T> implements IOperator<boolean> {
 
 		return leftOperand !== rightOperand;
 	}
+
+	toString(): string {
+		return `${isCommand(this.left) ? this.left.toString() : this.left} ${this.symbol} ${
+			isCommand(this.right) ? this.right.toString() : this.right
+		}`;
+	}
 }

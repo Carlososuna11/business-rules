@@ -20,4 +20,8 @@ export default class Addition implements IOperator<number | string> {
 
 		return Number(leftOperand) + Number(rightOperand);
 	}
+
+	toString(): string {
+		return `${this.left.toString()} ${this.symbol} ${this.right.toString()}`;
+	}
 }
