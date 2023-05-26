@@ -1,7 +1,7 @@
-import IFuntion from './IFunction';
+import IFunction from './IFunction';
 import ICommand from '../ICommand';
 
-export default class Lower implements IFuntion<string> {
+export default class Lower implements IFunction<string> {
 	id = 'lower';
 	constructor(private readonly value: ICommand<string> | string) {}
 

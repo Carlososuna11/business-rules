@@ -1,8 +1,11 @@
 import Average from './commands/functions/Average';
+import Length from './commands/functions/Length';
 import Lower from './commands/functions/Lower';
 import Max from './commands/functions/Max';
 import Min from './commands/functions/Min';
 import Upper from './commands/functions/Upper';
+import Addition from './commands/operators/Addition';
+import And from './commands/operators/And';
 import { Engine } from './engine';
 import { RuleObject } from './types';
 
@@ -175,5 +178,5 @@ const responses = users.map((user) => engine.evaluate(user, ['priority']));
 
 console.log(responses[1]);
 
-const minNumbers = new Average([4, '3', 2, 6, '1', 8]);
+const minNumbers = new Length([4, '3', 2, true, '1', new Addition(1, 2), new And(true)]);
 console.log(minNumbers.execute()); // Output: 4

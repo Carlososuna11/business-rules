@@ -1,6 +1,7 @@
 import { Constructor } from '../../types';
 import Average from './Average';
 import IFunction from './IFunction';
+import Length from './Length';
 import Lower from './Lower';
 import Max from './Max';
 import MaxDate from './MaxDate';
@@ -32,5 +33,6 @@ registerFunction('min', Min);
 registerFunction('maxDate', MaxDate);
 registerFunction('minDate', MinDate);
 registerFunction('average', Average);
+registerFunction('length', Length);
 
 export { IFunction, getFunctions, registerFunction };
