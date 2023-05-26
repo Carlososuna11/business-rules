@@ -1,5 +1,7 @@
+import Average from './commands/functions/Average';
 import Lower from './commands/functions/Lower';
 import Max from './commands/functions/Max';
+import Min from './commands/functions/Min';
 import Upper from './commands/functions/Upper';
 import { Engine } from './engine';
 import { RuleObject } from './types';
@@ -172,3 +174,6 @@ const engine = new Engine(rules, { filter: { error: true, debug: true, warn: tru
 const responses = users.map((user) => engine.evaluate(user, ['priority']));
 
 console.log(responses[1]);
+
+const minNumbers = new Average([4, '3', 2, 6, '1', 8]);
+console.log(minNumbers.execute()); // Output: 4
