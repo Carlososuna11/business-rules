@@ -1,6 +1,9 @@
 import Ceil from './commands/functions/Ceil';
 import Floor from './commands/functions/Floor';
+import ParseFloat from './commands/functions/ParseFloat';
+import ParseInt from './commands/functions/ParseInt';
 import Round from './commands/functions/Round';
+import Trunc from './commands/functions/Trunc';
 import And from './commands/operators/And';
 import Or from './commands/operators/Or';
 import { Engine } from './engine';
@@ -193,6 +196,6 @@ console.log(responses[0]);
 
 console.log(engine.rules[3].toString());
 
-var test = new Floor('9.1');
+var test = new Trunc(9.373823);
 
 console.log('El test es: ', test.execute());

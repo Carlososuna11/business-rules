@@ -9,8 +9,11 @@ import Max from './Max';
 import MaxDate from './MaxDate';
 import Min from './Min';
 import MinDate from './MinDate';
+import ParseFloat from './ParseFloat';
+import ParseInt from './ParseInt';
 import Round from './Round';
 import StandardDesviation from './StandardDesviation';
+import Trunc from './Trunc';
 import Upper from './Upper';
 
 // hashMap
@@ -39,8 +42,11 @@ registerFunction('max', Max);
 registerFunction('maxDate', MaxDate);
 registerFunction('min', Min);
 registerFunction('minDate', MinDate);
+registerFunction('parseFloat', ParseFloat);
+registerFunction('parseInt', ParseInt);
 registerFunction('round', Round);
 registerFunction('standarDesviation', StandardDesviation);
+registerFunction('trunc', Trunc);
 registerFunction('upper', Upper);
 
 export { IFunction, getFunctions, registerFunction };
