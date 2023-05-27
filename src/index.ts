@@ -1,3 +1,8 @@
+import Ceil from './commands/functions/Ceil';
+import Floor from './commands/functions/Floor';
+import Round from './commands/functions/Round';
+import And from './commands/operators/And';
+import Or from './commands/operators/Or';
 import { Engine } from './engine';
 import { RuleObject } from './types';
 interface User {
@@ -187,3 +192,7 @@ const responses = users.map((user) => engine.evaluate(user, ['priority']));
 console.log(responses[0]);
 
 console.log(engine.rules[3].toString());
+
+var test = new Floor('9.1');
+
+console.log('El test es: ', test.execute());

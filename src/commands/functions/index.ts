@@ -1,5 +1,7 @@
 import { Constructor } from '../../types';
 import Average from './Average';
+import Ceil from './Ceil';
+import Floor from './Floor';
 import IFunction from './IFunction';
 import Length from './Length';
 import Lower from './Lower';
@@ -7,6 +9,8 @@ import Max from './Max';
 import MaxDate from './MaxDate';
 import Min from './Min';
 import MinDate from './MinDate';
+import Round from './Round';
+import StandardDesviation from './StandardDesviation';
 import Upper from './Upper';
 
 // hashMap
@@ -26,13 +30,17 @@ function registerFunction(id: string, _function: Constructor<IFunction<unknown>>
 	functions[id] = _function;
 }
 
-registerFunction('upper', Upper);
+registerFunction('average', Average);
+registerFunction('ceil', Ceil);
+registerFunction('floor', Floor);
+registerFunction('length', Length);
 registerFunction('lower', Lower);
 registerFunction('max', Max);
-registerFunction('min', Min);
 registerFunction('maxDate', MaxDate);
+registerFunction('min', Min);
 registerFunction('minDate', MinDate);
-registerFunction('average', Average);
-registerFunction('length', Length);
+registerFunction('round', Round);
+registerFunction('standarDesviation', StandardDesviation);
+registerFunction('upper', Upper);
 
 export { IFunction, getFunctions, registerFunction };
