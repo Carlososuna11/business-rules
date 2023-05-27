@@ -20,7 +20,7 @@ export default class Equal<T> implements IOperator<boolean> {
 
 	toString(): string {
 		return `${isCommand(this.left) ? this.left.toString() : String(this.left)} ${this.symbol} ${
-			isCommand(this.left) ? this.left.toString() : String(this.left)
+			isCommand(this.right) ? this.right.toString() : String(this.right)
 		}`;
 	}
 }

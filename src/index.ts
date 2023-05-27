@@ -17,7 +17,7 @@ const users: User[] = [
 		email: 'ana.garcia@mail.com',
 		address: 'Calle Mayor, 4',
 		phoneNumber: '+34 123 456 789',
-		rates: [true, false, true],
+		rates: [true, true, true],
 	},
 	{
 		name: 'Juan Pérez',
@@ -107,7 +107,7 @@ const rules: RuleObject[] = [
 		},
 		postActions: [
 			{
-				'$ctx.set': ['role', 'admin'],
+				'$ctx.set': ['data.role', 'admin'],
 			},
 		],
 	},
@@ -161,10 +161,29 @@ const rules: RuleObject[] = [
 			},
 		],
 	},
+	{
+		name: 'Rule 4',
+		description: 'Todas las valoraciones son positivas',
+		condition: {
+			'$op.greaterThan': [
+				{
+					'$ctx.get': ['data.rates'],
+				},
+				1,
+			],
+		},
+		postActions: [
+			{
+				'$ctx.set': ['data.allRatesPositive', true],
+			},
+		],
+	},
 ];
 
-const engine = new Engine(rules, { filter: { error: true, debug: true, warn: true, info: true } });
+const engine = new Engine(rules, { filter: { error: true, debug: false, warn: true, info: true } });
 
 const responses = users.map((user) => engine.evaluate(user, ['priority']));
 
-console.log(responses[1]);
+console.log(responses[0]);
+
+console.log(engine.rules[3].toString());

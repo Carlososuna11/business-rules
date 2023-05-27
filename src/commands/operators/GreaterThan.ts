@@ -18,6 +18,9 @@ export default class GreaterThan implements IOperator<boolean> {
 		const leftOperand =
 			typeof this.left === 'number' || typeof this.left === 'string' ? this.left : this.left.execute();
 
+		console.log('leftOperand', leftOperand);
+		console.log('rightOperand', rightOperand);
+
 		return Number(leftOperand) > Number(rightOperand);
 	}
 

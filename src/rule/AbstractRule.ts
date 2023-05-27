@@ -36,4 +36,13 @@ export default abstract class AbstractRule {
 	abstract evaluate(): boolean;
 	abstract executePreActions(): void;
 	abstract executePostActions(): RuleResult;
+
+	toString(): string {
+		const condition = this.condition.toString();
+		const preActions = this.preActions.map((action) => action.toString()).join('\n\t-');
+		const postActions = this.postActions.map((action) => action.toString()).join('\n\t-');
+		return `Rule: ${this.name}${
+			preActions.length > 1 ? '\nbefore\n\t' + preActions : ''
+		}\nwhen\n\t${condition}\nthen\n\t${postActions.length > 1 ? postActions : 'do nothing'}`;
+	}
 }
