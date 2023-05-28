@@ -35,6 +35,12 @@ export default class Engine implements IEngine<ContextData, Rule> {
 		});
 	}
 
+	public toDiagram(): string {
+		return `@startmindmap\n<style>\nnode {\nPadding 12\nHorizontalAlignment center\nRoundCorner 40\nMaximumWidth 200\n}\n:depth(2) {\nMaximumWidth 500\n}\n:depth(3) {\nMaximumWidth 500\n}\n:depth(4) {\nMaximumWidth 500\n}\n<style>\n* ==Engine\nright side\n${this.rules
+			.map((rule) => rule.getDiagramPart())
+			.join('\n')}\n@endmindmap`;
+	}
+
 	public evaluate(
 		obj: object,
 		strategies: ConflictResolutionStrategies[] = [],

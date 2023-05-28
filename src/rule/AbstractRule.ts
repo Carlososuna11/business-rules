@@ -45,4 +45,16 @@ export default abstract class AbstractRule {
 			preActions.length > 1 ? '\nbefore\n\t' + preActions : ''
 		}\nwhen\n\t${condition}\nthen\n\t${postActions.length > 1 ? postActions : 'do nothing'}`;
 	}
+
+	getDiagramPart(): string {
+		const condition = this.condition.toString();
+		const preActions = this.preActions.map((action) => action.toString()).join('\n----\n');
+		const postActions = this.postActions.map((action) => action.toString()).join('\n----\n');
+
+		return `**:==${this.name}\n----\n${this.description ? this.description : ''};\n***:===PreActions\n====\n${
+			preActions.length > 1 ? preActions : ''
+		};\n****:===Condition\n====\n${condition};\n*****:===PostActions\n====\n${
+			postActions.length > 1 ? postActions : ''
+		};`;
+	}
 }
