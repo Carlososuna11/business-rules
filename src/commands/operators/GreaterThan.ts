@@ -15,16 +15,16 @@ export default class GreaterThan implements IOperator<boolean> {
 		this.right = right;
 	}
 
-	private validateOperand(value: number | string, operandName: string): void {
+	private validateValue(value: number | string, operandName: string): void {
 		this.typeGuard.evaluate(value, this.id, operandName);
 	}
 
 	execute(): boolean {
 		const rightOperand = isCommand(this.right) ? this.right.execute() : this.right;
-		this.validateOperand(rightOperand, 'right');
+		this.validateValue(rightOperand, 'rightOperand');
 
 		const leftOperand = isCommand(this.left) ? this.left.execute() : this.left;
-		this.validateOperand(leftOperand, 'left');
+		this.validateValue(leftOperand, 'leftOperand');
 
 		return Number(leftOperand) > Number(rightOperand);
 	}

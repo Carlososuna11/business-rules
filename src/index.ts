@@ -4,13 +4,14 @@ import ParseFloat from './commands/functions/ParseFloat';
 import ParseInt from './commands/functions/ParseInt';
 import Round from './commands/functions/Round';
 import Trunc from './commands/functions/Trunc';
-import And from './commands/operators/And';
 import Or from './commands/operators/Or';
 import { Engine } from './engine';
 import { Rule } from './rule';
 import { saveDiagram } from './utils';
 import { registerFunction, registerOperator } from './commands';
 import { RuleObject } from './types';
+import And from './commands/operators/And';
+import Xor from './commands/operators/Xor';
 interface User {
 	name: string;
 	age: number;
@@ -201,6 +202,9 @@ console.log(responses[0]);
 
 console.log(engine.rules[3].toString());
 
-var test = new Trunc(9.373823);
+var test = new Xor(false, true, true, false);
 
-console.log('El test es: ', test.execute());
+console.log('\nEl test es: ', test.execute());
+
+console.log('El string es: ', test.toString());
+
