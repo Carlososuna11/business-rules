@@ -161,29 +161,15 @@ const rules: RuleObject[] = [
 			},
 		],
 	},
-	{
-		name: 'Rule 4',
-		description: 'Todas las valoraciones son positivas',
-		condition: {
-			'$op.and': [
-				{
-					'$ctx.get': ['data.rates'],
-				},
-				1,
-			],
-		},
-		postActions: [
-			{
-				'$ctx.set': ['data.allRatesPositive', true],
-			},
-		],
-	},
 ];
 
 const engine = new Engine(rules, { filter: { error: true, debug: false, warn: true, info: true } });
 
-const responses = users.map((user) => engine.evaluate(user, ['priority']));
+engine.export('./', 'engine');
+const engine2 = Engine.import('./engine.tsbr');
+
+const responses = users.map((user) => engine2.evaluate(user, ['priority']));
 
 console.log(responses[0]);
 
-console.log(engine.rules[3].toString());
+console.log(engine2.rules[2].toString());

@@ -11,4 +11,5 @@ export default interface IEngine<T extends AbstractContextData, R extends Abstra
 	addRules(rules: RuleObject[]): void;
 	evaluate(obj: object): EngineResult;
 	toDiagram(): string;
+	export(path: string, name: string): void;
 }
