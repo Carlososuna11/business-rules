@@ -17,8 +17,11 @@ export default abstract class AbstractRule {
 	activationGroup?: string;
 	preActionObjects?: Data[];
 	postActionObjects?: Data[];
+	ruleObject: RuleObject;
 
 	constructor(rule: RuleObject, contextData: ContextData) {
+		// copy ruleObject to avoid mutating the original object
+		this.ruleObject = JSON.parse(JSON.stringify(rule));
 		this.id = uuidv4();
 		this.name = rule.name;
 		this.description = rule.description;

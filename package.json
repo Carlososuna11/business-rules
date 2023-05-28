@@ -1,8 +1,8 @@
 {
-	"name": "class-to-jsonschema",
-	"version": "1.0.0",
-	"description": "",
-	"main": "index.js",
+	"name": "typescript-business-rules-engine",
+	"version": "0.0.1",
+	"description": "A Typescript rule engine where rules are defined in JSON format.",
+	"main": "dist/index.js",
 	"scripts": {
 		"commit": "cz",
 		"compile": "tsc",
@@ -11,8 +11,17 @@
 		"lint": "prettier --ignore-path .gitignore --check --plugin-search-dir=. . && eslint --ignore-path .gitignore .",
 		"format": "prettier --write \"src/**/*.ts\""
 	},
-	"author": "",
-	"license": "ISC",
+	"contributors": [
+		{
+			"name": "Carlos Osuna",
+			"url": "https://github.com/Carlososuna11"
+		},
+		{
+			"name": "Carlos Doffiny",
+			"url": "https://github.com/CADSV"
+		}
+	],
+	"license": "GPLV3",
 	"devDependencies": {
 		"@commitlint/cli": "^17.6.3",
 		"@commitlint/config-conventional": "^17.6.3",
@@ -22,6 +31,7 @@
 		"@types/uuid": "^9.0.1",
 		"@typescript-eslint/eslint-plugin": "^5.59.0",
 		"@typescript-eslint/parser": "^5.59.0",
+		"bson": "^5.3.0",
 		"commitizen": "^4.3.0",
 		"eslint": "^8.39.0",
 		"husky": "^8.0.3",
@@ -33,5 +43,20 @@
 		"tslib": "^2.5.0",
 		"typescript": "^5.0.4",
 		"uuid": "^9.0.0"
-	}
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Carlososuna11/business-rules.git"
+	},
+	"bugs": {
+		"url": "https://github.com/Carlososuna11/business-rules/issues"
+	},
+	"homepage": "https://github.com/Carlososuna11/business-rules#readme",
+	"keywords": [
+		"business",
+		"rules",
+		"engine",
+		"typescript",
+		"json"
+	]
 }

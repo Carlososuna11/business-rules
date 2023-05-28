@@ -7,6 +7,9 @@ import Trunc from './commands/functions/Trunc';
 import And from './commands/operators/And';
 import Or from './commands/operators/Or';
 import { Engine } from './engine';
+import { Rule } from './rule';
+import { saveDiagram } from './utils';
+import { registerFunction, registerOperator } from './commands';
 import { RuleObject } from './types';
 interface User {
 	name: string;
@@ -191,6 +194,8 @@ const rules: RuleObject[] = [
 const engine = new Engine(rules, { filter: { error: true, debug: false, warn: true, info: true } });
 
 const responses = users.map((user) => engine.evaluate(user, ['priority']));
+
+// saveDiagram( engine.toDiagram(), '../diagrama.png');
 
 console.log(responses[0]);
 

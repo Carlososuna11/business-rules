@@ -1,4 +1,5 @@
 import IEngine from './IEngine';
+import fs from 'fs';
 import { Rule, ConflictResolution, Delegator, RuleObserver } from '../rule';
 import {
 	RuleObject,
@@ -12,6 +13,8 @@ import {
 import { ContextData } from '../context';
 import Session from './Session';
 import { Logger } from '../utils';
+import CONSTS from '../constants';
+import { BSON, ObjectId } from 'bson';
 
 export default class Engine implements IEngine<ContextData, Rule> {
 	public contextData: ContextData;
@@ -74,10 +77,12 @@ export default class Engine implements IEngine<ContextData, Rule> {
 
 		const end = Date.now();
 		const time = end - start;
+		const context = this.contextData.getContextData();
+		this.contextData.reset();
 		return {
 			elapsed: time,
 			fired: session.fired,
-			context: this.contextData.getContextData(),
+			context,
 		};
 	}
 
@@ -196,6 +201,42 @@ export default class Engine implements IEngine<ContextData, Rule> {
 			});
 		} finally {
 			delegator.unset();
+		}
+	}
+
+	public export(path: string, name: string): void {
+		// exports the engine to a TSBR file
+
+		const rules = this.rules.map((rule) => rule.ruleObject);
+
+		const data = {
+			_id: new ObjectId(),
+			version: CONSTS.VERSION,
+			rules,
+			createdAt: new Date().toISOString(),
+		};
+
+		const bytes = BSON.serialize(data);
+		// save to file
+		try {
+			const fileName = `${name}.tsbr`;
+			const file = fs.createWriteStream(`${path}/${fileName}`);
+			file.write(bytes);
+			file.end();
+		} catch (error) {
+			throw new Error(`Error exporting the engine: ${error}`);
+		}
+	}
+
+	public static import(filePath: string, loggerOptions: LoggerOptions = {}): Engine {
+		// imports the engine from a TSBR file
+		try {
+			const bytes = fs.readFileSync(filePath);
+			const data = BSON.deserialize(bytes);
+			const engine = new Engine(data.rules, loggerOptions);
+			return engine;
+		} catch (error) {
+			throw new Error(`Error importing the engine: ${error}`);
 		}
 	}
 }

@@ -48,6 +48,6 @@ export default class Set<T extends AbstractContextData> implements IContext<void
 	}
 
 	toString(): string {
-		return `${this.key} = ${isCommand(this.value) ? this.value.toString() : this.value}`;
+		return `${this.key} := ${isCommand(this.value) ? this.value.toString() : this.value}`;
 	}
 }
