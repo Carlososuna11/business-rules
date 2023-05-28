@@ -1,4 +1,4 @@
-import ICommand from '../ICommand';
+import ICommand, { isCommand } from '../ICommand';
 import IOperator from './IOperator';
 import { TypeGuard } from '../../utils';
 
@@ -14,16 +14,17 @@ export default class GreaterThan implements IOperator<boolean> {
 		this.left = left;
 		this.right = right;
 	}
+
+	private validateValue(value: number | string, operandName: string): void {
+		this.typeGuard.evaluate(value, this.id, operandName);
+	}
+
 	execute(): boolean {
-		const rightOperand =
-			typeof this.right === 'number' || typeof this.right === 'string' ? this.right : this.right.execute();
+		const rightOperand = isCommand(this.right) ? this.right.execute() : this.right;
+		this.validateValue(rightOperand, 'rightOperand');
 
-		this.typeGuard.evaluate(rightOperand, this.id, 'rightOperand');
-
-		const leftOperand =
-			typeof this.left === 'number' || typeof this.left === 'string' ? this.left : this.left.execute();
-
-		this.typeGuard.evaluate(leftOperand, this.id, 'leftOperand');
+		const leftOperand = isCommand(this.left) ? this.left.execute() : this.left;
+		this.validateValue(leftOperand, 'leftOperand');
 
 		return Number(leftOperand) > Number(rightOperand);
 	}
