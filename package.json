@@ -1,6 +1,6 @@
 {
 	"name": "typescript-business-rules-engine",
-	"version": "0.0.1",
+	"version": "1.0.0",
 	"description": "A Typescript rule engine where rules are defined in JSON format.",
 	"main": "dist/index.js",
 	"scripts": {
