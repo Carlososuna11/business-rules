@@ -61,3 +61,19 @@ export type DelegatorOptions = {
 	condition?: (...args: unknown[]) => unknown;
 	postAction?: (...args: unknown[]) => unknown;
 };
+
+// list of available options for the typeGuards function
+export type TypeGuardsOptions =
+	| 'string'
+	| 'number'
+	| 'boolean'
+	| 'object'
+	| 'array'
+	| 'function'
+	| 'null'
+	| 'undefined'
+	| 'symbol'
+	| 'date'
+	| 'command'
+	| 'map'
+	| 'set';
