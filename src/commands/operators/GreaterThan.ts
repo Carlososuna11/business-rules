@@ -6,7 +6,7 @@ export default class GreaterThan implements IOperator<boolean> {
 	id = 'greaterThan';
 	symbol = '>';
 
-	typeGuard: TypeGuard = new TypeGuard(['number', 'string']);
+	private typeGuard: TypeGuard = new TypeGuard(['number', 'string']);
 	left: number | string | ICommand<number | string>;
 	right: number | string | ICommand<number | string>;
 
@@ -15,16 +15,16 @@ export default class GreaterThan implements IOperator<boolean> {
 		this.right = right;
 	}
 
-	private validateValue(value: number | string, operandName: string): void {
+	private validateOperand(value: number | string, operandName: string): void {
 		this.typeGuard.evaluate(value, this.id, operandName);
 	}
 
 	execute(): boolean {
 		const rightOperand = isCommand(this.right) ? this.right.execute() : this.right;
-		this.validateValue(rightOperand, 'rightOperand');
+		this.validateOperand(rightOperand, 'right');
 
 		const leftOperand = isCommand(this.left) ? this.left.execute() : this.left;
-		this.validateValue(leftOperand, 'leftOperand');
+		this.validateOperand(leftOperand, 'left');
 
 		return Number(leftOperand) > Number(rightOperand);
 	}

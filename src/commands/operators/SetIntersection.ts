@@ -1,17 +1,17 @@
 import ICommand, { isCommand } from '../ICommand';
 import IOperator from './IOperator';
 
-export default class SetIntersection<T> implements IOperator<Set<T>> {
+export default class SetIntersection implements IOperator<Set<unknown>> {
 	symbol = '&';
 	id = 'setIntersection';
 
-	sets: (Set<T> | ICommand<Set<T>>)[];
+	sets: (Set<unknown> | ICommand<Set<unknown>>)[];
 
-	constructor(...sets: (Set<T> | ICommand<Set<T>>)[]) {
+	constructor(...sets: (Set<unknown> | ICommand<Set<unknown>>)[]) {
 		this.sets = sets;
 	}
 
-	execute(): Set<T> {
+	execute(): Set<unknown> {
 		const setArray = this.sets.map((set) => (isCommand(set) ? set.execute() : set));
 
 		return setArray.reduce((accumulator, currentSet) => {

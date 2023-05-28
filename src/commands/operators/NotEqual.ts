@@ -1,13 +1,13 @@
 import ICommand, { isCommand } from '../ICommand';
 import IOperator from './IOperator';
 
-export default class NotEqual<T> implements IOperator<boolean> {
+export default class NotEqual implements IOperator<boolean> {
 	symbol = '!=';
 	id = 'notEqual';
 
-	left: T | ICommand<T>;
-	right: T | ICommand<T>;
-	constructor(left: T | ICommand<T>, right: T | ICommand<T>) {
+	left: unknown | ICommand<unknown>;
+	right: unknown | ICommand<unknown>;
+	constructor(left: unknown | ICommand<unknown>, right: unknown | ICommand<unknown>) {
 		this.left = left;
 		this.right = right;
 	}

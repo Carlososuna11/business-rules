@@ -1,19 +1,19 @@
 import ICommand, { isCommand } from '../ICommand';
 import IOperator from './IOperator';
 
-export default class SetSymmetricDifference<T> implements IOperator<Set<T>> {
+export default class SetSymmetricDifference implements IOperator<Set<unknown>> {
 	id = 'setSymmetricDifference';
 	symbol = '∆';
 
-	sets: (Set<T> | ICommand<Set<T>>)[];
+	sets: (Set<unknown> | ICommand<Set<unknown>>)[];
 
-	constructor(...sets: (Set<T> | ICommand<Set<T>>)[]) {
+	constructor(...sets: (Set<unknown> | ICommand<Set<unknown>>)[]) {
 		this.sets = sets;
 	}
 
-	execute(): Set<T> {
-		const result: Set<T> = new Set();
-		const allValues: Set<T> = new Set();
+	execute(): Set<unknown> {
+		const result: Set<unknown> = new Set();
+		const allValues: Set<unknown> = new Set();
 
 		for (const set of this.sets) {
 			const values = isCommand(set) ? set.execute() : set;
