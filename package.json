@@ -43,5 +43,20 @@
 		"tslib": "^2.5.0",
 		"typescript": "^5.0.4",
 		"uuid": "^9.0.0"
-	}
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Carlososuna11/business-rules.git"
+	},
+	"bugs": {
+		"url": "https://github.com/Carlososuna11/business-rules/issues"
+	},
+	"homepage": "https://github.com/Carlososuna11/business-rules#readme",
+	"keywords": [
+		"business",
+		"rules",
+		"engine",
+		"typescript",
+		"json"
+	]
 }
