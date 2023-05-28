@@ -16,12 +16,9 @@ export default class And implements IOperator<boolean> {
 	execute(): boolean {
 		for (let i = 0; i < this.operators.length; i++) {
 			const operand = this.operators[i];
-			const result = this.typeGuard.evaluate(
-				typeof operand === 'boolean' ? operand : operand.execute(),
-				this.id,
-				`operand[${i}]`
-			);
-			if (!result) {
+			const toEvaluate = typeof operand === 'boolean' ? operand : operand.execute();
+			this.typeGuard.evaluate(toEvaluate, this.id, `operand[${i}]`);
+			if (!toEvaluate) {
 				return false;
 			}
 		}

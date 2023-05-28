@@ -171,7 +171,7 @@ export default class TypeGuard {
 		}
 	}
 
-	evaluate(value: unknown, commandName: string, keyName: string): unknown {
+	evaluate(value: unknown, commandName: string, keyName: string): boolean {
 		const result = this.someTypeGuard.some((typeGuard) => {
 			if (typeGuard in TypeGuard.defaultTypeGuards) {
 				return TypeGuard.defaultTypeGuards[typeGuard](value);
@@ -187,6 +187,6 @@ export default class TypeGuard {
 			);
 		}
 
-		return value;
+		return result;
 	}
 }
