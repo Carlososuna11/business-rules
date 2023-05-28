@@ -3,6 +3,7 @@ import Average from './Average';
 import Ceil from './Ceil';
 import Floor from './Floor';
 import IFunction from './IFunction';
+import IsNaN from './IsNaN';
 import Length from './Length';
 import Lower from './Lower';
 import Max from './Max';
@@ -36,6 +37,7 @@ function registerFunction(id: string, _function: Constructor<IFunction<unknown>>
 registerFunction('average', Average);
 registerFunction('ceil', Ceil);
 registerFunction('floor', Floor);
+registerFunction('isNaN', IsNaN);
 registerFunction('length', Length);
 registerFunction('lower', Lower);
 registerFunction('max', Max);

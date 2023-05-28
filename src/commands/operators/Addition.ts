@@ -1,10 +1,12 @@
 import IOperator from './IOperator';
-import ICommand from '../ICommand';
+import ICommand, { isCommand } from '../ICommand';
+import { TypeGuard } from '../../utils';
 
 export default class Addition implements IOperator<number | string> {
 	id = 'addition';
 	symbol = '+';
 
+	typeGuard: TypeGuard = new TypeGuard(['number', 'string']);
 	left: number | string | ICommand<number | string>;
 	right: number | string | ICommand<number | string>;
 
@@ -12,11 +14,17 @@ export default class Addition implements IOperator<number | string> {
 		this.left = left;
 		this.right = right;
 	}
+
+	private validateValue(value: number | string, operandName: string): void {
+		this.typeGuard.evaluate(value, this.id, operandName);
+	}
+
 	execute(): number {
-		const rightOperand =
-			typeof this.right === 'number' || typeof this.right === 'string' ? this.right : this.right.execute();
-		const leftOperand =
-			typeof this.left === 'number' || typeof this.left === 'string' ? this.left : this.left.execute();
+		const rightOperand = isCommand(this.right) ? this.right.execute() : this.right;
+		this.validateValue(rightOperand, 'rightOperand');
+
+		const leftOperand = isCommand(this.left) ? this.left.execute() : this.left;
+		this.validateValue(leftOperand, 'leftOperand');
 
 		return Number(leftOperand) + Number(rightOperand);
 	}
