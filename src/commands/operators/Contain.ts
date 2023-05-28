@@ -2,24 +2,24 @@
 import ICommand, { isCommand } from '../ICommand';
 import IOperator from './IOperator';
 
-export default class Contain<T> implements IOperator<boolean> {
+export default class Contain implements IOperator<boolean> {
 	symbol = 'contain';
 	id = 'contain';
 
-	value: T | ICommand<T>;
-	list: (T | ICommand<T>)[] | ICommand<T[]>;
+	value: unknown | ICommand<unknown>;
+	list: (unknown | ICommand<unknown>)[] | ICommand<unknown[]>;
 
-	constructor(value: T | ICommand<T>, list: (T | ICommand<T>)[] | ICommand<T[]>) {
+	constructor(value: unknown | ICommand<unknown>, list: (unknown | ICommand<unknown>)[] | ICommand<unknown[]>) {
 		this.value = value;
 		this.list = list;
 	}
 
 	execute(): boolean {
-		let list: T[] = [];
+		let list: unknown[] = [];
 		if (isCommand(this.list)) {
-			list = this.list.execute() as T[];
+			list = this.list.execute() as unknown[];
 		}
-		list = list.map((e) => (isCommand(e) ? e.execute() : e)) as T[];
+		list = list.map((e) => (isCommand(e) ? e.execute() : e)) as unknown[];
 		const value = isCommand(this.value) ? this.value.execute() : this.value;
 
 		return list.includes(value);
