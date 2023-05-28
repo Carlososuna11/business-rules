@@ -50,22 +50,22 @@ examples:
 */
 
 export const getOperation = (operation: object) => {
-  const options: ExpressionOptions = {
-    op: getOperators(),
-    fn: getFunctions(),
-  };
+	const options: ExpressionOptions = {
+		op: getOperators(),
+		fn: getFunctions(),
+	};
 
-  if (typeof operation !== 'object') {
-    return operation;
-  }
+	if (typeof operation !== 'object') {
+		return operation;
+	}
 
-  // if not have keys, return operation
-  if (!Object.keys(operation).length) {
-    return operation;
-  }
+	// if not have keys, return operation
+	if (!Object.keys(operation).length) {
+		return operation;
+	}
 
-  // ej: op.and => [op, and] ej: upper => [upper]
-  const [type, code] = Object.keys(operation)[0].split('.');
+	// ej: op.and => [op, and] ej: upper => [upper]
+	const [type, code] = Object.keys(operation)[0].split('.');
 
-  options[type][code];
+	options[type][code];
 };

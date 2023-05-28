@@ -1,14 +1,143 @@
-import { getOperators } from './operators';
+import { getOperators } from './commands/operators';
+import Addition from './commands/operators/Addition';
+import Between from './commands/operators/Between';
+import Like from './commands/operators/Like';
+import SetDifference from './commands/operators/SetDifference';
+import SetSymmetricDifference from './commands/operators/SetSymmetricDifference';
+import Union from './commands/operators/SetUnion';
+
+import { parseAction, parseCondition } from './parsers';
 
 const operators = getOperators();
 
-const And = operators['and'];
-const Or = operators['or'];
+// console.log('OPERATORS: ', operators);
 
-// test operator
+// // test operator
 
-console.log(new And(true, true).execute());
-console.log(new And(true, false).execute());
+// const set1 = new Set([1, 2, 3]);
+// const set2 = new Set([2, 3, 4]);
+// const set3 = new Set([3, 4, 5]);
+// const setDifference = new SetSymmetricDifference(set1, set2, set3);
+// console.log(setDifference.execute()); // Output: Set { 1, 5 }
 
-console.log(new Or(true, true).execute());
-console.log(new Or(true, false).execute());
+// const set1 = new Set([1, 2, 3,5,6]);
+// const set2 = new Set([1, 2, 3]);
+// const set3 = new Set([1, 6, 3]);
+
+// const setDifference = new SetDifference(set1, set2, set3);
+// const result = setDifference.execute(); // Resultado: Set {}ltado: Set [ 1 ]
+
+// console.log('SET DIFFERENCE: ', result);
+
+// const set1 = new Set([1, 2, 3]);
+// const set2 = new Set([3, 4, 5]);
+// const unionOperator = new Union(set1, set2);
+// const unionSet = unionOperator.execute(); // Set [1, 2, 3, 4, 5]
+
+// console.log('UNION: ', unionSet);
+
+// const currentDate = new Date();
+// const startDate = new Date('2021-01-01');
+// const endDate = new Date('2024-01-31');
+
+// const betweenOp = new Between<Date>(currentDate, startDate, endDate);
+// console.log(betweenOp.execute()); // depende de la fecha actual
+
+// const expression = 'Hola mundo';
+// const pattern = 'Ho';
+
+// const likeOperator = new Like(expression, pattern, 'BEGIN');
+
+// console.log(likeOperator.execute()); // true
+
+// const expression2 = 'Hola mundo';
+// const pattern2 = 'mu';
+
+// const likeOperator2 = new Like(expression2, pattern2, 'END');
+
+// console.log(likeOperator2.execute()); // false
+
+// console.log('AND: ', new And(true, new Or(true, false)).execute());
+
+// console.log('OR: ', new Or(false, true).execute());
+
+// console.log('NOT:', new Not(false, true, false).execute());
+
+// console.log('XOR:', new Xor(true, false, true, false, true).execute());
+
+// console.log('EQ:', new Equal(true, true, true).execute());
+
+// console.log('GT:', new GreaterThan(3, 2).execute());
+
+// console.log('LT:', new LessThan(2, 3).execute());
+
+// console.log('CON:', new Contains([1, '4', true], '4').execute());
+
+// console.log('SUB:', new Substract(5, 3).execute());
+
+// console.log('SUB:', new Substract(new Date('01-01-2021'), new Date('01-02-2021')).execute());
+
+// console.log('ADDITION:', new Addition('2', 1).execute());
+
+// console.log('GTE:', new GreatherEqualThan(2, 3).execute());
+
+// console.log('LTE:', new LessEqualThan(2, 3).execute());
+
+// console.log('OTHER:', new Other(false, false, true).execute());
+
+// console.log('MULTIPLY:', new Multiply(2.5, -3).execute());
+
+// console.log('DIVIDE:', new Divide(3, -3).execute());
+
+// console.log('REMAINDER:', new Remainder(6, 3).execute());
+
+// console.log('ROOT:', new Root(16, 4).execute());
+
+// console.log('EXPONENTIATION:', new Exponentiation(3, 3).execute());
+
+// console.log('IS NULL:', new IsNull(2, null).execute());
+
+const data = {
+	user: {
+		name: 'John',
+		age: 19,
+		cars: ['Ford', 'BMW', 'Fiat'],
+	},
+};
+
+const condition = {
+	'$op.and': [
+		{
+			'$op.equal': [
+				{
+					'$ctx.get': ['user.name'],
+				},
+				'John',
+			],
+		},
+		{
+			'$op.greaterThan': [
+				{
+					'$ctx.get': ['user.age'],
+				},
+				18,
+			],
+		},
+	],
+};
+
+const action = {
+	'$ctx.set': ['user.age', 50],
+};
+
+const conditionResult = parseCondition(data, condition);
+
+// console.log('CONDITION RESULT: ', conditionResult.execute());
+
+if (conditionResult.execute()) {
+	const actionResult = parseAction(data, action);
+
+	// console.log('ACTION RESULT: ', actionResult.execute());
+}
+
+// console.log('DATA: ', data);
