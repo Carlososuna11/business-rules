@@ -109,7 +109,7 @@ export default class Engine implements IEngine<ContextData, Rule> {
 			if (ruleEvaluation && rule.activationGroup) {
 				session.activationGroupConditionResult.set(rule.activationGroup, true);
 			}
-			session.ruleConditionResult.set(rule.id, rule.evaluate());
+			session.ruleConditionResult.set(rule.id, ruleEvaluation);
 		} catch (error) {
 			this.logger.error({
 				message: `Error executing evaluation for rule`,

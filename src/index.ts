@@ -173,7 +173,7 @@ const rules: RuleObject[] = [
 		name: 'Rule 4',
 		description: 'Todas las valoraciones son positivas',
 		condition: {
-			'$op.greaterThan': [
+			'$op.and': [
 				{
 					'$ctx.get': ['data.rates'],
 				},
