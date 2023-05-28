@@ -1,8 +1,8 @@
 {
-	"name": "class-to-jsonschema",
-	"version": "1.0.0",
-	"description": "",
-	"main": "index.js",
+	"name": "typescript-business-rules-engine",
+	"version": "0.0.1",
+	"description": "A Typescript rule engine where rules are defined in JSON format.",
+	"main": "src/index.ts",
 	"scripts": {
 		"commit": "cz",
 		"compile": "tsc",
@@ -11,8 +11,17 @@
 		"lint": "prettier --ignore-path .gitignore --check --plugin-search-dir=. . && eslint --ignore-path .gitignore .",
 		"format": "prettier --write \"src/**/*.ts\""
 	},
-	"author": "",
-	"license": "ISC",
+	"contributors": [
+		{
+			"name": "Carlos Osuna",
+			"url": "https://github.com/Carlososuna11"
+		},
+		{
+			"name": "Carlos Doffiny",
+			"url": "https://github.com/CADSV"
+		}
+	],
+	"license": "GPLV3",
 	"devDependencies": {
 		"@commitlint/cli": "^17.6.3",
 		"@commitlint/config-conventional": "^17.6.3",
