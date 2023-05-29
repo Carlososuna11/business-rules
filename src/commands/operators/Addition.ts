@@ -1,5 +1,5 @@
 import IOperator from './IOperator';
-import ICommand from '../ICommand';
+import ICommand, { isCommand } from '../ICommand';
 import { TypeGuard } from '../../utils';
 import { AbstractContextData } from '../../context';
 export default class Addition implements IOperator<number | string> {
@@ -20,11 +20,9 @@ export default class Addition implements IOperator<number | string> {
 	}
 
 	async execute(context: AbstractContextData): Promise<number> {
-		const rightOperand =
-			typeof this.right === 'number' || typeof this.right === 'string' ? this.right : await this.right.execute(context);
+		const rightOperand = isCommand(this.right) ? await this.right.execute(context) : this.right;
 		await this.validateOperand(rightOperand, 'right');
-		const leftOperand =
-			typeof this.left === 'number' || typeof this.left === 'string' ? this.left : await this.left.execute(context);
+		const leftOperand = isCommand(this.left) ? await this.left.execute(context) : this.left;
 		await this.validateOperand(leftOperand, 'left');
 
 		return Number(leftOperand) + Number(rightOperand);

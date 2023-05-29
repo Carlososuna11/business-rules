@@ -29,14 +29,9 @@ export default class And implements IOperator<boolean> {
 	}
 
 	toString(): string {
-		let listString = '';
-		if (isCommand(this.operands)) {
-			listString = this.operands.toString();
-		} else {
-			listString = this.operands.map((e) => (isCommand(e) ? e.toString() : String(e))).join(` ${this.symbol} `);
-			listString = `(${listString})`;
-		}
-
-		return listString;
+		const str = isCommand(this.operands)
+			? this.operands.toString()
+			: this.operands.map((e) => (isCommand(e) ? e.toString() : String(e))).join(` ${this.symbol} `);
+		return `(${str})`;
 	}
 }
