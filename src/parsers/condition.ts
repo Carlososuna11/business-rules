@@ -1,12 +1,8 @@
 import { getOperators, getFunctions, getContextMethods, ICommand } from '../commands';
 import { ExpressionOptions } from '../types';
-import { AbstractContextData } from '../context';
 
 // Composite pattern
-export const parseCondition = <T extends AbstractContextData>(
-	contextData: T,
-	conditionStructure: object
-): ICommand<boolean> => {
+export const parseCondition = (conditionStructure: object): ICommand<boolean> => {
 	const options: ExpressionOptions = {
 		$op: getOperators(),
 		$fn: getFunctions(),
@@ -29,13 +25,12 @@ export const parseCondition = <T extends AbstractContextData>(
 			throw new Error(`Arguments for ${token} must be an array`);
 		}
 
-		// if type is $data, inject contextData into args (first argument)
-		if (type === '$ctx') {
-			args.unshift(contextData);
-		}
 		const Class = options[type][name];
-		const subExpressions = (args as object[]).map((arg: unknown) => {
-			return typeof arg === 'object' && arg ? parseExpression(arg) : arg;
+		const subExpressions = (args as unknown[]).map((arg: unknown) => {
+			if (Array.isArray(arg))
+				return arg.map((subArg) => (typeof subArg === 'object' ? parseExpression(subArg) : subArg));
+			if (typeof arg === 'object' && arg) return parseExpression(arg);
+			return arg;
 		});
 		return new Class(...subExpressions);
 	};

@@ -1,23 +1,25 @@
 import IOperator from './IOperator';
-import ICommand, { isCommand } from '../ICommand';
+import ICommand from '../ICommand';
 import { TypeGuard } from '../../utils';
+import { AbstractContextData } from '../../context';
 
 export default class Or implements IOperator<boolean> {
 	id = 'or';
 	symbol = '||';
 
 	private typeGuard: TypeGuard = new TypeGuard(['boolean']);
-	constructor(private readonly operands: (ICommand<boolean> | boolean)[]) {}
 
-	private validateValue(value: boolean, operandName: string): void {
-		this.typeGuard.evaluate(value, this.id, operandName);
+	constructor(public operands: (ICommand<boolean> | boolean)[]) {}
+
+	private async validateOperand(value: boolean, operandName: string): Promise<void> {
+		await this.typeGuard.evaluate(value, this.id, operandName);
 	}
 
-	execute(): boolean {
+	public async execute(context: AbstractContextData): Promise<boolean> {
 		for (let i = 0; i < this.operands.length; i++) {
 			const operand = this.operands[i];
-			const toEvaluate = isCommand(operand) ? operand.execute() : operand;
-			this.validateValue(toEvaluate, `operands[${i}]`);
+			const toEvaluate = typeof operand === 'boolean' ? operand : await operand.execute(context);
+			await this.validateOperand(toEvaluate, `operands[${i}]`);
 			if (toEvaluate) {
 				return true;
 			}
@@ -28,8 +30,8 @@ export default class Or implements IOperator<boolean> {
 
 	toString(): string {
 		const str = this.operands
-			.map((operator) => {
-				return typeof operator === 'boolean' ? operator : operator.toString();
+			.map((operand) => {
+				return typeof operand === 'boolean' ? operand : operand.toString();
 			})
 			.join(` ${this.symbol} `);
 		return `(${str})`;

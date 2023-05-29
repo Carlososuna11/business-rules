@@ -15,7 +15,7 @@ export default class Contain implements IOperator<boolean> {
 	}
 
 	execute(): boolean {
-		let list: unknown[] = [];
+		let list: (unknown | ICommand<unknown>)[] = [];
 		if (isCommand(this.list)) {
 			list = this.list.execute() as unknown[];
 		}

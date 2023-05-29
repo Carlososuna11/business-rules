@@ -1,20 +1,31 @@
 import IContext from './IContext';
 import { AbstractContextData } from '../../context';
 import { Data } from '../../types';
+import ICommand, { isCommand } from '../ICommand';
+import { TypeGuard } from '../../utils';
 
-export default class Get<T extends AbstractContextData> implements IContext<unknown> {
+export default class Get implements IContext<unknown> {
 	id = 'get';
 
-	constructor(private readonly contextData: T, private readonly key: string) {}
+	private typeGuard: TypeGuard = new TypeGuard(['string']);
 
-	execute(): unknown {
-		const context: Data = this.contextData.getContextData();
-		const keys = this.key.split('.');
+	constructor(private readonly key: ICommand<string> | string) {}
+
+	private async validateOperand(value: string, operandName: string): Promise<void> {
+		await this.typeGuard.evaluate(value, this.id, operandName);
+	}
+
+	async execute(context: AbstractContextData): Promise<unknown> {
+		const data = context.getContextData();
+		const key = isCommand(this.key) ? await this.key.execute(context) : this.key;
+		await this.validateOperand(key, 'key');
+		const keys = key.split('.');
 		if (!keys.length) return undefined;
-		if (!Object.entries(context).length) return undefined;
+		if (!Object.entries(data).length) return undefined;
 
-		let value = context;
-		for (const key of keys) {
+		let value = data;
+		for (let i = 0; i < keys.length; i++) {
+			const key = keys[i];
 			const indexMatch = key.match(/[(\d+)]/);
 			let propertyKey = key;
 			let index: number | undefined = undefined;
@@ -33,17 +44,13 @@ export default class Get<T extends AbstractContextData> implements IContext<unkn
 				if (valueArray.length <= index) {
 					throw new Error(`Index ${index} of ${propertyKey} is out of bounds`);
 				}
-				if (typeof valueArray[index] === 'object') {
-					value = valueArray[index] as Data;
-					continue;
-				}
-				return valueArray[index];
-			}
-			if (typeof value[propertyKey] === 'object') {
-				value = value[propertyKey] as Data;
+				if (i === keys.length - 1) return valueArray[index];
+				value = valueArray[index] as Data;
 				continue;
 			}
-			return value[propertyKey];
+
+			if (i === keys.length - 1) return value[propertyKey];
+			value = value[propertyKey] as Data;
 		}
 	}
 

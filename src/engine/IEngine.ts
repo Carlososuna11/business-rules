@@ -1,15 +1,13 @@
-import { AbstractContextData } from '../context';
 import { AbstractRule } from '../rule';
 import { Logger } from '../utils';
 import { RuleObject, EngineResult } from '../types';
 
-export default interface IEngine<T extends AbstractContextData, R extends AbstractRule> {
-	contextData: T;
-	rules: R[];
+export default interface IEngine {
+	rules: AbstractRule[];
 	logger: Logger;
 
-	addRules(rules: RuleObject[]): void;
-	evaluate(obj: object): EngineResult;
+	addRules(rules: RuleObject[]): Promise<void>;
+	evaluate(obj: object): Promise<EngineResult>;
 	toDiagram(): string;
-	export(path: string, name: string): void;
+	export(path: string, name: string): Promise<void>;
 }

@@ -1,6 +1,8 @@
+import { AbstractContextData } from '../context';
+
 export default interface ICommand<T> {
 	id: string;
-	execute(): T;
+	execute(context: AbstractContextData): Promise<T>;
 	toString(): string;
 }
 
