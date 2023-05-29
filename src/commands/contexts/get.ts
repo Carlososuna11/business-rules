@@ -24,7 +24,8 @@ export default class Get implements IContext<unknown> {
 		if (!Object.entries(data).length) return undefined;
 
 		let value = data;
-		for (const key of keys) {
+		for (let i = 0; i < keys.length; i++) {
+			const key = keys[i];
 			const indexMatch = key.match(/[(\d+)]/);
 			let propertyKey = key;
 			let index: number | undefined = undefined;
@@ -43,17 +44,13 @@ export default class Get implements IContext<unknown> {
 				if (valueArray.length <= index) {
 					throw new Error(`Index ${index} of ${propertyKey} is out of bounds`);
 				}
-				if (typeof valueArray[index] === 'object') {
-					value = valueArray[index] as Data;
-					continue;
-				}
-				return valueArray[index];
-			}
-			if (typeof value[propertyKey] === 'object') {
-				value = value[propertyKey] as Data;
+				if (i === keys.length - 1) return valueArray[index];
+				value = valueArray[index] as Data;
 				continue;
 			}
-			return value[propertyKey];
+
+			if (i === keys.length - 1) return value[propertyKey];
+			value = value[propertyKey] as Data;
 		}
 	}
 

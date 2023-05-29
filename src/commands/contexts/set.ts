@@ -14,7 +14,8 @@ export default class Set implements IContext<void> {
 		if (!Object.entries(data).length) return undefined;
 
 		let value = data;
-		for (const key of keys) {
+		for (let i = 0; i < keys.length; i++) {
+			const key = keys[i];
 			const indexMatch = key.match(/[(\d+)]/);
 			let propertyKey = key;
 			let index: number | undefined = undefined;
@@ -31,19 +32,18 @@ export default class Set implements IContext<void> {
 				if (valueArray.length <= index) {
 					throw new Error(`Index ${index} of ${propertyKey} is out of bounds`);
 				}
-				if (typeof valueArray[index] === 'object') {
-					value = valueArray[index] as Data;
-					continue;
+				if (i === keys.length - 1) {
+					valueArray[index] = isCommand(this.value) ? await this.value.execute(context) : this.value;
+					return;
 				}
-				valueArray[index] = isCommand(this.value) ? await this.value.execute(context) : this.value;
-				return;
-			}
-			if (typeof value[propertyKey] === 'object') {
-				value = value[propertyKey] as Data;
+				value = valueArray[index] as Data;
 				continue;
 			}
-			value[propertyKey] = isCommand(this.value) ? await this.value.execute(context) : this.value;
-			return;
+			if (i === keys.length - 1) {
+				value[propertyKey] = isCommand(this.value) ? await this.value.execute(context) : this.value;
+				return;
+			}
+			value = value[propertyKey] as Data;
 		}
 	}
 
