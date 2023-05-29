@@ -1,6 +1,6 @@
 import ICommand, { isCommand } from '../ICommand';
 import IOperator from './IOperator';
-
+import { AbstractContextData } from '../../context';
 export default class Equal implements IOperator<boolean> {
 	symbol = '==';
 	id = 'equal';
@@ -11,9 +11,9 @@ export default class Equal implements IOperator<boolean> {
 		this.left = left;
 		this.right = right;
 	}
-	execute(): boolean {
-		const leftOperand = isCommand(this.left) ? this.left.execute() : this.left;
-		const rightOperand = isCommand(this.right) ? this.right.execute() : this.right;
+	async execute(context: AbstractContextData): Promise<boolean> {
+		const leftOperand = isCommand(this.left) ? await this.left.execute(context) : this.left;
+		const rightOperand = isCommand(this.right) ? await this.right.execute(context) : this.right;
 
 		return leftOperand === rightOperand;
 	}

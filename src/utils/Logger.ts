@@ -20,32 +20,32 @@ export default class Logger {
 		this.delegate = options.delegate;
 	}
 
-	debug(options: { message: string; rule?: string; error?: Error }) {
+	async debug(options: { message: string; rule?: string; error?: Error }) {
 		if (!this.filter.debug) return;
-		this.log({ ...options, level: 'debug' });
+		await this.log({ ...options, level: 'debug' });
 	}
 
-	error(options: { message: string; rule?: string; error?: Error }) {
+	async error(options: { message: string; rule?: string; error?: Error }) {
 		if (!this.filter.error) return;
-		this.log({ ...options, level: 'error' });
+		await this.log({ ...options, level: 'error' });
 	}
 
-	warn(options: { message: string; rule?: string; error?: Error }) {
+	async warn(options: { message: string; rule?: string; error?: Error }) {
 		if (!this.filter.warn) return;
-		this.log({ ...options, level: 'warn' });
+		await this.log({ ...options, level: 'warn' });
 	}
 
-	info(options: { message: string; rule?: string; error?: Error }) {
+	async info(options: { message: string; rule?: string; error?: Error }) {
 		if (!this.filter.info) return;
-		this.log({ ...options, level: 'info' });
+		await this.log({ ...options, level: 'info' });
 	}
 
-	private log(options: { message: string; rule?: string; error?: Error; level: LoggerLevels }) {
+	private async log(options: { message: string; rule?: string; error?: Error; level: LoggerLevels }) {
 		const out = this.delegate ? this.delegate : Logger.logDefault;
-		out(options);
+		await out(options);
 	}
 
-	private static logDefault({
+	private static async logDefault({
 		message,
 		rule,
 		error,
@@ -59,6 +59,6 @@ export default class Logger {
 		const msg = rule ? `# ${message} - "${rule}"` : `# ${message}`;
 		const err = error ? `\n${error.stack}` : '';
 		const method = Logger.levels[level];
-		method(`${msg}${err}`);
+		await method(`${msg}${err}`);
 	}
 }

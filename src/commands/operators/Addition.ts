@@ -1,7 +1,7 @@
 import IOperator from './IOperator';
 import ICommand from '../ICommand';
 import { TypeGuard } from '../../utils';
-
+import { AbstractContextData } from '../../context';
 export default class Addition implements IOperator<number | string> {
 	id = 'addition';
 	symbol = '+';
@@ -15,17 +15,17 @@ export default class Addition implements IOperator<number | string> {
 		this.right = right;
 	}
 
-	private validateOperand(value: number | string, operandName: string): void {
-		this.typeGuard.evaluate(value, this.id, operandName);
+	private async validateOperand(value: number | string, operandName: string): Promise<void> {
+		await this.typeGuard.evaluate(value, this.id, operandName);
 	}
 
-	execute(): number {
+	async execute(context: AbstractContextData): Promise<number> {
 		const rightOperand =
-			typeof this.right === 'number' || typeof this.right === 'string' ? this.right : this.right.execute();
-		this.validateOperand(rightOperand, 'right');
+			typeof this.right === 'number' || typeof this.right === 'string' ? this.right : await this.right.execute(context);
+		await this.validateOperand(rightOperand, 'right');
 		const leftOperand =
-			typeof this.left === 'number' || typeof this.left === 'string' ? this.left : this.left.execute();
-		this.validateOperand(leftOperand, 'left');
+			typeof this.left === 'number' || typeof this.left === 'string' ? this.left : await this.left.execute(context);
+		await this.validateOperand(leftOperand, 'left');
 
 		return Number(leftOperand) + Number(rightOperand);
 	}

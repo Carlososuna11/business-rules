@@ -3,17 +3,17 @@ import { Data } from '../../types';
 import { AbstractContextData } from '../../context';
 import ICommand, { isCommand } from '../ICommand';
 
-export default class Set<T extends AbstractContextData> implements IContext<void> {
+export default class Set implements IContext<void> {
 	id = 'set';
-	constructor(private contextData: T, private key: string, private value: ICommand<unknown> | unknown) {}
+	constructor(private key: string, private value: ICommand<unknown> | unknown) {}
 
-	execute(): void {
-		const context: Data = this.contextData.getContextData();
+	async execute(context: AbstractContextData): Promise<void> {
+		const data = context.getContextData();
 		const keys = this.key.split('.');
 		if (!keys.length) return undefined;
-		if (!Object.entries(context).length) return undefined;
+		if (!Object.entries(data).length) return undefined;
 
-		let value = context;
+		let value = data;
 		for (const key of keys) {
 			const indexMatch = key.match(/[(\d+)]/);
 			let propertyKey = key;
@@ -35,14 +35,14 @@ export default class Set<T extends AbstractContextData> implements IContext<void
 					value = valueArray[index] as Data;
 					continue;
 				}
-				valueArray[index] = isCommand(this.value) ? this.value.execute() : this.value;
+				valueArray[index] = isCommand(this.value) ? await this.value.execute(context) : this.value;
 				return;
 			}
 			if (typeof value[propertyKey] === 'object') {
 				value = value[propertyKey] as Data;
 				continue;
 			}
-			value[propertyKey] = isCommand(this.value) ? this.value.execute() : this.value;
+			value[propertyKey] = isCommand(this.value) ? await this.value.execute(context) : this.value;
 			return;
 		}
 	}

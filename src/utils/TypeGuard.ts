@@ -171,15 +171,19 @@ export default class TypeGuard {
 		}
 	}
 
-	evaluate(value: unknown, commandName: string, keyName: string): boolean {
-		const result = this.someTypeGuard.some((typeGuard) => {
-			if (typeGuard in TypeGuard.defaultTypeGuards) {
-				return TypeGuard.defaultTypeGuards[typeGuard](value);
-			}
-			if (typeGuard in this.extraTypeGuardsFunctions) {
-				return this.extraTypeGuardsFunctions[typeGuard](value);
-			}
-		});
+	async evaluate(value: unknown, commandName: string, keyName: string): Promise<boolean> {
+		const results = await Promise.all(
+			this.someTypeGuard.map(async (typeGuard) => {
+				if (typeGuard in TypeGuard.defaultTypeGuards) {
+					return Promise.resolve(TypeGuard.defaultTypeGuards[typeGuard](value));
+				}
+				if (typeGuard in this.extraTypeGuardsFunctions) {
+					return Promise.resolve(this.extraTypeGuardsFunctions[typeGuard](value));
+				}
+			})
+		);
+
+		const result = results.some((result) => result === true);
 
 		if (!result && this.raiseException) {
 			throw new Error(

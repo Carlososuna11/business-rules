@@ -16,23 +16,21 @@ import { Logger } from '../utils';
 import CONSTS from '../constants';
 import { BSON, ObjectId } from 'bson';
 
-export default class Engine implements IEngine<ContextData, Rule> {
-	public contextData: ContextData;
+export default class Engine implements IEngine {
 	public rules: Rule[];
 	public rulesbyId: Map<string, Rule>;
 	public logger: Logger;
 
 	constructor(rules: RuleObject[], loggerOptions: LoggerOptions = {}) {
-		this.contextData = new ContextData();
 		this.rules = [];
 		this.rulesbyId = new Map<string, Rule>();
 		this.addRules(rules);
 		this.logger = new Logger(loggerOptions);
 	}
 
-	public addRules(rules: RuleObject[]): void {
+	public async addRules(rules: RuleObject[]): Promise<void> {
 		rules.forEach((rule) => {
-			const newRule = new Rule(rule, this.contextData);
+			const newRule = new Rule(rule);
 			this.rules.push(newRule);
 			this.rulesbyId.set(newRule.id, newRule);
 		});
@@ -44,41 +42,44 @@ export default class Engine implements IEngine<ContextData, Rule> {
 			.join('\n')}\n@endmindmap`;
 	}
 
-	public evaluate(
+	public async evaluate(
 		obj: object,
 		strategies: ConflictResolutionStrategies[] = [],
 		delegatorOptions: DelegatorOptions = {}
-	): EngineResult {
+	): Promise<EngineResult> {
 		const start = Date.now();
-		this.contextData.reset();
+		const contextData = new ContextData();
 		const conflictResolution = new ConflictResolution<Rule>(strategies);
 		const delegator = new Delegator();
-		this.contextData.data = RuleObserver(obj as Data, (segment: unknown) => delegator.delegate(segment));
+		contextData.data = RuleObserver(obj as Data, (segment: unknown) => delegator.delegate(segment));
 		const session = new Session<Rule>();
 
 		const rules = session.resolveConflicts(this.rules, conflictResolution);
 
-		rules.forEach((rule) => {
-			this.firePreAction(rule, delegator, delegatorOptions.preAction);
-		});
-
+		// fire pre actions
+		await Promise.all(
+			rules.map(async (rule) => {
+				await this.firePreAction(contextData, rule, delegator, delegatorOptions.preAction);
+			})
+		);
 		// evaluate rules
 		for (const rule of rules) {
-			this.evaluateRule(rule, delegator, session, delegatorOptions.condition);
+			await this.evaluateRule(contextData, rule, delegator, session, delegatorOptions.condition);
 			if (session.finalRule) break;
 		}
 
 		const trueRules = session.getTrueRules(rules);
 
 		// fire post actions
-		trueRules.forEach((rule) => {
-			this.firePostAction(rule, delegator, session, delegatorOptions.postAction);
-		});
+		await Promise.all(
+			trueRules.map(async (rule) => {
+				await this.firePostAction(contextData, rule, delegator, session, delegatorOptions.postAction);
+			})
+		);
 
 		const end = Date.now();
 		const time = end - start;
-		const context = this.contextData.getContextData();
-		this.contextData.reset();
+		const context = contextData.getContextData();
 		return {
 			elapsed: time,
 			fired: session.fired,
@@ -86,12 +87,13 @@ export default class Engine implements IEngine<ContextData, Rule> {
 		};
 	}
 
-	private evaluateRule(
+	private async evaluateRule(
+		context: ContextData,
 		rule: Rule,
 		delegator: Delegator<(...args: unknown[]) => unknown>,
 		session: Session<Rule>,
 		delegatorFunction?: (...args: unknown[]) => unknown
-	): void {
+	): Promise<void> {
 		//
 		if (rule.activationGroup && session.activationGroupConditionResult.get(rule.activationGroup)) {
 			session.ruleConditionResult.set(rule.id, undefined);
@@ -104,25 +106,25 @@ export default class Engine implements IEngine<ContextData, Rule> {
 			if (delegatorFunction) {
 				delegator.set(delegatorFunction);
 			} else {
-				delegator.set((segment: unknown) => {
+				delegator.set(async (segment: unknown) => {
 					const segmentName = Delegator.getSegmentName(segment);
 					// logger
-					this.logger.debug({
+					await this.logger.debug({
 						message: `Access context segment \`${segmentName}\` in rule evaluation`,
 						rule: rule.name,
 					});
 				});
 			}
-			const ruleEvaluation = rule.evaluate();
+			const ruleEvaluation = await rule.evaluate(context);
 			if (ruleEvaluation && rule.final) {
 				session.finalRule = rule;
 			}
 			if (ruleEvaluation && rule.activationGroup) {
 				session.activationGroupConditionResult.set(rule.activationGroup, true);
 			}
-			session.ruleConditionResult.set(rule.id, ruleEvaluation);
+			session.ruleConditionResult.set(rule.id, await ruleEvaluation);
 		} catch (error) {
-			this.logger.error({
+			await this.logger.error({
 				message: `Error executing evaluation for rule`,
 				rule: rule.name,
 				error: error instanceof Error ? error : new Error(String(error)),
@@ -133,27 +135,28 @@ export default class Engine implements IEngine<ContextData, Rule> {
 		}
 	}
 
-	private firePreAction(
+	private async firePreAction(
+		context: ContextData,
 		rule: Rule,
 		delegator: Delegator<(...args: unknown[]) => unknown>,
 		delegatorFunction?: (...args: unknown[]) => unknown
-	): void {
+	): Promise<void> {
 		try {
 			if (delegatorFunction) {
 				delegator.set(delegatorFunction);
 			} else {
-				delegator.set((segment: unknown) => {
+				delegator.set(async (segment: unknown) => {
 					const segmentName = Delegator.getSegmentName(segment);
 					// logger
-					this.logger.debug({
+					await this.logger.debug({
 						message: `Access context segment \`${segmentName}\` in pre actions`,
 						rule: rule.name,
 					});
 				});
 			}
-			rule.executePreActions();
+			await rule.executePreActions(context);
 		} catch (error) {
-			this.logger.error({
+			await this.logger.error({
 				message: `Error executing pre actions for rule`,
 				rule: rule.name,
 				error: error instanceof Error ? error : new Error(String(error)),
@@ -162,39 +165,40 @@ export default class Engine implements IEngine<ContextData, Rule> {
 			delegator.unset();
 		}
 	}
-	private firePostAction(
+	private async firePostAction(
+		context: ContextData,
 		rule: Rule,
 		delegator: Delegator<(...args: unknown[]) => unknown>,
 		session: Session<Rule>,
 		delegatorFunction?: (...args: unknown[]) => unknown
-	): void {
+	): Promise<void> {
 		try {
 			if (delegatorFunction) {
 				delegator.set(delegatorFunction);
 			} else {
-				delegator.set((segment: unknown) => {
+				delegator.set(async (segment: unknown) => {
 					const segmentName = Delegator.getSegmentName(segment);
 					// logger
-					this.logger.debug({
+					await this.logger.debug({
 						message: `Access context segment \`${segmentName}\` in post actions`,
 						rule: rule.name,
 					});
 				});
 			}
-			session.ruleActionResult.set(rule.id, rule.executePostActions());
+			session.ruleActionResult.set(rule.id, await rule.executePostActions(context));
 			session.fired.push(session.ruleActionResult.get(rule.id) as RuleResult);
 			if (rule.activationGroup) {
-				this.logger.debug({
+				await this.logger.debug({
 					message: `Activation group \`${rule.activationGroup}\` fired`,
 				});
 			}
 			if (rule.final) {
-				this.logger.debug({
+				await this.logger.debug({
 					message: `Final rule \`${rule.name}\` fired`,
 				});
 			}
 		} catch (error) {
-			this.logger.error({
+			await this.logger.error({
 				message: `Error executing post actions for rule. Rule not fired`,
 				rule: rule.name,
 				error: error instanceof Error ? error : new Error(String(error)),
@@ -204,7 +208,7 @@ export default class Engine implements IEngine<ContextData, Rule> {
 		}
 	}
 
-	public export(path: string, name: string): void {
+	public async export(path: string, name: string): Promise<void> {
 		// exports the engine to a TSBR file
 
 		const rules = this.rules.map((rule) => rule.ruleObject);
@@ -220,18 +224,19 @@ export default class Engine implements IEngine<ContextData, Rule> {
 		// save to file
 		try {
 			const fileName = `${name}.tsbr`;
-			const file = fs.createWriteStream(`${path}/${fileName}`);
-			file.write(bytes);
-			file.end();
+			const file = await fs.promises.open(`${path}/${fileName}`, 'w');
+			await file.write(bytes);
+			await file.close();
 		} catch (error) {
 			throw new Error(`Error exporting the engine: ${error}`);
 		}
 	}
 
-	public static import(filePath: string, loggerOptions: LoggerOptions = {}): Engine {
+	public static async import(filePath: string, loggerOptions: LoggerOptions = {}): Promise<Engine> {
 		// imports the engine from a TSBR file
 		try {
-			const bytes = fs.readFileSync(filePath);
+			const file = await fs.promises.open(filePath, 'r');
+			const bytes = await file.readFile();
 			const data = BSON.deserialize(bytes);
 			const engine = new Engine(data.rules, loggerOptions);
 			return engine;

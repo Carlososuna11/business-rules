@@ -1,9 +1,8 @@
 import { getOperators, getFunctions, getContextMethods, ICommand } from '../commands';
 import { ExpressionOptions } from '../types';
-import { AbstractContextData } from '../context';
 
 // Composite pattern
-const parseAction = <T extends AbstractContextData>(contextData: T, actionStructure: object): ICommand<unknown> => {
+const parseAction = (actionStructure: object): ICommand<unknown> => {
 	const options: ExpressionOptions = {
 		$op: getOperators(),
 		$fn: getFunctions(),
@@ -24,11 +23,6 @@ const parseAction = <T extends AbstractContextData>(contextData: T, actionStruct
 		// if args is not an array, raise an error
 		if (!Array.isArray(args)) {
 			throw new Error(`Arguments for ${token} must be an array`);
-		}
-
-		// if type is $ctx, add contextData into args (first argument)
-		if (type === '$ctx') {
-			args.unshift(contextData);
 		}
 
 		const Class = options[type][name];

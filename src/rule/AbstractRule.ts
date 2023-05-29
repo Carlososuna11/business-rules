@@ -1,8 +1,8 @@
 import { ICommand } from '../commands';
 import { parseCondition, parseAction } from '../parsers';
-import { ContextData } from '../context';
 import { v4 as uuidv4 } from 'uuid';
 import { RuleResult, Data, RuleObject } from '../types';
+import AbstactContextData from '../context/AbstractContextData';
 
 export default abstract class AbstractRule {
 	id: string;
@@ -19,26 +19,26 @@ export default abstract class AbstractRule {
 	postActionObjects?: Data[];
 	ruleObject: RuleObject;
 
-	constructor(rule: RuleObject, contextData: ContextData) {
+	constructor(rule: RuleObject) {
 		// copy ruleObject to avoid mutating the original object
 		this.ruleObject = JSON.parse(JSON.stringify(rule));
 		this.id = uuidv4();
 		this.name = rule.name;
 		this.description = rule.description;
 		this.conditionObject = rule.condition;
-		this.condition = parseCondition(contextData, rule.condition);
+		this.condition = parseCondition(rule.condition);
 		this.preActionObjects = rule.preActions;
-		this.preActions = rule.preActions?.map((action) => parseAction(contextData, action)) || [];
+		this.preActions = rule.preActions?.map((action) => parseAction(action)) || [];
 		this.postActionObjects = rule.postActions;
-		this.postActions = rule.postActions?.map((action) => parseAction(contextData, action)) || [];
+		this.postActions = rule.postActions?.map((action) => parseAction(action)) || [];
 		this.final = rule.final || false;
 		this.priority = rule.priority || 0;
 		this.activationGroup = rule.activationGroup;
 	}
 
-	abstract evaluate(): boolean;
-	abstract executePreActions(): void;
-	abstract executePostActions(): RuleResult;
+	abstract evaluate(context: AbstactContextData): Promise<boolean>;
+	abstract executePreActions(context: AbstactContextData): Promise<void>;
+	abstract executePostActions(context: AbstactContextData): Promise<RuleResult>;
 
 	toString(): string {
 		const condition = this.condition.toString();

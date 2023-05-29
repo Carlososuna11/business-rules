@@ -1,18 +1,20 @@
 import AbstractRule from './AbstractRule';
 import { RuleResult } from '../types';
 import { ICommand } from '../commands';
+import { AbstractContextData } from '../context';
 export default class Rule extends AbstractRule {
-	evaluate(): boolean {
-		const result = this.condition.execute();
-		return result;
+	async evaluate(context: AbstractContextData): Promise<boolean> {
+		return await this.condition.execute(context);
 	}
 
-	executePreActions(): void {
-		this.preActions.forEach((action: ICommand<unknown>) => action.execute());
+	async executePreActions(context: AbstractContextData): Promise<void> {
+		await Promise.all(this.preActions.map(async (action: ICommand<unknown>) => await action.execute(context)));
 	}
 
-	executePostActions(): RuleResult {
-		const actions = this.postActions.map((action: ICommand<unknown>) => action.execute());
+	async executePostActions(context: AbstractContextData): Promise<RuleResult> {
+		const actions = await Promise.all(
+			this.postActions.map(async (action: ICommand<unknown>) => await action.execute(context))
+		);
 		return {
 			name: this.name,
 			fired: true,
