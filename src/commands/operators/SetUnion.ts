@@ -5,11 +5,7 @@ export default class SetUnion implements IOperator<Set<unknown>> {
 	symbol = '|';
 	id = 'setUnion';
 
-	sets: (Set<unknown> | ICommand<Set<unknown>>)[];
-
-	constructor(...sets: (Set<unknown> | ICommand<Set<unknown>>)[]) {
-		this.sets = sets;
-	}
+	constructor(private readonly sets: (Set<unknown> | ICommand<Set<unknown>>)[]) {}
 
 	execute(): Set<unknown> {
 		const setArray = this.sets.map((set) => (isCommand(set) ? set.execute() : set));

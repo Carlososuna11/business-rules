@@ -12,6 +12,7 @@ import { registerFunction, registerOperator } from './commands';
 import { RuleObject } from './types';
 import And from './commands/operators/And';
 import Xor from './commands/operators/Xor';
+import Average from './commands/functions/Average';
 interface User {
 	name: string;
 	age: number;
@@ -202,9 +203,8 @@ console.log(responses[0]);
 
 console.log(engine.rules[3].toString());
 
-var test = new Xor(false, true, true, false);
+var test = new Average([1, 2, '3', 4, 5]);
 
 console.log('\nEl test es: ', test.execute());
 
-console.log('El string es: ', test.toString());
-
+// console.log('El string es: ', test.toString());

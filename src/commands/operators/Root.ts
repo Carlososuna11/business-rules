@@ -17,7 +17,6 @@ export default class Root implements IOperator<number> {
 		this.radicand = radicand;
 		this.index = index;
 	}
-	
 
 	private validateValue(value: number | string, operandName: string): void {
 		this.typeGuard.evaluate(value, this.id, operandName);

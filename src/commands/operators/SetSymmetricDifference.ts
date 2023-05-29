@@ -5,11 +5,7 @@ export default class SetSymmetricDifference implements IOperator<Set<unknown>> {
 	id = 'setSymmetricDifference';
 	symbol = '∆';
 
-	sets: (Set<unknown> | ICommand<Set<unknown>>)[];
-
-	constructor(...sets: (Set<unknown> | ICommand<Set<unknown>>)[]) {
-		this.sets = sets;
-	}
+	constructor(private readonly sets: (Set<unknown> | ICommand<Set<unknown>>)[]) {}
 
 	execute(): Set<unknown> {
 		const result: Set<unknown> = new Set();

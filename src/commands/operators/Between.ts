@@ -25,7 +25,6 @@ export default class Between implements IOperator<boolean> {
 		this.typeGuard.evaluate(value, this.id, operandName);
 	}
 
-
 	execute(): boolean {
 		const val = isCommand(this.value) ? this.value.execute() : this.value;
 		this.validateValue(val, 'value');

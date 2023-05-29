@@ -15,7 +15,6 @@ export default class Substraction implements IOperator<number> {
 		this.right = right;
 	}
 
-
 	private validateValue(value: number | string, operandName: string): void {
 		this.typeGuard.evaluate(value, this.id, operandName);
 	}

@@ -5,10 +5,7 @@ export default class SetDifference implements IOperator<Set<unknown>> {
 	id = 'setDifference';
 	symbol = '∖';
 
-	sets: (Set<unknown> | ICommand<Set<unknown>>)[];
-	constructor(...sets: (Set<unknown> | ICommand<Set<unknown>>)[]) {
-		this.sets = sets;
-	}
+	constructor(private readonly sets: (Set<unknown> | ICommand<Set<unknown>>)[]) {}
 
 	execute(): Set<unknown> {
 		const firstSet = isCommand(this.sets[0]) ? this.sets[0].execute() : this.sets[0];
