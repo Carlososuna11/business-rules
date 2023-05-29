@@ -178,12 +178,12 @@ const rules: RuleObject[] = [
 		name: 'Rule 4',
 		description: 'Todas las valoraciones son positivas',
 		condition: {
-			'$op.and': [
+			'$op.and': [[
 				{
 					'$ctx.get': ['data.rates'],
 				},
 				1,
-			],
+			]],
 		},
 		postActions: [
 			{
@@ -207,4 +207,4 @@ var test = new Average([1, 2, '3', 4, 5]);
 
 console.log('\nEl test es: ', test.execute());
 
-// console.log('El string es: ', test.toString());
+console.log('El string es: ', test.toString());

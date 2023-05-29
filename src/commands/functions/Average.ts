@@ -34,12 +34,6 @@ export default class Average implements IFunction<number> {
 	}
 
 	toString(): string {
-		const str = this.operands
-			.map((operand) => {
-				return typeof operand === 'boolean' ? operand : operand.toString();
-			})
-			.join(', ');
-		return `(${str})`;
-		// return `${this.id}(${this.operands.map((value) => (isCommand(value) ? value.toString() : value)).join(', ')})`;
+		return `${this.id}(${this.operands.map((value) => (isCommand(value) ? value.toString() : value)).join(', ')})`;
 	}
 }

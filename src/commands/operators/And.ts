@@ -8,7 +8,7 @@ export default class And implements IOperator<boolean> {
 
 	private typeGuard: TypeGuard = new TypeGuard(['boolean']);
 
-	constructor(private readonly operands: (ICommand<boolean> | boolean)[]) {}
+	constructor(public operands: (ICommand<boolean> | boolean)[]) {}
 
 	private validateValue(value: boolean, operandName: string): void {
 		this.typeGuard.evaluate(value, this.id, operandName);
