@@ -1,12 +1,24 @@
 import IFunction from './IFunction';
-import ICommand from '../ICommand';
+import ICommand, { isCommand } from '../ICommand';
+import { TypeGuard } from '../../utils';
+import { AbstractContextData } from '../../context';
 
 export default class Lower implements IFunction<string> {
 	id = 'lower';
+
+	typeGuard: TypeGuard = new TypeGuard(['string']);
 	constructor(private readonly value: ICommand<string> | string) {}
 
-	execute(): string {
-		return typeof this.value === 'string' ? this.value.toLowerCase() : this.value.execute().toLowerCase();
+	private async validateValue(value: string, operandName: string): Promise<void> {
+		await this.typeGuard.evaluate(value, this.id, operandName);
+	}
+
+	async execute(context: AbstractContextData): Promise<string> {
+		const transformedValue = isCommand(this.value) ? await this.value.execute(context) : this.value;
+
+		await this.validateValue(transformedValue, 'value');
+
+		return transformedValue.toLowerCase();
 	}
 
 	toString(): string {

@@ -1,3 +1,4 @@
+import { AbstractContextData } from '../../context';
 import ICommand, { isCommand } from '../ICommand';
 import IOperator from './IOperator';
 
@@ -20,9 +21,9 @@ export default class Like implements IOperator<boolean> {
 		this.position = position;
 	}
 
-	execute(): boolean {
-		const expression = isCommand(this.expression) ? this.expression.execute() : this.expression;
-		const pattern = isCommand(this.pattern) ? this.pattern.execute() : this.pattern;
+	async execute(context: AbstractContextData): Promise<boolean> {
+		const expression = isCommand(this.expression) ? await this.expression.execute(context) : this.expression;
+		const pattern = isCommand(this.pattern) ? await this.pattern.execute(context) : this.pattern;
 
 		switch (this.position) {
 			case 'BEGIN':

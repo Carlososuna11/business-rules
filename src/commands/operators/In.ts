@@ -1,6 +1,7 @@
 import ICommand, { isCommand } from '../ICommand';
 import IOperator from './IOperator';
 import { TypeGuard } from '../../utils';
+import { AbstractContextData } from '../../context';
 
 export default class In implements IOperator<boolean> {
 	symbol = 'IN';
@@ -20,19 +21,20 @@ export default class In implements IOperator<boolean> {
 		this.property = property;
 	}
 
-	private validateObjectOperand(value: Record<string, unknown>, operandName: string): void {
-		this.objectTypeGuard.evaluate(value, this.id, operandName);
+	private async validateObjectOperand(value: Record<string, unknown>, operandName: string): Promise<void> {
+		await this.objectTypeGuard.evaluate(value, this.id, operandName);
 	}
 
-	private validatePropertyOperand(value: string, operandName: string): void {
-		this.propertyTypeGuard.evaluate(value, this.id, operandName);
+	private async validatePropertyOperand(value: string, operandName: string): Promise<void> {
+		await this.propertyTypeGuard.evaluate(value, this.id, operandName);
 	}
 
-	execute(): boolean {
-		const object = isCommand(this.object) ? this.object.execute() : this.object;
-		this.validateObjectOperand(object, 'object');
-		const property = isCommand(this.property) ? this.property.execute() : this.property;
-		this.validatePropertyOperand(property, 'property');
+	async execute(context: AbstractContextData): Promise<boolean> {
+		const object = isCommand(this.object) ? await this.object.execute(context) : this.object;
+		await this.validateObjectOperand(object, 'object');
+
+		const property = isCommand(this.property) ? await this.property.execute(context) : this.property;
+		await this.validatePropertyOperand(property, 'property');
 
 		return property in object;
 	}

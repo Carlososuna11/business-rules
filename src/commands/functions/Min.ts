@@ -1,21 +1,43 @@
+import { AbstractContextData } from '../../context';
 import { ValueException } from '../../exceptions';
+import { TypeGuard } from '../../utils';
 import ICommand, { isCommand } from '../ICommand';
 import IFunction from './IFunction';
 
 export default class Min implements IFunction<number | string> {
 	id = 'min';
+
+	typeGuard: TypeGuard = new TypeGuard(['number', 'string']);
 	constructor(private readonly values: (ICommand<number | string> | number | string)[]) {}
 
-	execute(): number {
-		const transformedValues = this.values.map((value) => (isCommand(value) ? value.execute() : value));
+	private async validateOperand(value: number | string, operandName: string): Promise<void> {
+		await this.typeGuard.evaluate(value, this.id, operandName);
+	}
 
-		const allValuesAreNumbers = transformedValues.every((value) => !isNaN(Number(value)));
+	async execute(context: AbstractContextData): Promise<number> {
+		try {
+			for (let i = 0; i < this.values.length; i++) {
+				const operand = this.values[i];
+				const toEvaluate = isCommand(operand) ? await operand.execute(context) : operand;
+				await this.validateOperand(toEvaluate, `operands[${i}]`);
+			}
 
-		if (!allValuesAreNumbers) {
-			throw new ValueException(this.id, 'Values must be numbers or strings representing numbers');
+			const transformedValues = this.values.map(async (value) =>
+				isCommand(value) ? await value.execute(context) : value
+			);
+
+			const allValuesAreNumbers = transformedValues.every((value) => !isNaN(Number(value)));
+
+			if (!allValuesAreNumbers) {
+				throw new ValueException(this.id, 'Values must be numbers or strings representing numbers');
+			}
+
+			return Math.min(...transformedValues.map((value) => Number(value)));
+		} catch (error) {
+			// Manejo del error
+			console.error(error);
+			throw error;
 		}
-
-		return Math.min(...transformedValues.map((value) => Number(value)));
 	}
 
 	toString(): string {

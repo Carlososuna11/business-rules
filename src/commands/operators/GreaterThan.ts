@@ -22,10 +22,10 @@ export default class GreaterThan implements IOperator<boolean> {
 
 	async execute(context: AbstractContextData): Promise<boolean> {
 		const rightOperand = isCommand(this.right) ? await this.right.execute(context) : this.right;
-		this.validateOperand(rightOperand, 'right');
+		await this.validateOperand(rightOperand, 'right');
 
 		const leftOperand = isCommand(this.left) ? await this.left.execute(context) : this.left;
-		this.validateOperand(leftOperand, 'left');
+		await this.validateOperand(leftOperand, 'left');
 
 		return Number(leftOperand) > Number(rightOperand);
 	}

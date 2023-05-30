@@ -1,3 +1,4 @@
+import { AbstractContextData } from '../../context';
 import ICommand, { isCommand } from '../ICommand';
 import IOperator from './IOperator';
 
@@ -7,12 +8,12 @@ export default class SetSymmetricDifference implements IOperator<Set<unknown>> {
 
 	constructor(private readonly sets: (Set<unknown> | ICommand<Set<unknown>>)[]) {}
 
-	execute(): Set<unknown> {
+	async execute(context: AbstractContextData): Promise<Set<unknown>> {
 		const result: Set<unknown> = new Set();
 		const allValues: Set<unknown> = new Set();
 
 		for (const set of this.sets) {
-			const values = isCommand(set) ? set.execute() : set;
+			const values = isCommand(set) ? await set.execute(context) : set;
 
 			for (const value of values) {
 				if (allValues.has(value)) {

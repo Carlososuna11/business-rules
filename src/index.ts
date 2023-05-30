@@ -10,6 +10,9 @@ import { Rule } from './rule';
 import { saveDiagram } from './utils';
 import { registerFunction, registerOperator } from './commands';
 import { RuleObject, Data, EngineResult } from './types';
+import And from './commands/operators/And';
+import { AbstractContextData, ContextData } from './context';
+import Max from './commands/functions/Max';
 
 interface User {
 	name: string;
@@ -186,12 +189,14 @@ const rules: RuleObject[] = [
 		name: 'Rule 4',
 		description: 'Todas las valoraciones son positivas',
 		condition: {
-			'$op.and': [[
-				{
-					'$ctx.get': ['data.rates'],
-				},
-				1,
-			]],
+			'$op.and': [
+				[
+					{
+						'$ctx.get': ['data.rates'],
+					},
+					1,
+				],
+			],
 		},
 		postActions: [
 			{
@@ -203,8 +208,6 @@ const rules: RuleObject[] = [
 
 const engine = new Engine(rules, { filter: { error: true, debug: false, warn: true, info: true } });
 
-console.log(engine.rules[1].toString());
-
 const main = async () => {
 	const responses = await Promise.all(
 		users.map(async (user) => {
@@ -215,6 +218,18 @@ const main = async () => {
 	for (const response of responses) {
 		console.log(response);
 	}
+
+	var test = new Round('h');
+
+	const hola = async () => {
+		console.log('\nEl test es: ', await test.execute(new ContextData()));
+		return;
+	};
+
+	hola();
+
+	console.log('El string es: ', test.toString());
+	// console.log(engine.rules[1].toString());
 };
 
 main();

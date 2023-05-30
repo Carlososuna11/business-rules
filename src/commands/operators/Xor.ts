@@ -1,6 +1,7 @@
 import IOperator from './IOperator';
 import ICommand, { isCommand } from '../ICommand';
 import { TypeGuard } from '../../utils';
+import { AbstractContextData } from '../../context';
 
 export default class Xor implements IOperator<boolean> {
 	id = 'xor';
@@ -10,16 +11,16 @@ export default class Xor implements IOperator<boolean> {
 
 	constructor(private readonly operands: (ICommand<boolean> | boolean)[]) {}
 
-	private validateValue(value: boolean, operandName: string): void {
-		this.typeGuard.evaluate(value, this.id, operandName);
+	private async validateValue(value: boolean, operandName: string): Promise<void> {
+		await this.typeGuard.evaluate(value, this.id, operandName);
 	}
 
-	execute(): boolean {
+	async execute(context: AbstractContextData): Promise<boolean> {
 		let count = 0;
 		for (let i = 0; i < this.operands.length; i++) {
 			const operand = this.operands[i];
-			const toEvaluate = isCommand(operand) ? operand.execute() : operand;
-			this.validateValue(toEvaluate, `operands[${i}]`);
+			const toEvaluate = isCommand(operand) ? await operand.execute(context) : operand;
+			await this.validateValue(toEvaluate, `operands[${i}]`);
 			if (toEvaluate) {
 				count++;
 			}

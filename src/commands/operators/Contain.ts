@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { AbstractContextData } from '../../context';
 import ICommand, { isCommand } from '../ICommand';
 import IOperator from './IOperator';
 
@@ -14,13 +15,15 @@ export default class Contain implements IOperator<boolean> {
 		this.list = list;
 	}
 
-	execute(): boolean {
+	async execute(context: AbstractContextData): Promise<boolean> {
 		let list: (unknown | ICommand<unknown>)[] = [];
 		if (isCommand(this.list)) {
-			list = this.list.execute() as unknown[];
+			list = (await this.list.execute(context)) as unknown[];
 		}
-		list = list.map((e) => (isCommand(e) ? e.execute() : e)) as unknown[];
-		const value = isCommand(this.value) ? this.value.execute() : this.value;
+
+		list = (await Promise.all(list.map(async (e) => (isCommand(e) ? await e.execute(context) : e)))) as unknown[];
+
+		const value = isCommand(this.value) ? await this.value.execute(context) : this.value;
 
 		return list.includes(value);
 	}

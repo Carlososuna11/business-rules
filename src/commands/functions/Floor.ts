@@ -1,14 +1,23 @@
+import { AbstractContextData } from '../../context';
 import { ValueException } from '../../exceptions';
+import { TypeGuard } from '../../utils';
 import ICommand, { isCommand } from '../ICommand';
 import IFunction from './IFunction';
 
 export default class Floor implements IFunction<number> {
 	id = 'floor';
 
+	typeGuard: TypeGuard = new TypeGuard(['number', 'string']);
 	constructor(private readonly value: ICommand<number | string> | number | string) {}
 
-	execute(): number {
-		const transformedValue = isCommand(this.value) ? this.value.execute() : this.value;
+	private async validateValue(value: number | string, operandName: string): Promise<void> {
+		await this.typeGuard.evaluate(value, this.id, operandName);
+	}
+
+	async execute(context: AbstractContextData): Promise<number> {
+		const transformedValue = isCommand(this.value) ? await this.value.execute(context) : this.value;
+
+		await this.validateValue(transformedValue, 'value');
 
 		if (isNaN(Number(transformedValue))) {
 			throw new ValueException(this.id, 'Value must be a number or a string representing a number');

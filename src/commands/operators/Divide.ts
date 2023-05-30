@@ -1,3 +1,4 @@
+import { AbstractContextData } from '../../context';
 import { TypeGuard } from '../../utils';
 import ICommand, { isCommand } from '../ICommand';
 import IOperator from './IOperator';
@@ -15,16 +16,16 @@ export default class Divide implements IOperator<number> {
 		this.right = right;
 	}
 
-	private validateValue(value: number | string, operandName: string): void {
-		this.typeGuard.evaluate(value, this.id, operandName);
+	private async validateValue(value: number | string, operandName: string): Promise<void> {
+		await this.typeGuard.evaluate(value, this.id, operandName);
 	}
 
-	execute(): number {
-		const rightOperand = isCommand(this.right) ? this.right.execute() : this.right;
-		this.validateValue(rightOperand, 'rightOperand');
+	async execute(context: AbstractContextData): Promise<number> {
+		const rightOperand = isCommand(this.right) ? await this.right.execute(context) : this.right;
+		await this.validateValue(rightOperand, 'rightOperand');
 
-		const leftOperand = isCommand(this.left) ? this.left.execute() : this.left;
-		this.validateValue(leftOperand, 'leftOperand');
+		const leftOperand = isCommand(this.left) ? await this.left.execute(context) : this.left;
+		await this.validateValue(leftOperand, 'leftOperand');
 
 		return Number(leftOperand) / Number(rightOperand);
 	}

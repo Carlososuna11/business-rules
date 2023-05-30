@@ -1,3 +1,4 @@
+import { AbstractContextData } from '../../context';
 import { TypeGuard } from '../../utils';
 import ICommand, { isCommand } from '../ICommand';
 import IOperator from './IOperator';
@@ -9,13 +10,13 @@ export default class Not implements IOperator<boolean> {
 	private typeGuard: TypeGuard = new TypeGuard(['boolean']);
 	constructor(public operand: boolean | ICommand<boolean>) {}
 
-	private validateValue(value: boolean, operandName: string): void {
-		this.typeGuard.evaluate(value, this.id, operandName);
+	private async validateValue(value: boolean, operandName: string): Promise<void> {
+		await this.typeGuard.evaluate(value, this.id, operandName);
 	}
 
-	public execute(): boolean {
-		const operand = isCommand(this.operand) ? this.operand.execute() : this.operand;
-		this.validateValue(operand, 'operand');
+	async execute(context: AbstractContextData): Promise<boolean> {
+		const operand = isCommand(this.operand) ? await this.operand.execute(context) : this.operand;
+		await this.validateValue(operand, 'operand');
 
 		return !operand;
 	}

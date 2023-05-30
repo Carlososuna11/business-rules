@@ -1,3 +1,4 @@
+import { AbstractContextData } from '../../context';
 import { TypeGuard } from '../../utils';
 import ICommand, { isCommand } from '../ICommand';
 import IOperator from './IOperator';
@@ -18,16 +19,16 @@ export default class Root implements IOperator<number> {
 		this.index = index;
 	}
 
-	private validateValue(value: number | string, operandName: string): void {
-		this.typeGuard.evaluate(value, this.id, operandName);
+	private async validateValue(value: number | string, operandName: string): Promise<void> {
+		await this.typeGuard.evaluate(value, this.id, operandName);
 	}
 
-	execute(): number {
-		const radicandOperand = isCommand(this.radicand) ? this.radicand.execute() : this.radicand;
-		this.validateValue(radicandOperand, 'radicandOperand');
+	async execute(context: AbstractContextData): Promise<number> {
+		const radicandOperand = isCommand(this.radicand) ? await this.radicand.execute(context) : this.radicand;
+		await this.validateValue(radicandOperand, 'radicandOperand');
 
-		const indexOperand = isCommand(this.index) ? this.index.execute() : this.index;
-		this.validateValue(indexOperand, 'indexOperand');
+		const indexOperand = isCommand(this.index) ? await this.index.execute(context) : this.index;
+		await this.validateValue(indexOperand, 'indexOperand');
 
 		return Math.pow(Number(radicandOperand), 1 / Number(indexOperand));
 	}

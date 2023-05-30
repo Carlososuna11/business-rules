@@ -1,3 +1,4 @@
+import { AbstractContextData } from '../../context';
 import { ValueException } from '../../exceptions';
 import { TypeGuard } from '../../utils';
 import ICommand, { isCommand } from '../ICommand';
@@ -10,18 +11,18 @@ export default class Average implements IFunction<number> {
 	typeGuard: TypeGuard = new TypeGuard(['number', 'string']);
 	constructor(private readonly operands: (ICommand<number | string> | number | string)[]) {}
 
-	private validateValue(value: number | string, operandName: string): void {
-		this.typeGuard.evaluate(value, this.id, operandName);
+	private async validateValue(value: number | string, operandName: string): Promise<void> {
+		await this.typeGuard.evaluate(value, this.id, operandName);
 	}
 
-	execute(): number {
+	async execute(context: AbstractContextData): Promise<number> {
 		let sum = 0;
 		let count = 0;
 
 		for (let i = 0; i < this.operands.length; i++) {
 			const operand = this.operands[i];
-			const toEvaluate = isCommand(operand) ? operand.execute() : operand;
-			this.validateValue(toEvaluate, `values[${i}]`);
+			const toEvaluate = isCommand(operand) ? await operand.execute(context) : operand;
+			await this.validateValue(toEvaluate, `values[${i}]`);
 
 			if (isNaN(Number(toEvaluate))) {
 				throw new ValueException(this.id, `The value '${toEvaluate}' is not a valid number.`);
