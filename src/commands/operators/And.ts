@@ -8,7 +8,17 @@ export default class And implements IOperator<boolean> {
 
 	private typeGuard: TypeGuard = new TypeGuard(['boolean']);
 
-	constructor(public operands: (ICommand<boolean> | boolean)[] | ICommand<boolean[]>) {}
+	public operands: (ICommand<boolean> | boolean)[] | ICommand<boolean[]>;
+
+	constructor(...operands: (ICommand<boolean> | boolean)[]);
+	constructor(operands: ICommand<boolean[]>);
+	constructor(...args: unknown[]) {
+		if (args.length === 1) {
+			this.operands = args[0] as ICommand<boolean[]>;
+		} else {
+			this.operands = args as (ICommand<boolean> | boolean)[];
+		}
+	}
 
 	private async validateOperand(value: boolean, operandName: string): Promise<void> {
 		await this.typeGuard.evaluate(value, this.id, operandName);
@@ -31,7 +41,7 @@ export default class And implements IOperator<boolean> {
 	toString(): string {
 		const str = isCommand(this.operands)
 			? this.operands.toString()
-			: this.operands.map((e) => (isCommand(e) ? e.toString() : String(e))).join(` ${this.symbol} `);
+			: this.operands.map((e) => e.toString()).join(` ${this.symbol} `);
 		return `(${str})`;
 	}
 }

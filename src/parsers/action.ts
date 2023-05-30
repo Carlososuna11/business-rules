@@ -27,8 +27,8 @@ const parseAction = (actionStructure: object): ICommand<unknown> => {
 
 		const Class = options[type][name];
 		const subExpressions = (args as unknown[]).map((arg: unknown) => {
-			if (Array.isArray(arg))
-				return arg.map((subArg) => (typeof subArg === 'object' ? parseExpression(subArg) : subArg));
+			// if (Array.isArray(arg))
+			// 	return arg.map((subArg) => (typeof subArg === 'object' ? parseExpression(subArg) : subArg));
 			if (typeof arg === 'object' && arg) return parseExpression(arg);
 			return arg;
 		});

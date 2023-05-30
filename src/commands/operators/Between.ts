@@ -40,8 +40,6 @@ export default class Between implements IOperator<boolean> {
 	}
 
 	toString(): string {
-		return `${isCommand(this.value) ? this.value.toString() : this.value} ${this.symbol} (${
-			isCommand(this.minValue) ? this.minValue.toString() : this.minValue
-		} and ${isCommand(this.maxValue) ? this.maxValue.toString() : this.maxValue})`;
+		return `(${this.value.toString()} ${this.symbol} (${this.minValue.toString()} and ${this.maxValue.toString()}))`;
 	}
 }

@@ -7,31 +7,40 @@ export default class MinDate implements IFunction<Date> {
 	id = 'minDate';
 
 	typeGuard: TypeGuard = new TypeGuard(['date']);
-	constructor(private readonly values: (ICommand<Date> | Date)[]) {}
+	private readonly values: (ICommand<Date> | Date)[] | ICommand<Date[]>;
+
+	constructor(...values: (ICommand<Date> | Date)[]);
+	constructor(values: ICommand<Date[]>);
+	constructor(...args: unknown[]) {
+		if (args.length === 1) {
+			this.values = args[0] as ICommand<Date[]>;
+		} else {
+			this.values = args as (ICommand<Date> | Date)[];
+		}
+	}
 
 	private async validateValue(value: Date, operandName: string): Promise<void> {
 		await this.typeGuard.evaluate(value, this.id, operandName);
 	}
 
 	async execute(context: AbstractContextData): Promise<Date> {
-		const transformedValues = await Promise.all(
-			this.values.map(async (value) => (isCommand(value) ? await value.execute(context) : value))
-		);
+		const values = isCommand(this.values) ? await this.values.execute(context) : this.values;
 
-		let minValue = transformedValues[0];
-		for (let i = 1; i < transformedValues.length; i++) {
-			const currentValue = transformedValues[i];
+		const result = await Promise.all(
+			values.map(async (value, index) => {
+				const toEvaluate = isCommand(value) ? await value.execute(context) : value;
+				await this.validateValue(toEvaluate, `values[${index}]`);
+				return toEvaluate.getTime();
+			})
+		).catch((err) => {
+			throw err;
+		});
 
-			await this.validateValue(currentValue, `value[${i}]`);
-
-			if (currentValue < minValue) {
-				minValue = currentValue;
-			}
-		}
-		return minValue;
+		return new Date(Math.min(...result));
 	}
 
 	toString(): string {
-		return `${this.id}(${this.values.map((value) => (isCommand(value) ? value.toString() : value)).join(', ')})`;
+		const str = isCommand(this.values) ? this.values.toString() : this.values.map((e) => e.toString()).join(`, `);
+		return `${this.id}(${str})`;
 	}
 }

@@ -1,18 +1,5 @@
-import Ceil from './commands/functions/Ceil';
-import Floor from './commands/functions/Floor';
-import ParseFloat from './commands/functions/ParseFloat';
-import ParseInt from './commands/functions/ParseInt';
-import Round from './commands/functions/Round';
-import Trunc from './commands/functions/Trunc';
-import Or from './commands/operators/Or';
 import { Engine } from './engine';
-import { Rule } from './rule';
-import { saveDiagram } from './utils';
-import { registerFunction, registerOperator } from './commands';
-import { RuleObject, Data, EngineResult } from './types';
-import And from './commands/operators/And';
-import { AbstractContextData, ContextData } from './context';
-import Max from './commands/functions/Max';
+import { RuleObject } from './types';
 
 interface User {
 	name: string;
@@ -190,12 +177,9 @@ const rules: RuleObject[] = [
 		description: 'Todas las valoraciones son positivas',
 		condition: {
 			'$op.and': [
-				[
-					{
-						'$ctx.get': ['data.rates'],
-					},
-					1,
-				],
+				{
+					'$ctx.get': ['data.rates'],
+				},
 			],
 		},
 		postActions: [
@@ -206,9 +190,9 @@ const rules: RuleObject[] = [
 	},
 ];
 
-const engine = new Engine(rules, { filter: { error: true, debug: false, warn: true, info: true } });
-
 const main = async () => {
+	const engine = new Engine(rules, { filter: { error: true, debug: false, warn: true, info: true } });
+
 	const responses = await Promise.all(
 		users.map(async (user) => {
 			return await engine.evaluate(user, ['priority']);
@@ -218,18 +202,6 @@ const main = async () => {
 	for (const response of responses) {
 		console.log(response);
 	}
-
-	var test = new Round('h');
-
-	const hola = async () => {
-		console.log('\nEl test es: ', await test.execute(new ContextData()));
-		return;
-	};
-
-	hola();
-
-	console.log('El string es: ', test.toString());
-	// console.log(engine.rules[1].toString());
 };
 
 main();

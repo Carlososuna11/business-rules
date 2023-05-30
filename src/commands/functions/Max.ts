@@ -8,39 +8,44 @@ export default class Max implements IFunction<number | string> {
 	id = 'max';
 
 	typeGuard: TypeGuard = new TypeGuard(['number', 'string']);
-	constructor(private readonly values: (ICommand<number | string> | number | string)[]) {}
+
+	private readonly values: (ICommand<number | string> | number | string)[] | ICommand<(number | string)[]>;
+
+	constructor(...values: (ICommand<number | string> | number | string)[]);
+	constructor(values: ICommand<(number | string)[]>);
+	constructor(...args: unknown[]) {
+		if (args.length === 1) {
+			this.values = args[0] as ICommand<(number | string)[]>;
+		} else {
+			this.values = args as (ICommand<number | string> | number | string)[];
+		}
+	}
 
 	private async validateOperand(value: number | string, operandName: string): Promise<void> {
 		await this.typeGuard.evaluate(value, this.id, operandName);
 	}
 
 	async execute(context: AbstractContextData): Promise<number> {
-		try {
-			for (let i = 0; i < this.values.length; i++) {
-				const operand = this.values[i];
+		const operands = isCommand(this.values) ? await this.values.execute(context) : this.values;
+
+		const result = await Promise.all(
+			operands.map(async (operand, index) => {
 				const toEvaluate = isCommand(operand) ? await operand.execute(context) : operand;
-				await this.validateOperand(toEvaluate, `operands[${i}]`);
-			}
+				await this.validateOperand(toEvaluate, `operands[${index}]`);
+				if (isNaN(Number(toEvaluate))) {
+					throw new ValueException(this.id, `The value '${toEvaluate}' is not a valid number.`);
+				}
+				return Number(toEvaluate);
+			})
+		).catch((err) => {
+			throw err;
+		});
 
-			const transformedValues = this.values.map(async (value) =>
-				isCommand(value) ? await value.execute(context) : value
-			);
-
-			const allValuesAreNumbers = transformedValues.every((value) => !isNaN(Number(value)));
-
-			if (!allValuesAreNumbers) {
-				throw new ValueException(this.id, 'Values must be numbers or strings representing numbers');
-			}
-
-			return Math.max(...transformedValues.map((value) => Number(value)));
-		} catch (error) {
-			// Manejo del error
-			console.error(error);
-			throw error;
-		}
+		return Math.max(...result);
 	}
 
 	toString(): string {
-		return `${this.id}(${this.values.map((value) => (isCommand(value) ? value.toString() : value)).join(', ')})`;
+		const str = isCommand(this.values) ? this.values.toString() : this.values.map((e) => e.toString()).join(`, `);
+		return `${this.id}(${str})`;
 	}
 }

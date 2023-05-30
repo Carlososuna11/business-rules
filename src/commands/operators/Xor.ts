@@ -9,31 +9,41 @@ export default class Xor implements IOperator<boolean> {
 
 	private typeGuard: TypeGuard = new TypeGuard(['boolean']);
 
-	constructor(private readonly operands: (ICommand<boolean> | boolean)[]) {}
+	public operands: (ICommand<boolean> | boolean)[] | ICommand<boolean[]>;
+
+	constructor(...operands: (ICommand<boolean> | boolean)[]);
+	constructor(operands: ICommand<boolean[]>);
+	constructor(...args: unknown[]) {
+		if (args.length === 1) {
+			this.operands = args[0] as ICommand<boolean[]>;
+		} else {
+			this.operands = args as (ICommand<boolean> | boolean)[];
+		}
+	}
 
 	private async validateValue(value: boolean, operandName: string): Promise<void> {
 		await this.typeGuard.evaluate(value, this.id, operandName);
 	}
 
 	async execute(context: AbstractContextData): Promise<boolean> {
-		let count = 0;
-		for (let i = 0; i < this.operands.length; i++) {
-			const operand = this.operands[i];
-			const toEvaluate = isCommand(operand) ? await operand.execute(context) : operand;
-			await this.validateValue(toEvaluate, `operands[${i}]`);
-			if (toEvaluate) {
-				count++;
-			}
-		}
-		return count === 1;
+		const operands = isCommand(this.operands) ? await this.operands.execute(context) : this.operands;
+
+		const results = await Promise.all(
+			operands.map(async (operand, index) => {
+				const toEvaluate = isCommand(operand) ? await operand.execute(context) : operand;
+				await this.validateValue(toEvaluate, `operands[${index}]`);
+				return toEvaluate;
+			})
+		).catch((e) => {
+			throw e;
+		});
+		return results.reduce((acc, curr) => acc !== curr, false);
 	}
 
 	toString(): string {
-		const str = this.operands
-			.map((operand) => {
-				return typeof operand === 'boolean' ? operand : operand.toString();
-			})
-			.join(` ${this.symbol} `);
+		const str = isCommand(this.operands)
+			? this.operands.toString()
+			: this.operands.map((e) => e.toString()).join(` ${this.symbol} `);
 		return `(${str})`;
 	}
 }
