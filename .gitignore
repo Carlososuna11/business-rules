@@ -45,3 +45,10 @@ yarn.lock
 
 # ignore .tgz   
 *.tgz
+
+# img
+*.png
+*.jpg
+
+# tsbr
+*.tsbr

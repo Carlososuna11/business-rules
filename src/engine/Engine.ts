@@ -17,11 +17,15 @@ import CONSTS from '../constants';
 import { BSON, ObjectId } from 'bson';
 
 export default class Engine implements IEngine {
+	public name: string;
+	public description: string;
 	public rules: Rule[];
 	public rulesbyId: Map<string, Rule>;
 	public logger: Logger;
 
-	constructor(rules: RuleObject[], loggerOptions: LoggerOptions = {}) {
+	constructor(name: string, rules: RuleObject[], description = '', loggerOptions: LoggerOptions = {}) {
+		this.name = name;
+		this.description = description;
 		this.rules = [];
 		this.rulesbyId = new Map<string, Rule>();
 		this.addRules(rules);
@@ -216,6 +220,8 @@ export default class Engine implements IEngine {
 		const data = {
 			_id: new ObjectId(),
 			version: CONSTS.VERSION,
+			name: this.name,
+			description: this.description,
 			rules,
 			createdAt: new Date().toISOString(),
 		};
@@ -238,7 +244,9 @@ export default class Engine implements IEngine {
 			const file = await fs.promises.open(filePath, 'r');
 			const bytes = await file.readFile();
 			const data = BSON.deserialize(bytes);
-			const engine = new Engine(data.rules, loggerOptions);
+			//TODO: check version
+			//TODO: check data structure
+			const engine = new Engine(data.name, data.rules, data.description, loggerOptions);
 			return engine;
 		} catch (error) {
 			throw new Error(`Error importing the engine: ${error}`);

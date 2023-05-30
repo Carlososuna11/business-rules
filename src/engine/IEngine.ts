@@ -3,6 +3,8 @@ import { Logger } from '../utils';
 import { RuleObject, EngineResult } from '../types';
 
 export default interface IEngine {
+	name: string;
+	description: string;
 	rules: AbstractRule[];
 	logger: Logger;
 
