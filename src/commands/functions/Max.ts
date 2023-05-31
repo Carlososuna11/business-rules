@@ -4,7 +4,7 @@ import { TypeGuard } from '../../utils';
 import ICommand, { isCommand } from '../ICommand';
 import IFunction from './IFunction';
 
-export default class Max implements IFunction<number | string> {
+export default class Max implements IFunction<number> {
 	id = 'max';
 
 	typeGuard: TypeGuard = new TypeGuard(['number', 'string']);

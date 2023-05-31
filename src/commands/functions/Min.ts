@@ -4,7 +4,7 @@ import { TypeGuard } from '../../utils';
 import ICommand, { isCommand } from '../ICommand';
 import IFunction from './IFunction';
 
-export default class Min implements IFunction<number | string> {
+export default class Min implements IFunction<number> {
 	id = 'min';
 
 	typeGuard: TypeGuard = new TypeGuard(['number', 'string']);
