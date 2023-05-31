@@ -206,7 +206,7 @@ const main = async () => {
 	// 	console.log(response);
 	// }
 
-	var test = new And(false, true, 2);
+	var test = new And([false, true]);
 
 	const hola = async () => {
 		console.log('\nEl test es: ', await test.execute(new ContextData()));
