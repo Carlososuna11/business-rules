@@ -9,13 +9,13 @@ export default class Xor implements IOperator<boolean> {
 
 	private typeGuard: TypeGuard = new TypeGuard(['boolean']);
 
-	public operands: (ICommand<boolean> | boolean)[] | ICommand<boolean[]>;
+	public operands: (ICommand<boolean> | boolean)[] | ICommand<boolean[]> | ICommand<boolean>;
 
 	constructor(...operands: (ICommand<boolean> | boolean)[]);
-	constructor(operands: ICommand<boolean[]>);
+	constructor(operands: ICommand<boolean> | ICommand<boolean[]> | boolean);
 	constructor(...args: unknown[]) {
 		if (args.length === 1) {
-			this.operands = args[0] as ICommand<boolean[]>;
+			this.operands = isCommand(args[0]) ? (args[0] as ICommand<boolean[]> | ICommand<boolean>) : (args as boolean[]);
 		} else {
 			this.operands = args as (ICommand<boolean> | boolean)[];
 		}
@@ -28,16 +28,22 @@ export default class Xor implements IOperator<boolean> {
 	async execute(context: AbstractContextData): Promise<boolean> {
 		const operands = isCommand(this.operands) ? await this.operands.execute(context) : this.operands;
 
-		const results = await Promise.all(
-			operands.map(async (operand, index) => {
-				const toEvaluate = isCommand(operand) ? await operand.execute(context) : operand;
-				await this.validateValue(toEvaluate, `operands[${index}]`);
-				return toEvaluate;
-			})
-		).catch((e) => {
-			throw e;
-		});
-		return results.reduce((acc, curr) => acc !== curr, false);
+		if (Array.isArray(operands)) {
+			const results = await Promise.all(
+				operands.map(async (operand, index) => {
+					const toEvaluate = isCommand(operand) ? await operand.execute(context) : operand;
+					await this.validateValue(toEvaluate, `operands[${index}]`);
+					return toEvaluate;
+				})
+			).catch((e) => {
+				throw e;
+			});
+			return results.reduce((acc, curr) => acc !== curr, false);
+		}
+
+		await this.validateValue(operands, 'operands');
+
+		return operands;
 	}
 
 	toString(): string {

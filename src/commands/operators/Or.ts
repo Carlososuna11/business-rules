@@ -9,13 +9,13 @@ export default class Or implements IOperator<boolean> {
 
 	private typeGuard: TypeGuard = new TypeGuard(['boolean']);
 
-	public operands: (ICommand<boolean> | boolean)[] | ICommand<boolean[]>;
+	public operands: (ICommand<boolean> | boolean)[] | ICommand<boolean[]> | ICommand<boolean>;
 
 	constructor(...operands: (ICommand<boolean> | boolean)[]);
-	constructor(operands: ICommand<boolean[]>);
+	constructor(operands: ICommand<boolean> | ICommand<boolean[]> | boolean);
 	constructor(...args: unknown[]) {
 		if (args.length === 1) {
-			this.operands = args[0] as ICommand<boolean[]>;
+			this.operands = isCommand(args[0]) ? (args[0] as ICommand<boolean[]> | ICommand<boolean>) : (args as boolean[]);
 		} else {
 			this.operands = args as (ICommand<boolean> | boolean)[];
 		}
@@ -28,16 +28,22 @@ export default class Or implements IOperator<boolean> {
 	public async execute(context: AbstractContextData): Promise<boolean> {
 		const operands = isCommand(this.operands) ? await this.operands.execute(context) : this.operands;
 
-		for (let i = 0; i < operands.length; i++) {
-			const operand = operands[i];
-			const toEvaluate = isCommand(operand) ? await operand.execute(context) : operand;
-			await this.validateOperand(toEvaluate, `operands[${i}]`);
-			if (toEvaluate) {
-				return true;
+		if (Array.isArray(operands)) {
+			for (let i = 0; i < operands.length; i++) {
+				const operand = operands[i];
+				const toEvaluate = isCommand(operand) ? await operand.execute(context) : operand;
+				await this.validateOperand(toEvaluate, `operands[${i}]`);
+				if (toEvaluate) {
+					return true;
+				}
 			}
+
+			return false;
 		}
 
-		return false;
+		await this.validateOperand(operands, 'operands');
+
+		return operands;
 	}
 
 	toString(): string {
