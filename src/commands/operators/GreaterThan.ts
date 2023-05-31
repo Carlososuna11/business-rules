@@ -7,20 +7,22 @@ export default class GreaterThan implements IOperator<boolean> {
 	id = 'greaterThan';
 	symbol = '>';
 
-	private typeGuard: TypeGuard = new TypeGuard(['number', 'string']);
-	left: number | string | ICommand<number | string>;
-	right: number | string | ICommand<number | string>;
+	private typeGuard: TypeGuard = new TypeGuard(['number', 'string', 'date']);
+	left: number | string  | Date| ICommand<number | string | Date>;
+	right: number | string | Date | ICommand<number | string | Date>;
 
-	constructor(left: number | string | ICommand<number | string>, right: number | string | ICommand<number | string>) {
+	constructor(left: number | string | Date | ICommand<number | string | Date>, right: number | string | Date | ICommand<number | string | Date>) {
 		this.left = left;
 		this.right = right;
 	}
 
-	private async validateOperand(value: number | string, operandName: string): Promise<void> {
+	private async validateOperand(value: number | string | Date, operandName: string): Promise<void> {
 		await this.typeGuard.evaluate(value, this.id, operandName);
 	}
 
 	async execute(context: AbstractContextData): Promise<boolean> {
+
+
 		const rightOperand = isCommand(this.right) ? await this.right.execute(context) : this.right;
 		await this.validateOperand(rightOperand, 'right');
 

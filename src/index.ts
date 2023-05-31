@@ -215,6 +215,8 @@ const main = async () => {
 
 	hola();
 
+	console.log('Epa: ', Number(Date.now()));
+
 	// console.log('El string es: ', test.toString());
 	// console.log(engine.rules[1].toString());
 };

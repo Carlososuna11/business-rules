@@ -7,16 +7,16 @@ export default class LessThan implements IOperator<boolean> {
 	id = 'lessThan';
 	symbol = '<';
 
-	private typeGuard: TypeGuard = new TypeGuard(['number', 'string']);
-	left: number | string | ICommand<number | string>;
-	right: number | string | ICommand<number | string>;
+	private typeGuard: TypeGuard = new TypeGuard(['number', 'string', 'date']);
+	left: number | string | Date | ICommand<number | string | Date>;
+	right: number | string | Date | ICommand<number | string | Date>;
 
-	constructor(left: number | string | ICommand<number | string>, right: number | string | ICommand<number | string>) {
+	constructor(left: number | string | Date | ICommand<number | string | Date>, right: number | string | Date | ICommand<number | string | Date>) {
 		this.left = left;
 		this.right = right;
 	}
 
-	private async validateValue(value: number | string, operandName: string): Promise<void> {
+	private async validateValue(value: number | string | Date, operandName: string): Promise<void> {
 		await this.typeGuard.evaluate(value, this.id, operandName);
 	}
 
