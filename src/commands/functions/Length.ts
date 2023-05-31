@@ -5,13 +5,13 @@ import IFunction from './IFunction';
 export default class Length implements IFunction<number> {
 	id = 'length';
 
-	private readonly values: (ICommand<unknown> | unknown)[] | ICommand<unknown[]> | unknown[];
+	private readonly values: (ICommand<unknown> | unknown)[] | ICommand<unknown[]> | ICommand<unknown>;
 
 	constructor(...values: (ICommand<unknown> | unknown)[]);
-	constructor(values: ICommand<unknown[]>);
+	constructor(values: ICommand<unknown[]> | ICommand<unknown> | unknown);
 	constructor(...args: unknown[]) {
 		if (args.length === 1) {
-			this.values = args[0] as ICommand<unknown[]>;
+			this.values = isCommand(args[0]) ? (args[0] as ICommand<unknown[] | unknown>) : (args as unknown[]);
 		} else {
 			this.values = args as (ICommand<unknown> | unknown)[];
 		}
@@ -20,11 +20,14 @@ export default class Length implements IFunction<number> {
 	async execute(context: AbstractContextData): Promise<number> {
 		const values = isCommand(this.values) ? await this.values.execute(context) : this.values;
 
-		const transformedValues = await Promise.all(
-			values.map(async (value) => (isCommand(value) ? await value.execute(context) : value))
-		);
+		if (Array.isArray(values)) {
+			const transformedValues = await Promise.all(
+				values.map(async (value) => (isCommand(value) ? await value.execute(context) : value))
+			);
+			return transformedValues.length;
+		}
 
-		return transformedValues.length;
+		return 1;
 	}
 
 	toString(): string {

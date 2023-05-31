@@ -1,8 +1,9 @@
 {
 	"name": "typescript-business-rules-engine",
-	"version": "1.0.0",
+	"version": "1.0.9",
 	"description": "A Typescript rule engine where rules are defined in JSON format.",
 	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
 	"scripts": {
 		"commit": "cz",
 		"compile": "tsc",
@@ -26,23 +27,25 @@
 		"@commitlint/cli": "^17.6.3",
 		"@commitlint/config-conventional": "^17.6.3",
 		"@commitlint/cz-commitlint": "^17.5.0",
-		"@tsconfig/recommended": "^1.0.2",
-		"@types/plantuml-encoder": "^1.4.0",
-		"@types/uuid": "^9.0.1",
 		"@typescript-eslint/eslint-plugin": "^5.59.0",
 		"@typescript-eslint/parser": "^5.59.0",
-		"bson": "^5.3.0",
 		"commitizen": "^4.3.0",
 		"eslint": "^8.39.0",
 		"husky": "^8.0.3",
 		"inquirer": "^8.2.5",
-		"plantuml-encoder": "^1.4.0",
 		"prettier": "^2.8.8",
 		"standard-version": "^9.5.0",
 		"ts-node-dev": "^2.0.0",
 		"tslib": "^2.5.0",
-		"typescript": "^5.0.4",
-		"uuid": "^9.0.0"
+		"typescript": "^5.0.4"
+	},
+	"dependencies": {
+		"@tsconfig/recommended": "^1.0.2",
+		"uuid": "^9.0.0",
+		"plantuml-encoder": "^1.4.0",
+		"bson": "^5.3.0",
+		"@types/uuid": "^9.0.1",
+		"@types/plantuml-encoder": "^1.4.0"
 	},
 	"repository": {
 		"type": "git",
