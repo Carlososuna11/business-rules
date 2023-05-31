@@ -9,6 +9,7 @@ import {
 	RuleResult,
 	LoggerOptions,
 	DelegatorOptions,
+	EngineObject,
 } from '../types';
 import { ContextData } from '../context';
 import Session from './Session';
@@ -32,7 +33,15 @@ export default class Engine implements IEngine {
 		this.logger = new Logger(loggerOptions);
 	}
 
-	public async addRules(rules: RuleObject[]): Promise<void> {
+	public toObject(): EngineObject {
+		return {
+			name: this.name,
+			description: this.description,
+			rules: this.rules.map((rule) => rule.ruleObject),
+		};
+	}
+
+	public addRules(rules: RuleObject[]): void {
 		rules.forEach((rule) => {
 			const newRule = new Rule(rule);
 			this.rules.push(newRule);

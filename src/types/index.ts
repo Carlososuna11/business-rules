@@ -19,6 +19,12 @@ export type ExpressionOptions = {
 	[key: string]: FunctionMap<unknown> | OperatorMap<unknown> | ContextMap<unknown>;
 };
 
+export type EngineObject = {
+	name: string;
+	description: string;
+	rules: RuleObject[];
+};
+
 export type RuleObject = {
 	name: string;
 	condition: Data;
