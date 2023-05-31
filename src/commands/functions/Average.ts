@@ -7,7 +7,7 @@ import IFunction from './IFunction';
 export default class Average implements IFunction<number> {
 	id = 'average';
 
-	typeGuard: TypeGuard = new TypeGuard(['number', 'string']);
+	typeGuard: TypeGuard = new TypeGuard(['number', 'string', 'array']);
 	private operands:
 		| (ICommand<number | string> | number | string)[]
 		| ICommand<(number | string)[]>
@@ -27,8 +27,19 @@ export default class Average implements IFunction<number> {
 		await this.typeGuard.evaluate(value, this.id, operandName);
 	}
 
+	private async validateListValue(
+		value: (ICommand<number | string> | number | string)[],
+		operandName: string
+	): Promise<void> {
+		await this.typeGuard.evaluate(value, this.id, operandName);
+	}
+
 	async execute(context: AbstractContextData): Promise<number> {
 		const operands = isCommand(this.operands) ? await this.operands.execute(context) : this.operands;
+
+		console.log('Operandos son: ', operands);
+		console.log('Longitud de operandos: ', operands.length);
+		await this.validateListValue(operands, 'lista');
 
 		const result = await Promise.all(
 			operands.map(async (operand, index) => {

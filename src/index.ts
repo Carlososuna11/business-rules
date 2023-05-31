@@ -1,3 +1,6 @@
+import Average from './commands/functions/Average';
+import And from './commands/operators/And';
+import { ContextData } from './context';
 import { Engine } from './engine';
 import { RuleObject } from './types';
 
@@ -191,17 +194,29 @@ const rules: RuleObject[] = [
 ];
 
 const main = async () => {
-	const engine = new Engine(rules, { filter: { error: true, debug: false, warn: true, info: true } });
+		// const engine = new Engine(rules, { filter: { error: true, debug: false, warn: true, info: true } });
 
-	const responses = await Promise.all(
-		users.map(async (user) => {
-			return await engine.evaluate(user, ['priority']);
-		})
-	);
+		// const responses = await Promise.all(
+		// 	users.map(async (user) => {
+		// 		return await engine.evaluate(user, ['priority']);
+		// 	})
+		// );
 
-	for (const response of responses) {
-		console.log(response);
-	}
+	// for (const response of responses) {
+	// 	console.log(response);
+	// }
+
+	var test = new And(false, true, 2);
+
+	const hola = async () => {
+		console.log('\nEl test es: ', await test.execute(new ContextData()));
+		return;
+	};
+
+	hola();
+
+	// console.log('El string es: ', test.toString());
+	// console.log(engine.rules[1].toString());
 };
 
 main();
