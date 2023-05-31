@@ -8,10 +8,13 @@ export default class GreaterThan implements IOperator<boolean> {
 	symbol = '>';
 
 	private typeGuard: TypeGuard = new TypeGuard(['number', 'string', 'date']);
-	left: number | string  | Date| ICommand<number | string | Date>;
+	left: number | string | Date | ICommand<number | string | Date>;
 	right: number | string | Date | ICommand<number | string | Date>;
 
-	constructor(left: number | string | Date | ICommand<number | string | Date>, right: number | string | Date | ICommand<number | string | Date>) {
+	constructor(
+		left: number | string | Date | ICommand<number | string | Date>,
+		right: number | string | Date | ICommand<number | string | Date>
+	) {
 		this.left = left;
 		this.right = right;
 	}
@@ -21,8 +24,6 @@ export default class GreaterThan implements IOperator<boolean> {
 	}
 
 	async execute(context: AbstractContextData): Promise<boolean> {
-
-
 		const rightOperand = isCommand(this.right) ? await this.right.execute(context) : this.right;
 		await this.validateOperand(rightOperand, 'right');
 

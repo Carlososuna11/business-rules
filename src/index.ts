@@ -1,4 +1,7 @@
 import Average from './commands/functions/Average';
+import BoolToNumber from './commands/functions/BoolToNumber';
+import ToBoolean from './commands/functions/ToBoolean';
+import ToString from './commands/functions/ToString';
 import And from './commands/operators/And';
 import { ContextData } from './context';
 import { Engine } from './engine';
@@ -194,30 +197,32 @@ const rules: RuleObject[] = [
 ];
 
 const main = async () => {
-		// const engine = new Engine(rules, { filter: { error: true, debug: false, warn: true, info: true } });
+	// const engine = new Engine(rules, { filter: { error: true, debug: false, warn: true, info: true } });
 
-		// const responses = await Promise.all(
-		// 	users.map(async (user) => {
-		// 		return await engine.evaluate(user, ['priority']);
-		// 	})
-		// );
+	// const responses = await Promise.all(
+	// 	users.map(async (user) => {
+	// 		return await engine.evaluate(user, ['priority']);
+	// 	})
+	// );
 
 	// for (const response of responses) {
 	// 	console.log(response);
 	// }
 
-	var test = new And(false, true);
+	var test = new BoolToNumber(true);
+
+	var num = '';
 
 	const hola = async () => {
 		console.log('\nEl test es: ', await test.execute(new ContextData()));
+		console.log('El string es: ', test.toString());
 		return;
 	};
 
 	hola();
 
-	console.log('Epa: ', Number(Date.now()));
+	console.log('Epa: ', !!num);
 
-	// console.log('El string es: ', test.toString());
 	// console.log(engine.rules[1].toString());
 };
 

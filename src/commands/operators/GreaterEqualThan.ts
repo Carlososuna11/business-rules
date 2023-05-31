@@ -11,7 +11,10 @@ export default class GreaterEqualThan implements IOperator<boolean> {
 	left: number | string | Date | ICommand<number | string | Date>;
 	right: number | string | Date | ICommand<number | string | Date>;
 
-	constructor(left: number | string | Date | ICommand<number | string | Date>, right: number | string | Date | ICommand<number | string | Date>) {
+	constructor(
+		left: number | string | Date | ICommand<number | string | Date>,
+		right: number | string | Date | ICommand<number | string | Date>
+	) {
 		this.left = left;
 		this.right = right;
 	}

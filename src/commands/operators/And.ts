@@ -3,8 +3,8 @@ import ICommand, { isCommand } from '../ICommand';
 import { TypeGuard } from '../../utils';
 import { AbstractContextData } from '../../context';
 export default class And implements IOperator<boolean> {
-  id = 'and';
-  symbol = '&&';
+	id = 'and';
+	symbol = '&&';
 
 	private typeGuard: TypeGuard = new TypeGuard(['boolean']);
 

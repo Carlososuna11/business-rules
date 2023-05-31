@@ -1,5 +1,6 @@
 import { Constructor } from '../../types';
 import Average from './Average';
+import BoolToNumber from './BoolToNumber';
 import Ceil from './Ceil';
 import Floor from './Floor';
 import IFunction from './IFunction';
@@ -14,6 +15,8 @@ import ParseFloat from './ParseFloat';
 import ParseInt from './ParseInt';
 import Round from './Round';
 import StandardDesviation from './StandardDesviation';
+import ToBoolean from './ToBoolean';
+import ToString from './ToString';
 import Trunc from './Trunc';
 import Upper from './Upper';
 
@@ -35,6 +38,7 @@ function registerFunction(id: string, _function: Constructor<IFunction<unknown>>
 }
 
 registerFunction('average', Average);
+registerFunction('boolToNumber', BoolToNumber);
 registerFunction('ceil', Ceil);
 registerFunction('floor', Floor);
 registerFunction('isNaN', IsNaN);
@@ -48,6 +52,8 @@ registerFunction('parseFloat', ParseFloat);
 registerFunction('parseInt', ParseInt);
 registerFunction('round', Round);
 registerFunction('standarDesviation', StandardDesviation);
+registerFunction('toBoolean', ToBoolean);
+registerFunction('ToString', ToString);
 registerFunction('trunc', Trunc);
 registerFunction('upper', Upper);
 
