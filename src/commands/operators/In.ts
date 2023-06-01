@@ -14,8 +14,8 @@ export default class In implements IOperator<boolean> {
 	private property: string | ICommand<string>;
 
 	constructor(
-		object: Record<string, unknown> | ICommand<Record<string, unknown>>,
-		property: string | ICommand<string>
+		property: string | ICommand<string>,
+		object: Record<string, unknown> | ICommand<Record<string, unknown>>
 	) {
 		this.object = object;
 		this.property = property;
