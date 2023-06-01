@@ -13,12 +13,15 @@ import Min from './Min';
 import MinDate from './MinDate';
 import ParseFloat from './ParseFloat';
 import ParseInt from './ParseInt';
+import Regex from './Regex';
 import Round from './Round';
 import StandardDesviation from './StandardDesviation';
 import ToBoolean from './ToBoolean';
+import ToDate from './ToDate';
 import ToString from './ToString';
 import Trunc from './Trunc';
 import Upper from './Upper';
+import YearsFrom from './YearsFrom';
 
 // hashMap
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -50,11 +53,14 @@ registerFunction('min', Min);
 registerFunction('minDate', MinDate);
 registerFunction('parseFloat', ParseFloat);
 registerFunction('parseInt', ParseInt);
+registerFunction('regex', Regex);
 registerFunction('round', Round);
 registerFunction('standarDesviation', StandardDesviation);
 registerFunction('toBoolean', ToBoolean);
+registerFunction('toDate', ToDate);
 registerFunction('ToString', ToString);
 registerFunction('trunc', Trunc);
 registerFunction('upper', Upper);
+registerFunction('yearsFrom', YearsFrom);
 
 export { IFunction, getFunctions, registerFunction };

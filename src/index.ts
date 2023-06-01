@@ -1,7 +1,10 @@
 import Average from './commands/functions/Average';
 import BoolToNumber from './commands/functions/BoolToNumber';
+import Regex from './commands/functions/Regex';
 import ToBoolean from './commands/functions/ToBoolean';
+import ToDate from './commands/functions/ToDate';
 import ToString from './commands/functions/ToString';
+import YearsFrom from './commands/functions/YearsFrom';
 import And from './commands/operators/And';
 import { ContextData } from './context';
 import { Engine } from './engine';
@@ -19,7 +22,7 @@ interface User {
 // generados con ChatGPT xd
 const users: User[] = [
 	{
-		name: 'Ana García',
+		name: '\ba\w+',
 		age: 28,
 		gay: true,
 		email: 'ana.garcia@mail.com',
@@ -27,87 +30,87 @@ const users: User[] = [
 		phoneNumber: '+34 123 456 789',
 		rates: [true, true, true],
 	},
-	{
-		name: 'Juan Pérez',
-		age: 35,
-		gay: false,
-		email: 'juan.perez@mail.com',
-		address: 'Calle Gran Vía, 20',
-		phoneNumber: undefined,
-		rates: [true, false, true],
-	},
-	{
-		name: 'María Rodríguez',
-		age: 42,
-		gay: false,
-		email: 'maria.rodriguez@mail.com',
-		address: 'Calle Alcalá, 15',
-		phoneNumber: undefined,
-		rates: [true, false, true],
-	},
-	{
-		name: 'Pedro Sánchez',
-		age: 55,
-		gay: false,
-		email: 'pedro.sanchez@mail.com',
-		address: 'Avenida de la Constitución, 8',
-		phoneNumber: '+34 111 111 111',
-		rates: [true, false, true],
-	},
-	{
-		name: 'Lucía Fernández',
-		age: 30,
-		gay: false,
-		email: 'lucia.fernandez@mail.com',
-		address: 'Calle San Bernardo, 12',
-		phoneNumber: '+34 222 222 222',
-		rates: [true, false, true],
-	},
-	{
-		name: 'Javier Martínez',
-		age: 43,
-		gay: false,
-		email: 'javier.martinez@mail.com',
-		address: 'Calle Bravo Murillo, 100',
-		phoneNumber: '+34 333 333 333',
-		rates: [true, false, false],
-	},
-	{
-		name: 'Sara González',
-		age: 25,
-		gay: false,
-		email: 'sara.gonzalez@mail.com',
-		address: 'Calle Fuencarral, 80',
-		phoneNumber: '+34 444 444 444',
-		rates: [true, false, true],
-	},
-	{
-		name: 'David García',
-		age: 20,
-		gay: false,
-		email: 'david.garcia@mail.com',
-		address: 'Calle Toledo, 30',
-		phoneNumber: '+34 777 777 777',
-		rates: [true, false, true],
-	},
-	{
-		name: 'Luisa Pérez',
-		age: 37,
-		gay: false,
-		email: 'luisa.perez@mail.com',
-		address: 'Calle Almagro, 6',
-		phoneNumber: '+34 888 888 888',
-		rates: [true, false, false],
-	},
-	{
-		name: 'Carlos Gómez',
-		age: 50,
-		gay: false,
-		email: 'carlos.gomez@mail.com',
-		address: 'Calle Serrano, 10',
-		phoneNumber: '+34 999 999 999',
-		rates: [true, false, false],
-	},
+	// {
+	// 	name: 'Juan Pérez',
+	// 	age: 35,
+	// 	gay: false,
+	// 	email: 'juan.perez@mail.com',
+	// 	address: 'Calle Gran Vía, 20',
+	// 	phoneNumber: undefined,
+	// 	rates: [true, false, true],
+	// },
+	// {
+	// 	name: 'María Rodríguez',
+	// 	age: 42,
+	// 	gay: false,
+	// 	email: 'maria.rodriguez@mail.com',
+	// 	address: 'Calle Alcalá, 15',
+	// 	phoneNumber: undefined,
+	// 	rates: [true, false, true],
+	// },
+	// {
+	// 	name: 'Pedro Sánchez',
+	// 	age: 55,
+	// 	gay: false,
+	// 	email: 'pedro.sanchez@mail.com',
+	// 	address: 'Avenida de la Constitución, 8',
+	// 	phoneNumber: '+34 111 111 111',
+	// 	rates: [true, false, true],
+	// },
+	// {
+	// 	name: 'Lucía Fernández',
+	// 	age: 30,
+	// 	gay: false,
+	// 	email: 'lucia.fernandez@mail.com',
+	// 	address: 'Calle San Bernardo, 12',
+	// 	phoneNumber: '+34 222 222 222',
+	// 	rates: [true, false, true],
+	// },
+	// {
+	// 	name: 'Javier Martínez',
+	// 	age: 43,
+	// 	gay: false,
+	// 	email: 'javier.martinez@mail.com',
+	// 	address: 'Calle Bravo Murillo, 100',
+	// 	phoneNumber: '+34 333 333 333',
+	// 	rates: [true, false, false],
+	// },
+	// {
+	// 	name: 'Sara González',
+	// 	age: 25,
+	// 	gay: false,
+	// 	email: 'sara.gonzalez@mail.com',
+	// 	address: 'Calle Fuencarral, 80',
+	// 	phoneNumber: '+34 444 444 444',
+	// 	rates: [true, false, true],
+	// },
+	// {
+	// 	name: 'David García',
+	// 	age: 20,
+	// 	gay: false,
+	// 	email: 'david.garcia@mail.com',
+	// 	address: 'Calle Toledo, 30',
+	// 	phoneNumber: '+34 777 777 777',
+	// 	rates: [true, false, true],
+	// },
+	// {
+	// 	name: 'Luisa Pérez',
+	// 	age: 37,
+	// 	gay: false,
+	// 	email: 'luisa.perez@mail.com',
+	// 	address: 'Calle Almagro, 6',
+	// 	phoneNumber: '+34 888 888 888',
+	// 	rates: [true, false, false],
+	// },
+	// {
+	// 	name: 'Carlos Gómez',
+	// 	age: 50,
+	// 	gay: false,
+	// 	email: 'carlos.gomez@mail.com',
+	// 	address: 'Calle Serrano, 10',
+	// 	phoneNumber: '+34 999 999 999',
+	// 	rates: [true, false, false],
+	// },
 ];
 
 const rules: RuleObject[] = [
@@ -137,7 +140,7 @@ const rules: RuleObject[] = [
 		condition: {
 			'$op.equal': [
 				{
-					'$ctx.get': ['data.phoneNumber'],
+					'$ctx.get': ['data.name'],
 				},
 				undefined,
 			],
@@ -159,6 +162,8 @@ const rules: RuleObject[] = [
 			'$op.equal': [
 				{
 					'$ctx.get': ['data.rates[0]'],
+					// '$ctx.get': ['\ba\w+'],
+
 				},
 				false,
 			],
@@ -197,19 +202,20 @@ const rules: RuleObject[] = [
 ];
 
 const main = async () => {
-	// const engine = new Engine(rules, { filter: { error: true, debug: false, warn: true, info: true } });
+	const engine = new Engine('El pepe', rules, 'osuna', { filter: { error: true, debug: false, warn: true, info: true } });
 
-	// const responses = await Promise.all(
-	// 	users.map(async (user) => {
-	// 		return await engine.evaluate(user, ['priority']);
-	// 	})
-	// );
+	const responses = await Promise.all(
+		users.map(async (user) => {
+			return await engine.evaluate(user, ['priority']);
+		})
+	);
 
-	// for (const response of responses) {
-	// 	console.log(response);
-	// }
+	for (const response of responses) {
+		console.log(response);
+	}
 
-	var test = new BoolToNumber(true);
+
+	var test = new Regex("ara", '\ba\w+');
 
 	var num = '';
 
@@ -221,7 +227,15 @@ const main = async () => {
 
 	hola();
 
-	console.log('Epa: ', !!num);
+	const holaa = '\ba\w+';
+
+	console.log('Esto es hola:', RegExp(holaa));
+
+	const chao = holaa.replace('/', '');
+
+	console.log('Esto es chao:', chao);
+
+
 
 	// console.log(engine.rules[1].toString());
 };

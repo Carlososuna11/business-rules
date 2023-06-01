@@ -34,6 +34,8 @@ export default class Get implements IContext<unknown> {
 				propertyKey = key.replace(`[${indexMatch[0]}]`, '');
 			}
 
+			console.log('AQUIIIIIIII:',{ propertyKey, index });
+
 			if (value[propertyKey] === undefined) return undefined;
 
 			if (index !== undefined) {
