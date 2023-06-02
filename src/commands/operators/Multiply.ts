@@ -28,12 +28,12 @@ export default class Multiply implements IOperator<number> {
 		const leftOperand = isCommand(this.left) ? await this.left.execute(context) : this.left;
 		await this.validateValue(leftOperand, 'leftOperand');
 
-		 if (isNaN(Number(rightOperand))) {
-            throw new ValueException(this.id, `The value '${rightOperand}' is not a valid number.`);
-        }
-        if (isNaN(Number(leftOperand))) {
-            throw new ValueException(this.id, `The value '${leftOperand}' is not a valid number.`);
-        }
+		if (isNaN(Number(rightOperand))) {
+			throw new ValueException(this.id, `The value '${rightOperand}' is not a valid number.`);
+		}
+		if (isNaN(Number(leftOperand))) {
+			throw new ValueException(this.id, `The value '${leftOperand}' is not a valid number.`);
+		}
 
 		return Number(leftOperand) * Number(rightOperand);
 	}

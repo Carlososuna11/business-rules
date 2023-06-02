@@ -31,12 +31,12 @@ export default class Root implements IOperator<number> {
 		const indexOperand = isCommand(this.index) ? await this.index.execute(context) : this.index;
 		await this.validateValue(indexOperand, 'indexOperand');
 
-		 if (isNaN(Number(radicandOperand))) {
-            throw new ValueException(this.id, `The value '${radicandOperand}' is not a valid number.`);
-        }
-        if (isNaN(Number(indexOperand))) {
-            throw new ValueException(this.id, `The value '${indexOperand}' is not a valid number.`);
-        }
+		if (isNaN(Number(radicandOperand))) {
+			throw new ValueException(this.id, `The value '${radicandOperand}' is not a valid number.`);
+		}
+		if (isNaN(Number(indexOperand))) {
+			throw new ValueException(this.id, `The value '${indexOperand}' is not a valid number.`);
+		}
 
 		return Math.pow(Number(radicandOperand), 1 / Number(indexOperand));
 	}
