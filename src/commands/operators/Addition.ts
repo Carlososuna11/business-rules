@@ -2,6 +2,7 @@ import IOperator from './IOperator';
 import ICommand, { isCommand } from '../ICommand';
 import { TypeGuard } from '../../utils';
 import { AbstractContextData } from '../../context';
+import { ValueException } from '../../exceptions';
 export default class Addition implements IOperator<number> {
 	id = 'addition';
 	symbol = '+';
