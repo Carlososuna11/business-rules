@@ -20,7 +20,7 @@ export default class Floor implements IFunction<number> {
 		await this.validateValue(transformedValue, 'value');
 
 		if (isNaN(Number(transformedValue))) {
-			throw new ValueException(this.id, 'Value must be a number or a string representing a number');
+			throw new ValueException(`On ${this.id}. Value must be a number or a string representing a number`);
 		}
 		return Math.floor(Number(transformedValue));
 	}

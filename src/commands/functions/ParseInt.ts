@@ -20,7 +20,7 @@ export default class ParseInt implements IFunction<number> {
 		await this.validateValue(stringValue, 'value');
 
 		if (isNaN(Number(stringValue))) {
-			throw new ValueException(this.id, 'Value must be a string representing a number');
+			throw new ValueException(`On ${this.id}. Value must be a string representing a number`);
 		}
 
 		return parseInt(stringValue);

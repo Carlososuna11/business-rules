@@ -2,6 +2,7 @@ import IContext from './IContext';
 import { Data } from '../../types';
 import { AbstractContextData } from '../../context';
 import ICommand, { isCommand } from '../ICommand';
+import { BusinessRulesException } from '../../exceptions';
 
 export default class Set implements IContext<void> {
 	id = 'set';
@@ -26,11 +27,11 @@ export default class Set implements IContext<void> {
 
 			if (index !== undefined) {
 				if (!Array.isArray(value[propertyKey])) {
-					throw new Error(`Cannot access index ${index} of ${propertyKey}`);
+					throw new BusinessRulesException(`Cannot access index ${index} of ${propertyKey}`);
 				}
 				const valueArray = value[propertyKey] as unknown[];
 				if (valueArray.length <= index) {
-					throw new Error(`Index ${index} of ${propertyKey} is out of bounds`);
+					throw new BusinessRulesException(`Index ${index} of ${propertyKey} is out of bounds`);
 				}
 				if (i === keys.length - 1) {
 					valueArray[index] = isCommand(this.value) ? await this.value.execute(context) : this.value;

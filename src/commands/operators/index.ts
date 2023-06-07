@@ -25,6 +25,7 @@ import SetIntersection from './SetIntersection';
 import SetUnion from './SetUnion';
 import SetDifference from './SetDifference';
 import SetSymmetricDifference from './SetSymmetricDifference';
+import { BusinessRulesException } from '../../exceptions';
 // Operators hashMap
 const operators: { [key: string]: Constructor<IOperator<unknown>> } = {};
 
@@ -36,7 +37,7 @@ function getOperators(): {
 
 function registerOperator(id: string, operator: Constructor<IOperator<unknown>>): void {
 	if (operators[id]) {
-		throw new Error(`Operator with id ${id} already registered.`);
+		throw new BusinessRulesException(`Operator with id ${id} already registered.`);
 	}
 	operators[id] = operator;
 }

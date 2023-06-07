@@ -16,19 +16,29 @@ import Session from './Session';
 import { Logger } from '../utils';
 import CONSTS from '../constants';
 import { BSON, ObjectId } from 'bson';
+import type { JSONSchema7 } from 'json-schema';
+import { BusinessRulesException } from '../exceptions';
 
 export default class Engine implements IEngine {
 	public name: string;
+	public dataSchema: JSONSchema7;
 	public description: string;
 	public rules: Rule[];
 	public rulesbyId: Map<string, Rule>;
 	public logger: Logger;
 
-	constructor(name: string, rules: RuleObject[], description = '', loggerOptions: LoggerOptions = {}) {
+	constructor(
+		name: string,
+		rules: RuleObject[],
+		description = '',
+		loggerOptions: LoggerOptions = {},
+		dataSchema?: JSONSchema7
+	) {
 		this.name = name;
 		this.description = description;
 		this.rules = [];
 		this.rulesbyId = new Map<string, Rule>();
+		this.dataSchema = dataSchema || {};
 		this.addRules(rules);
 		this.logger = new Logger(loggerOptions);
 	}
@@ -140,7 +150,7 @@ export default class Engine implements IEngine {
 			await this.logger.error({
 				message: `Error executing evaluation for rule`,
 				rule: rule.name,
-				error: error instanceof Error ? error : new Error(String(error)),
+				error: error instanceof Error ? error : new BusinessRulesException(String(error)),
 			});
 			session.ruleConditionResult.set(rule.id, undefined);
 		} finally {
@@ -172,7 +182,7 @@ export default class Engine implements IEngine {
 			await this.logger.error({
 				message: `Error executing pre actions for rule`,
 				rule: rule.name,
-				error: error instanceof Error ? error : new Error(String(error)),
+				error: error instanceof Error ? error : new BusinessRulesException(String(error)),
 			});
 		} finally {
 			delegator.unset();
@@ -214,7 +224,7 @@ export default class Engine implements IEngine {
 			await this.logger.error({
 				message: `Error executing post actions for rule. Rule not fired`,
 				rule: rule.name,
-				error: error instanceof Error ? error : new Error(String(error)),
+				error: error instanceof Error ? error : new BusinessRulesException(String(error)),
 			});
 		} finally {
 			delegator.unset();
@@ -232,6 +242,7 @@ export default class Engine implements IEngine {
 			name: this.name,
 			description: this.description,
 			rules,
+			dataSchema: this.dataSchema,
 			createdAt: new Date().toISOString(),
 		};
 
@@ -243,7 +254,7 @@ export default class Engine implements IEngine {
 			await file.write(bytes);
 			await file.close();
 		} catch (error) {
-			throw new Error(`Error exporting the engine: ${error}`);
+			throw new BusinessRulesException(`Error exporting the engine: ${error}`);
 		}
 	}
 
@@ -255,10 +266,10 @@ export default class Engine implements IEngine {
 			const data = BSON.deserialize(bytes);
 			//TODO: check version
 			//TODO: check data structure
-			const engine = new Engine(data.name, data.rules, data.description, loggerOptions);
+			const engine = new Engine(data.name, data.rules, data.description, loggerOptions, data.dataSchema);
 			return engine;
 		} catch (error) {
-			throw new Error(`Error importing the engine: ${error}`);
+			throw new BusinessRulesException(`Error importing the engine: ${error}`);
 		}
 	}
 }

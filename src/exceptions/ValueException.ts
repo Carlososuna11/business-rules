@@ -1,8 +1,10 @@
-export default class ValueException extends Error {
-	// constructor(public id: string, public message: string) {}
-	constructor(id: string, message: string) {
+import BusinessRulesException from './BusinessRulesException';
+
+export default class ValueException extends BusinessRulesException {
+	name = 'ValueException';
+
+	constructor(message: string) {
 		super(message);
-		this.name = `ValueException in ${id}`;
 		Object.setPrototypeOf(this, ValueException.prototype);
 	}
 }

@@ -29,10 +29,10 @@ export default class Divide implements IOperator<number> {
 		await this.validateValue(leftOperand, 'leftOperand');
 
 		if (isNaN(Number(rightOperand))) {
-			throw new ValueException(this.id, `The value '${rightOperand}' is not a valid number.`);
+			throw new ValueException(`On ${this.id}. The value '${rightOperand}' is not a valid number.`);
 		}
 		if (isNaN(Number(leftOperand))) {
-			throw new ValueException(this.id, `The value '${leftOperand}' is not a valid number.`);
+			throw new ValueException(`On ${this.id}. The value '${leftOperand}' is not a valid number.`);
 		}
 
 		return Number(leftOperand) / Number(rightOperand);

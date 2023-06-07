@@ -22,6 +22,7 @@ import ToString from './ToString';
 import Trunc from './Trunc';
 import Upper from './Upper';
 import YearsFrom from './YearsFrom';
+import { BusinessRulesException } from '../../exceptions';
 
 // hashMap
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -35,7 +36,7 @@ function getFunctions(): {
 
 function registerFunction(id: string, _function: Constructor<IFunction<unknown>>): void {
 	if (functions[id]) {
-		throw new Error(`Function with id ${id} already registered.`);
+		throw new BusinessRulesException(`Function with id ${id} already registered.`);
 	}
 	functions[id] = _function;
 }

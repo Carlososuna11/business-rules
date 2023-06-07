@@ -1,6 +1,7 @@
 import { encode } from 'plantuml-encoder';
 import { promises as fs } from 'fs';
 import CONSTS from '../constants';
+import { BusinessRulesException } from '../exceptions';
 
 export function encodeDiagram(diagram: string) {
 	return encode(diagram);
@@ -16,13 +17,13 @@ export async function saveDiagram(diagram: string, path: string): Promise<void> 
 		const response = await fetch(url);
 		// Check if the response is successful
 		if (!response.ok) {
-			throw new Error(`Error donwloading the diagram: ${response.statusText}`);
+			throw new BusinessRulesException(`Error donwloading the diagram: ${response.statusText}`);
 		}
 		const blob = await response.blob();
 		const arrayBuffer = await blob.arrayBuffer();
 		const buffer = Buffer.from(arrayBuffer);
 		await fs.writeFile(path, buffer);
 	} catch (error) {
-		throw new Error(`Error donwloading the diagram: ${error}`);
+		throw new BusinessRulesException(`Error donwloading the diagram: ${error}`);
 	}
 }

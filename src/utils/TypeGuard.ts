@@ -1,5 +1,6 @@
 import { isCommand } from '../commands';
 import { TypeGuardsOptions } from '../types';
+import { BusinessRulesException } from '../exceptions';
 
 // string type guard
 export function isStringTypeGuard(value: unknown, raiseException = false): boolean {
@@ -7,7 +8,7 @@ export function isStringTypeGuard(value: unknown, raiseException = false): boole
 		return true;
 	}
 	if (raiseException) {
-		throw new Error(`Expected string, got ${typeof value}`);
+		throw new BusinessRulesException(`Expected string, got ${typeof value}`);
 	}
 	return false;
 }
@@ -18,7 +19,7 @@ export function isNumberTypeGuard(value: unknown, raiseException = false): boole
 		return true;
 	}
 	if (raiseException) {
-		throw new Error(`Expected number, got ${typeof value}`);
+		throw new BusinessRulesException(`Expected number, got ${typeof value}`);
 	}
 	return false;
 }
@@ -29,7 +30,7 @@ export function isBooleanTypeGuard(value: unknown, raiseException = false): bool
 		return true;
 	}
 	if (raiseException) {
-		throw new Error(`Expected boolean, got ${typeof value}`);
+		throw new BusinessRulesException(`Expected boolean, got ${typeof value}`);
 	}
 	return false;
 }
@@ -40,7 +41,7 @@ export function isObjectTypeGuard(value: unknown, raiseException = false): boole
 		return true;
 	}
 	if (raiseException) {
-		throw new Error(`Expected object, got ${typeof value}`);
+		throw new BusinessRulesException(`Expected object, got ${typeof value}`);
 	}
 	return false;
 }
@@ -51,7 +52,7 @@ export function isArrayTypeGuard(value: unknown, raiseException = false): boolea
 		return true;
 	}
 	if (raiseException) {
-		throw new Error(`Expected array, got ${typeof value}`);
+		throw new BusinessRulesException(`Expected array, got ${typeof value}`);
 	}
 	return false;
 }
@@ -62,7 +63,7 @@ export function isFunctionTypeGuard(value: unknown, raiseException = false): boo
 		return true;
 	}
 	if (raiseException) {
-		throw new Error(`Expected function, got ${typeof value}`);
+		throw new BusinessRulesException(`Expected function, got ${typeof value}`);
 	}
 	return false;
 }
@@ -73,7 +74,7 @@ export function isNullTypeGuard(value: unknown, raiseException = false): boolean
 		return true;
 	}
 	if (raiseException) {
-		throw new Error(`Expected null, got ${typeof value}`);
+		throw new BusinessRulesException(`Expected null, got ${typeof value}`);
 	}
 	return false;
 }
@@ -84,7 +85,7 @@ export function isUndefinedTypeGuard(value: unknown, raiseException = false): bo
 		return true;
 	}
 	if (raiseException) {
-		throw new Error(`Expected undefined, got ${typeof value}`);
+		throw new BusinessRulesException(`Expected undefined, got ${typeof value}`);
 	}
 	return false;
 }
@@ -95,7 +96,7 @@ export function isSymbolTypeGuard(value: unknown, raiseException = false): boole
 		return true;
 	}
 	if (raiseException) {
-		throw new Error(`Expected symbol, got ${typeof value}`);
+		throw new BusinessRulesException(`Expected symbol, got ${typeof value}`);
 	}
 	return false;
 }
@@ -106,7 +107,7 @@ export function isDateTypeGuard(value: unknown, raiseException = false): boolean
 		return true;
 	}
 	if (raiseException) {
-		throw new Error(`Expected date, got ${typeof value}`);
+		throw new BusinessRulesException(`Expected date, got ${typeof value}`);
 	}
 	return false;
 }
@@ -117,7 +118,7 @@ export function isCommandTypeGuard(value: unknown, raiseException = false): bool
 		return true;
 	}
 	if (raiseException) {
-		throw new Error(`Expected ICommand, got ${typeof value}`);
+		throw new BusinessRulesException(`Expected ICommand, got ${typeof value}`);
 	}
 	return false;
 }
@@ -128,7 +129,7 @@ export function isMapTypeGuard(value: unknown, raiseException = false): boolean 
 		return true;
 	}
 	if (raiseException) {
-		throw new Error(`Expected Map, got ${typeof value}`);
+		throw new BusinessRulesException(`Expected Map, got ${typeof value}`);
 	}
 	return false;
 }
@@ -139,7 +140,7 @@ export function isSetTypeGuard(value: unknown, raiseException = false): boolean 
 		return true;
 	}
 	if (raiseException) {
-		throw new Error(`Expected Set, got ${typeof value}`);
+		throw new BusinessRulesException(`Expected Set, got ${typeof value}`);
 	}
 	return false;
 }
@@ -167,7 +168,7 @@ export default class TypeGuard {
 		public extraTypeGuardsFunctions: Record<string, CallableFunction> = {}
 	) {
 		if (someTypeGuard.length === 0) {
-			throw new Error('Expected at least one type guard');
+			throw new BusinessRulesException('Expected at least one type guard');
 		}
 	}
 
@@ -186,7 +187,7 @@ export default class TypeGuard {
 		const result = results.some((result) => result === true);
 
 		if (!result && this.raiseException) {
-			throw new Error(
+			throw new BusinessRulesException(
 				`On ${commandName} command, ${keyName} key, expected ${this.someTypeGuard.join(' or ')}, got ${typeof value}`
 			);
 		}

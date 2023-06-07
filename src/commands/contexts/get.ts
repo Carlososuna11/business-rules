@@ -3,6 +3,7 @@ import { AbstractContextData } from '../../context';
 import { Data } from '../../types';
 import ICommand, { isCommand } from '../ICommand';
 import { TypeGuard } from '../../utils';
+import { BusinessRulesException } from '../../exceptions';
 
 export default class Get implements IContext<unknown> {
 	id = 'get';
@@ -38,11 +39,11 @@ export default class Get implements IContext<unknown> {
 
 			if (index !== undefined) {
 				if (!Array.isArray(value[propertyKey])) {
-					throw new Error(`Cannot access index ${index} of ${propertyKey}`);
+					throw new BusinessRulesException(`Cannot access index ${index} of ${propertyKey}`);
 				}
 				const valueArray = value[propertyKey] as unknown[];
 				if (valueArray.length <= index) {
-					throw new Error(`Index ${index} of ${propertyKey} is out of bounds`);
+					throw new BusinessRulesException(`Index ${index} of ${propertyKey} is out of bounds`);
 				}
 				if (i === keys.length - 1) return valueArray[index];
 				value = valueArray[index] as Data;

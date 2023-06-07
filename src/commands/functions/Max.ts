@@ -39,7 +39,7 @@ export default class Max implements IFunction<number> {
 					const toEvaluate = isCommand(operand) ? await operand.execute(context) : operand;
 					await this.validateOperand(toEvaluate, `operands[${index}]`);
 					if (isNaN(Number(toEvaluate))) {
-						throw new ValueException(this.id, `The value '${toEvaluate}' is not a valid number.`);
+						throw new ValueException(`On ${this.id}. The value '${toEvaluate}' is not a valid number.`);
 					}
 					return Number(toEvaluate);
 				})
@@ -53,7 +53,7 @@ export default class Max implements IFunction<number> {
 		await this.validateOperand(operands, 'operands');
 
 		if (isNaN(Number(operands))) {
-			throw new ValueException(this.id, `The value '${operands}' is not a valid number.`);
+			throw new ValueException(`On ${this.id}. The value '${operands}' is not a valid number.`);
 		}
 
 		return Number(operands);

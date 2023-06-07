@@ -1,5 +1,6 @@
 import { getOperators, getFunctions, getContextMethods, ICommand } from '../commands';
 import { ExpressionOptions } from '../types';
+import { BusinessRulesException } from '../exceptions';
 
 // Composite pattern
 export const parseCondition = (conditionStructure: object): ICommand<boolean> => {
@@ -18,11 +19,11 @@ export const parseCondition = (conditionStructure: object): ICommand<boolean> =>
 
 		if (!options[type]) return expression;
 		if (!options[type][name]) {
-			throw new Error(`Unknown ${type}: ${name}`);
+			throw new BusinessRulesException(`Unknown ${type}: ${name}`);
 		}
 		// if args is not an array, raise an error
 		if (!Array.isArray(args)) {
-			throw new Error(`Arguments for ${token} must be an array`);
+			throw new BusinessRulesException(`Arguments for ${token} must be an array`);
 		}
 
 		const Class = options[type][name];

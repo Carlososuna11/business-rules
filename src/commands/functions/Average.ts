@@ -43,7 +43,7 @@ export default class Average implements IFunction<number> {
 					await this.validateValue(toEvaluate, `operands[${index}]`);
 
 					if (isNaN(Number(toEvaluate))) {
-						throw new ValueException(this.id, `The value '${toEvaluate}' is not a valid number.`);
+						throw new ValueException(`On ${this.id} The value '${toEvaluate}' is not a valid number.`);
 					}
 
 					return Number(toEvaluate);
@@ -58,7 +58,7 @@ export default class Average implements IFunction<number> {
 		await this.validateListValue(operands, 'operands');
 
 		if (isNaN(Number(operands))) {
-			throw new ValueException(this.id, `The value '${operands}' is not a valid number.`);
+			throw new ValueException(`On ${this.id}. The value '${operands}' is not a valid number.`);
 		}
 
 		return Number(operands);
