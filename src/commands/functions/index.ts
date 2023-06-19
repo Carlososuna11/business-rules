@@ -21,7 +21,8 @@ import ToDate from './ToDate';
 import ToString from './ToString';
 import Trunc from './Trunc';
 import Upper from './Upper';
-import YearsFrom from './YearsFrom';
+import YearsFromNow from './YearsFromNow';
+import Now from './Now';
 import { BusinessRulesException } from '../../exceptions';
 
 // hashMap
@@ -56,12 +57,13 @@ registerFunction('parseFloat', ParseFloat);
 registerFunction('parseInt', ParseInt);
 registerFunction('regex', Regex);
 registerFunction('round', Round);
-registerFunction('standarDesviation', StandardDesviation);
+registerFunction('standardDesviation', StandardDesviation);
 registerFunction('toBoolean', ToBoolean);
 registerFunction('toDate', ToDate);
 registerFunction('ToString', ToString);
 registerFunction('trunc', Trunc);
 registerFunction('upper', Upper);
-registerFunction('yearsFrom', YearsFrom);
+registerFunction('yearsFromNow', YearsFromNow);
+registerFunction('now', Now);
 
 export { IFunction, getFunctions, registerFunction };
