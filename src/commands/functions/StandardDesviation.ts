@@ -5,15 +5,35 @@ import ICommand, { isCommand } from '../ICommand';
 import IFunction from './IFunction';
 
 export default class StandardDesviation implements IFunction<number> {
+	/**
+	 * The id of the function.
+	 */
 	id = 'standardDesviation';
 
+	/**
+	 * The TypeGuard instance used to validate the types of the operands.
+	 */
 	typeGuard: TypeGuard = new TypeGuard(['number', 'string']);
+
+	/**
+	 * The values to be used as operands in the function execution.
+	 */
 	private readonly values:
 		| (ICommand<number | string> | number | string)[]
 		| ICommand<(number | string)[]>
 		| ICommand<number | string>;
 
+	/**
+	 * Creates an instance of StandardDesviation.
+	 * @param {...((ICommand<number | string> | number | string)[])} values The values to be used as operands in the function execution.
+	 * @memberof StandardDesviation
+	 */
 	constructor(...values: (ICommand<number | string> | number | string)[]);
+	/**
+	 * Creates an instance of StandardDesviation.
+	 * @param {(ICommand<(number | string)[]> | ICommand<number | string> | number | string)} values The values to be used as operands in the function execution.
+	 * @memberof StandardDesviation
+	 */
 	constructor(values: ICommand<(number | string)[]> | ICommand<number | string> | number | string);
 	constructor(...args: unknown[]) {
 		if (args.length === 1) {
@@ -25,10 +45,25 @@ export default class StandardDesviation implements IFunction<number> {
 		}
 	}
 
+	/**
+	 * Validates a single operand to ensure it is a number or a string.
+	 *
+	 * @private
+	 * @param {(number | string)} value The value to be validated.
+	 * @param {string} operandName The name of the operand being validated.
+	 * @memberof StandardDesviation
+	 */
 	private async validateOperand(value: number | string, operandName: string): Promise<void> {
 		await this.typeGuard.evaluate(value, this.id, operandName);
 	}
 
+	/**
+	 * Executes the standard deviation function with the provided operands and returns the result.
+	 *
+	 * @param {AbstractContextData} context The context data to be used during the execution.
+	 * @returns {Promise<number>} The result of the standard deviation function execution.
+	 * @memberof StandardDesviation
+	 */
 	async execute(context: AbstractContextData): Promise<number> {
 		const operands = isCommand(this.values) ? await this.values.execute(context) : this.values;
 
@@ -61,6 +96,12 @@ export default class StandardDesviation implements IFunction<number> {
 		return 0;
 	}
 
+	/**
+	 * Returns a string representation of the standard deviation function with the provided operands.
+	 *
+	 * @returns {string} The string representation of the function.
+	 * @memberof StandardDesviation
+	 */
 	toString(): string {
 		const str = isCommand(this.values) ? this.values.toString() : this.values.map((e) => e.toString()).join(`, `);
 		return `${this.id}(${str})`;

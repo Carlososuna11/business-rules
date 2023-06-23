@@ -19,14 +19,43 @@ import { BSON, ObjectId } from 'bson';
 import type { JSONSchema7 } from 'json-schema';
 import { BusinessRulesException } from '../exceptions';
 
+/**
+ * Represents a business rules engine that can evaluate rules based on input data.
+ */
 export default class Engine implements IEngine {
+	/**
+	 * The name of the engine.
+	 */
 	public name: string;
+	/**
+	 * The JSON Schema defining the expected data input format.
+	 */
 	public dataSchema: JSONSchema7;
+	/**
+	 * A description of the engine.
+	 */
 	public description: string;
+	/**
+	 * The list of rules to be evaluated by the engine.
+	 */
 	public rules: Rule[];
+	/**
+	 * A map containing the rules mapped by their ID.
+	 */
 	public rulesbyId: Map<string, Rule>;
+	/**
+	 * The logger used by the engine.
+	 */
 	public logger: Logger;
 
+	/**
+	 * Creates a new instance of the engine.
+	 * @param name - The name of the engine.
+	 * @param rules - The list of rules to be evaluated by the engine.
+	 * @param description - A description of the engine.
+	 * @param loggerOptions - Options for the logger used by the engine.
+	 * @param dataSchema - The JSON Schema defining the expected data input format.
+	 */
 	constructor(
 		name: string,
 		rules: RuleObject[],
@@ -43,6 +72,10 @@ export default class Engine implements IEngine {
 		this.logger = new Logger(loggerOptions);
 	}
 
+	/**
+	 * Returns an object representation of the engine.
+	 * @returns An object representation of the engine.
+	 */
 	public toObject(): EngineObject {
 		return {
 			name: this.name,
@@ -51,6 +84,10 @@ export default class Engine implements IEngine {
 		};
 	}
 
+	/**
+	 * Adds a list of rules to the engine.
+	 * @param rules - The list of rules to be added.
+	 */
 	public addRules(rules: RuleObject[]): void {
 		rules.forEach((rule) => {
 			const newRule = new Rule(rule);
@@ -59,12 +96,23 @@ export default class Engine implements IEngine {
 		});
 	}
 
+	/**
+	 * Returns a string representation of the engine in a diagram format.
+	 * @returns A string representation of the engine in a diagram format.
+	 */
 	public toDiagram(): string {
 		return `@startmindmap\n<style>\nnode {\nPadding 12\nHorizontalAlignment center\nRoundCorner 40\nMaximumWidth 200\n}\n:depth(2) {\nMaximumWidth 500\n}\n:depth(3) {\nMaximumWidth 500\n}\n:depth(4) {\nMaximumWidth 500\n}\n<style>\n* ==Engine\nright side\n${this.rules
 			.map((rule) => rule.getDiagramPart())
 			.join('\n')}\n@endmindmap`;
 	}
 
+	/**
+	 * Evaluates the rules against the input data.
+	 * @param obj - The input data to be evaluated.
+	 * @param strategies - The conflict resolution strategies to be used.
+	 * @param delegatorOptions - Options for the delegator used by the engine.
+	 * @returns The results of the engine evaluation.
+	 */
 	public async evaluate(
 		obj: object,
 		strategies: ConflictResolutionStrategies[] = [],
@@ -110,6 +158,14 @@ export default class Engine implements IEngine {
 		};
 	}
 
+	/**
+	 * Evaluates a single rule using the input context.
+	 * @param context - The context data containing the input data for the rule evaluation.
+	 * @param rule - The rule to be evaluated.
+	 * @param delegator - The delegator used by the engine.
+	 * @param session - The session used by the engine.
+	 * @param delegatorFunction - The function used to evaluate the delegator.
+	 */
 	private async evaluateRule(
 		context: ContextData,
 		rule: Rule,
@@ -158,6 +214,13 @@ export default class Engine implements IEngine {
 		}
 	}
 
+	/**
+	 * Fires the pre-actions of a rule.
+	 * @param context - The context data containing the input data for the pre-actions.
+	 * @param rule - The rule whose pre-actions should be fired.
+	 * @param delegator - The delegator used by the engine.
+	 * @param delegatorFunction - The function used to evaluate the delegator.
+	 */
 	private async firePreAction(
 		context: ContextData,
 		rule: Rule,
@@ -188,6 +251,15 @@ export default class Engine implements IEngine {
 			delegator.unset();
 		}
 	}
+
+	/**
+	 * Fires the post-actions of a rule.
+	 * @param context - The context data containing the input data for the post-actions.
+	 * @param rule - The rule whose post-actions should be fired.
+	 * @param delegator - The delegator used by the engine.
+	 * @param session - The session used by the engine.
+	 * @param delegatorFunction - The function used to evaluate the delegator.
+	 */
 	private async firePostAction(
 		context: ContextData,
 		rule: Rule,
@@ -231,6 +303,11 @@ export default class Engine implements IEngine {
 		}
 	}
 
+	/**
+	 * Exports the engine to a TSBR file.
+	 * @param path - The path where the file should be saved.
+	 * @param name - The name of the file.
+	 */
 	public async export(path: string, name: string): Promise<void> {
 		// exports the engine to a TSBR file
 
@@ -258,6 +335,12 @@ export default class Engine implements IEngine {
 		}
 	}
 
+	/**
+	 * Imports an engine from a TSBR file.
+	 * @param filePath - The path of the file to be imported.
+	 * @param loggerOptions - Options for the logger used by the engine.
+	 * @returns The imported engine.
+	 */
 	public static async import(filePath: string, loggerOptions: LoggerOptions = {}): Promise<Engine> {
 		// imports the engine from a TSBR file
 		try {

@@ -3,6 +3,12 @@ import { ExpressionOptions } from '../types';
 import { BusinessRulesException } from '../exceptions';
 
 // Composite pattern
+/**
+ * Parses a condition structure object into a command that evaluates to a boolean value.
+ * @param {object} conditionStructure - The condition structure object to parse.
+ * @returns {ICommand<boolean>} - The command that evaluates to a boolean value.
+ * @throws {BusinessRulesException} - If an unknown type or function is encountered, or if the arguments for a function are not an array.
+ */
 export const parseCondition = (conditionStructure: object): ICommand<boolean> => {
 	const options: ExpressionOptions = {
 		$op: getOperators(),

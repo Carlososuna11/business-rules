@@ -1,4 +1,4 @@
-class Delegator<T extends (...args: unknown[]) => unknown> {
+export default class Delegator<T extends (...args: unknown[]) => unknown> {
 	private to: T | null;
 
 	constructor() {
@@ -21,5 +21,3 @@ class Delegator<T extends (...args: unknown[]) => unknown> {
 		return typeof segment === 'string' ? segment.toString() : segment;
 	}
 }
-
-export default Delegator;

@@ -3,13 +3,28 @@ import { ExpressionOptions } from '../types';
 import { BusinessRulesException } from '../exceptions';
 
 // Composite pattern
+/**
+ * Parses an action structure into a ICommand object or returns the original object if it cannot be parsed
+ * @param actionStructure - The structure of the action to be parsed
+ * @returns The parsed ICommand object or the original object if it cannot be parsed
+ * @throws {BusinessRulesException} If an unknown type is encountered in the action structure
+ * @throws {BusinessRulesException} If the arguments for a token are not in an array format
+ */
 const parseAction = (actionStructure: object): ICommand<unknown> => {
+	// An options object that contains the supported operators, functions and context methods
 	const options: ExpressionOptions = {
 		$op: getOperators(),
 		$fn: getFunctions(),
 		$ctx: getContextMethods(),
 	};
 
+	/**
+	 * Parses an expression object into an ICommand object or returns the original object if it cannot be parsed
+	 * @param expression - The expression object to be parsed
+	 * @returns The parsed ICommand object or the original object if it cannot be parsed
+	 * @throws {BusinessRulesException} If an unknown type is encountered in the expression object
+	 * @throws {BusinessRulesException} If the arguments for a token are not in an array format
+	 */
 	const parseExpression = (expression: object): ICommand<unknown> | object => {
 		const entries = Object.entries(expression);
 		if (!entries.length) return expression;
@@ -28,8 +43,6 @@ const parseAction = (actionStructure: object): ICommand<unknown> => {
 
 		const Class = options[type][name];
 		const subExpressions = (args as unknown[]).map((arg: unknown) => {
-			// if (Array.isArray(arg))
-			// 	return arg.map((subArg) => (typeof subArg === 'object' ? parseExpression(subArg) : subArg));
 			if (typeof arg === 'object' && arg) return parseExpression(arg);
 			return arg;
 		});

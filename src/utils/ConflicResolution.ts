@@ -1,5 +1,11 @@
 import { Data } from '../types';
 
+/**
+ * Calculates the specificity level of a given data object recursively
+ * @param data The data object to calculate the specificity level for
+ * @param nivel The starting level of specificity (default 0)
+ * @returns The specificity level of the data object
+ */
 export function specificityLevel(data: Data, nivel = 0): number {
 	let length = nivel;
 

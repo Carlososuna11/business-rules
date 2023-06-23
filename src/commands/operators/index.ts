@@ -41,7 +41,7 @@ function registerOperator(id: string, operator: Constructor<IOperator<unknown>>)
 // Todo: register operators
 registerOperator('additon', Addition);
 registerOperator('and', And);
-registerOperator('betwwen', Between);
+registerOperator('between', Between);
 registerOperator('contain', Contain);
 registerOperator('divide', Divide);
 registerOperator('equal', Equal);
@@ -58,7 +58,7 @@ registerOperator('notEqual', NotEqual);
 registerOperator('or', Or);
 registerOperator('remainder', Remainder);
 registerOperator('root', Root);
-registerOperator('subtraction', Substraction);
+registerOperator('substraction', Substraction);
 registerOperator('xor', Xor);
 
 export { IOperator, getOperators, registerOperator };

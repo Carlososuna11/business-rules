@@ -1,0 +1,7 @@
+{
+	"out": "docs",
+	"entryPoints": ["src/index.ts"],
+	"tsconfig": "tsconfig.json",
+	"name": "TypeScript Business Rules Engine",
+	"theme": "default"
+}
