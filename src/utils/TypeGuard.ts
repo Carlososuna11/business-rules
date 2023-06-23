@@ -2,7 +2,13 @@ import { isCommand } from '../commands';
 import { TypeGuardsOptions } from '../types';
 import { BusinessRulesException } from '../exceptions';
 
-// string type guard
+/**
+ * Type guard for string values
+ * @param value - The value to evaluate
+ * @param raiseException - Whether to raise an exception if the value is not a string
+ * @returns Whether the value is a string or not
+ * @throws BusinessRulesException if raiseException is true and the value is not a string
+ */
 export function isStringTypeGuard(value: unknown, raiseException = false): boolean {
 	if (typeof value === 'string') {
 		return true;
@@ -13,7 +19,13 @@ export function isStringTypeGuard(value: unknown, raiseException = false): boole
 	return false;
 }
 
-// number type guard
+/**
+ * Type guard for number values
+ * @param value - The value to evaluate
+ * @param raiseException - Whether to raise an exception if the value is not a number
+ * @returns Whether the value is a number or not
+ * @throws BusinessRulesException if raiseException is true and the value is not a number
+ */
 export function isNumberTypeGuard(value: unknown, raiseException = false): boolean {
 	if (typeof value === 'number') {
 		return true;
@@ -24,7 +36,13 @@ export function isNumberTypeGuard(value: unknown, raiseException = false): boole
 	return false;
 }
 
-// boolean type guard
+/**
+ * Type guard for boolean values
+ * @param value - The value to evaluate
+ * @param raiseException - Whether to raise an exception if the value is not a boolean
+ * @returns Whether the value is a boolean or not
+ * @throws BusinessRulesException if raiseException is true and the value is not a boolean
+ */
 export function isBooleanTypeGuard(value: unknown, raiseException = false): boolean {
 	if (typeof value === 'boolean') {
 		return true;
@@ -35,7 +53,13 @@ export function isBooleanTypeGuard(value: unknown, raiseException = false): bool
 	return false;
 }
 
-// object type guard
+/**
+ * Type guard for object values
+ * @param value - The value to evaluate
+ * @param raiseException - Whether to raise an exception if the value is not an object
+ * @returns Whether the value is an object or not
+ * @throws BusinessRulesException if raiseException is true and the value is not an object
+ */
 export function isObjectTypeGuard(value: unknown, raiseException = false): boolean {
 	if (typeof value === 'object') {
 		return true;
@@ -46,7 +70,13 @@ export function isObjectTypeGuard(value: unknown, raiseException = false): boole
 	return false;
 }
 
-// array type guard
+/**
+ * Type guard for array values
+ * @param value - The value to evaluate
+ * @param raiseException - Whether to raise an exception if the value is not an array
+ * @returns Whether the value is an array or not
+ * @throws BusinessRulesException if raiseException is true and the value is not an array
+ */
 export function isArrayTypeGuard(value: unknown, raiseException = false): boolean {
 	if (Array.isArray(value)) {
 		return true;
@@ -57,7 +87,13 @@ export function isArrayTypeGuard(value: unknown, raiseException = false): boolea
 	return false;
 }
 
-// function type guard
+/**
+ * Type guard for function values
+ * @param value - The value to evaluate
+ * @param raiseException - Whether to raise an exception if the value is not a function
+ * @returns Whether the value is a function or not
+ * @throws BusinessRulesException if raiseException is true and the value is not a function
+ */
 export function isFunctionTypeGuard(value: unknown, raiseException = false): boolean {
 	if (typeof value === 'function') {
 		return true;
@@ -68,7 +104,13 @@ export function isFunctionTypeGuard(value: unknown, raiseException = false): boo
 	return false;
 }
 
-// null type guard
+/**
+ * Type guard for null values
+ * @param value - The value to evaluate
+ * @param raiseException - Whether to raise an exception if the value is not null
+ * @returns Whether the value is null or not
+ * @throws BusinessRulesException if raiseException is true and the value is not null
+ */
 export function isNullTypeGuard(value: unknown, raiseException = false): boolean {
 	if (value === null) {
 		return true;
@@ -79,7 +121,13 @@ export function isNullTypeGuard(value: unknown, raiseException = false): boolean
 	return false;
 }
 
-// undefined type guard
+/**
+ * Type guard for undefined values
+ * @param value - The value to evaluate
+ * @param raiseException - Whether to raise an exception if the value is not undefined
+ * @returns Whether the value is undefined or not
+ * @throws BusinessRulesException if raiseException is true and the value is not undefined
+ */
 export function isUndefinedTypeGuard(value: unknown, raiseException = false): boolean {
 	if (value === undefined) {
 		return true;
@@ -90,7 +138,13 @@ export function isUndefinedTypeGuard(value: unknown, raiseException = false): bo
 	return false;
 }
 
-// symbol type guard
+/**
+ * Type guard for symbol values
+ * @param value - The value to evaluate
+ * @param raiseException - Whether to raise an exception if the value is not a symbol
+ * @returns Whether the value is a symbol or not
+ * @throws BusinessRulesException if raiseException is true and the value is not a symbol
+ */
 export function isSymbolTypeGuard(value: unknown, raiseException = false): boolean {
 	if (typeof value === 'symbol') {
 		return true;
@@ -101,7 +155,13 @@ export function isSymbolTypeGuard(value: unknown, raiseException = false): boole
 	return false;
 }
 
-// date type guard
+/**
+ * Type guard for date values
+ * @param value - The value to evaluate
+ * @param raiseException - Whether to raise an exception if the value is not a Date object
+ * @returns Whether the value is a Date object or not
+ * @throws BusinessRulesException if raiseException is true and the value is not a Date object
+ */
 export function isDateTypeGuard(value: unknown, raiseException = false): boolean {
 	if (value instanceof Date) {
 		return true;
@@ -112,7 +172,13 @@ export function isDateTypeGuard(value: unknown, raiseException = false): boolean
 	return false;
 }
 
-// type guard for ICommand
+/**
+ * Type guard for ICommand values
+ * @param value - The value to evaluate
+ * @param raiseException - Whether to raise an exception if the value is not an ICommand object
+ * @returns Whether the value is an ICommand object or not
+ * @throws BusinessRulesException if raiseException is true and the value is not an ICommand object
+ */
 export function isCommandTypeGuard(value: unknown, raiseException = false): boolean {
 	if (isCommand(value)) {
 		return true;
@@ -123,7 +189,13 @@ export function isCommandTypeGuard(value: unknown, raiseException = false): bool
 	return false;
 }
 
-// type guard Map
+/**
+ * Type guard for Map values
+ * @param value - The value to evaluate
+ * @param raiseException - Whether to raise an exception if the value is not a Map object
+ * @returns Whether the value is a Map object or not
+ * @throws BusinessRulesException if raiseException is true and the value is not a Map object
+ */
 export function isMapTypeGuard(value: unknown, raiseException = false): boolean {
 	if (value instanceof Map) {
 		return true;
@@ -134,7 +206,13 @@ export function isMapTypeGuard(value: unknown, raiseException = false): boolean 
 	return false;
 }
 
-// type guard Set
+/**
+ * Type guard for Set values
+ * @param value - The value to evaluate
+ * @param raiseException - Whether to raise an exception if the value is not a Set object
+ * @returns Whether the value is a Set object or not
+ * @throws BusinessRulesException if raiseException is true and the value is not a Set object
+ */
 export function isSetTypeGuard(value: unknown, raiseException = false): boolean {
 	if (value instanceof Set) {
 		return true;
@@ -146,6 +224,9 @@ export function isSetTypeGuard(value: unknown, raiseException = false): boolean 
 }
 
 export default class TypeGuard {
+	/**
+	 * Default type guards
+	 */
 	static defaultTypeGuards: Record<string, CallableFunction> = {
 		string: isStringTypeGuard,
 		number: isNumberTypeGuard,
@@ -162,6 +243,12 @@ export default class TypeGuard {
 		set: isSetTypeGuard,
 	};
 
+	/**
+	 * TypeGuard class constructor
+	 * @param someTypeGuard - An array of type guards to evaluate the value against
+	 * @param raiseException - Whether to raise an exception if the value does not pass any of the type guards
+	 * @param extraTypeGuardsFunctions - Extra type guard functions to include in the evaluation
+	 */
 	constructor(
 		public someTypeGuard: (TypeGuardsOptions | string)[] = [],
 		public raiseException = true,
@@ -172,6 +259,14 @@ export default class TypeGuard {
 		}
 	}
 
+	/**
+	 * Evaluates a value against the type guards
+	 * @param value - The value to evaluate
+	 * @param commandName - The name of the command being evaluated
+	 * @param keyName - The name of the key being evaluated
+	 * @returns Whether the value passes any of the type guards or not
+	 * @throws BusinessRulesException if raiseException is true and the value doesn't pass any of the type guards
+	 */
 	async evaluate(value: unknown, commandName: string, keyName: string): Promise<boolean> {
 		const results = await Promise.all(
 			this.someTypeGuard.map(async (typeGuard) => {

@@ -1,6 +1,6 @@
 {
 	"name": "typescript-business-rules-engine",
-	"version": "1.1.1",
+	"version": "1.1.11",
 	"description": "A Typescript rule engine where rules are defined in JSON format.",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
@@ -8,7 +8,9 @@
 		"commit": "cz",
 		"compile": "tsc",
 		"dev": "ts-node-dev --respawn --transpile-only --no-notify src/index.ts",
+		"release:publish": "tsc && npm pack && npm publish --access public && rm -rf *.tgz",
 		"release": "standard-version --no-verify",
+		"generate-docs": "typedoc",
 		"lint": "prettier --ignore-path .gitignore --check --plugin-search-dir=. . && eslint --ignore-path .gitignore .",
 		"format": "prettier --write \"src/**/*.ts\""
 	},
@@ -37,6 +39,7 @@
 		"standard-version": "^9.5.0",
 		"ts-node-dev": "^2.0.0",
 		"tslib": "^2.5.0",
+		"typedoc": "^0.24.8",
 		"typescript": "^5.0.4"
 	},
 	"dependencies": {

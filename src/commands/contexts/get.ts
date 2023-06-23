@@ -6,16 +6,34 @@ import { TypeGuard } from '../../utils';
 import { BusinessRulesException } from '../../exceptions';
 
 export default class Get implements IContext<unknown> {
+	/**
+	 * Identifier of the Get context
+	 */
 	id = 'get';
 
 	private typeGuard: TypeGuard = new TypeGuard(['string']);
 
+	/**
+	 * Creates a new instance of the Get context
+	 * @param {ICommand<string> | string} key - The key to be retrieved from the context data
+	 */
 	constructor(private readonly key: ICommand<string> | string) {}
 
+	/**
+	 * Validates that the operand is a string
+	 * @param {string} value - The value to be validated
+	 * @param {string} operandName - The name of the operand
+	 * @returns {Promise<void>}
+	 */
 	private async validateOperand(value: string, operandName: string): Promise<void> {
 		await this.typeGuard.evaluate(value, this.id, operandName);
 	}
 
+	/**
+	 * Executes the Get context
+	 * @param {AbstractContextData} context - The context data
+	 * @returns {Promise<unknown>} - The value retrieved from the context data
+	 */
 	async execute(context: AbstractContextData): Promise<unknown> {
 		const data = context.getContextData();
 		const key = isCommand(this.key) ? await this.key.execute(context) : this.key;
@@ -55,6 +73,10 @@ export default class Get implements IContext<unknown> {
 		}
 	}
 
+	/**
+	 * Returns the string representation of the Get context
+	 * @returns {string} - The string representation of the key
+	 */
 	toString(): string {
 		return `${this.key}`;
 	}

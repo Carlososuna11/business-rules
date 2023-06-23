@@ -12,5 +12,6 @@
 		"extraFileExtensions": [".svelte"]
 	},
 	"plugins": ["@typescript-eslint"],
-	"rules": {}
+	"rules": {},
+	"ignorePatterns": ["node_modules", "dist", "docs"]
 }

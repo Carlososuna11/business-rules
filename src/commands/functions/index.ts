@@ -23,18 +23,35 @@ import Trunc from './Trunc';
 import Upper from './Upper';
 import YearsFromNow from './YearsFromNow';
 import Now from './Now';
+import MaxObject from './MaxObject';
+import MinObject from './MinObject';
+import GetElement from './GetElement';
+import GetProperty from './GetProperty';
+
 import { BusinessRulesException } from '../../exceptions';
 
-// hashMap
+/**
+ * HashMap containing all the registered functions.
+ */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const functions: { [key: string]: Constructor<IFunction<unknown>> } = {};
 
+/**
+ * Returns a hashMap containing all the registered functions.
+ * @returns A hashMap containing all the registered functions.
+ */
 function getFunctions(): {
 	[key: string]: Constructor<IFunction<unknown>>;
 } {
 	return functions;
 }
 
+/**
+ * Registers a new function with the given id and constructor.
+ * @param id - The id of the function to register.
+ * @param _function - The constructor of the function to register.
+ * @throws Throws an exception if a function with the given id is already registered.
+ */
 function registerFunction(id: string, _function: Constructor<IFunction<unknown>>): void {
 	if (functions[id]) {
 		throw new BusinessRulesException(`Function with id ${id} already registered.`);
@@ -65,5 +82,9 @@ registerFunction('trunc', Trunc);
 registerFunction('upper', Upper);
 registerFunction('yearsFromNow', YearsFromNow);
 registerFunction('now', Now);
+registerFunction('maxObject', MaxObject);
+registerFunction('minObject', MinObject);
+registerFunction('getElement', GetElement);
+registerFunction('getProperty', GetProperty);
 
 export { IFunction, getFunctions, registerFunction };

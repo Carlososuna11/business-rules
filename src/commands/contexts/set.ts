@@ -1,3 +1,7 @@
+/**
+ * Represents a command that sets a value in the context data.
+ * @implements {IContext<void>}
+ */
 import IContext from './IContext';
 import { Data } from '../../types';
 import { AbstractContextData } from '../../context';
@@ -5,9 +9,23 @@ import ICommand, { isCommand } from '../ICommand';
 import { BusinessRulesException } from '../../exceptions';
 
 export default class Set implements IContext<void> {
+	/**
+	 * The unique identifier of the Set command.
+	 */
 	id = 'set';
+
+	/**
+	 * Creates an instance of Set.
+	 * @param {string} key - The key representing the location in the context data where the value will be set.
+	 * @param {ICommand<unknown> | unknown} value - The value to be set in the context data at the specified location.
+	 */
 	constructor(private key: string, private value: ICommand<unknown> | unknown) {}
 
+	/**
+	 * Executes the Set command by setting the specified value in the context data at the specified location.
+	 * @param {AbstractContextData} context - The context data where the value will be set.
+	 * @returns {Promise<void>} A Promise that resolves when the value has been set in the context data.
+	 */
 	async execute(context: AbstractContextData): Promise<void> {
 		const data = context.getContextData();
 		const keys = this.key.split('.');
@@ -48,6 +66,10 @@ export default class Set implements IContext<void> {
 		}
 	}
 
+	/**
+	 * Returns a string representation of the Set command.
+	 * @returns {string} A string representation of the Set command.
+	 */
 	toString(): string {
 		return `${this.key} := ${isCommand(this.value) ? this.value.toString() : this.value}`;
 	}
