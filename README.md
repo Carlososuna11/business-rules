@@ -33,6 +33,7 @@ const facts = {
 
 const rules = [
 	{
+		// if data.user.stars >= 200 then data.user.mood = 'great'
 		name: 'Mood Great',
 		description: 'mood is great if 200 stars or more',
 		priority: 0,
@@ -54,6 +55,7 @@ const rules = [
 		],
 	},
 	{
+		// if data.user.mood === 'great && data.weather.temperature >= 20 && !data.weather.rainy then data.goWalking = true
 		name: 'go for wak',
 		description: 'go for a walk if mood is great and the weather is fine',
 		priority: 0,
@@ -90,6 +92,28 @@ const rules = [
 		postActions: [
 			{
 				'$ctx.set': ['data.goWalking', true],
+			},
+		],
+	},
+	{
+		// if wheater.temperature < 20 then data.user.mood = 'bad'
+		name: 'Mood Bad',
+		description: 'mood is bad if temperature is below 20',
+		priority: 0,
+		final: false,
+		activationGroup: '',
+		condition: {
+			'$op.lessThan': [
+				{
+					'$ctx.get': ['data.weather.temperature'],
+				},
+				20,
+			],
+		},
+		preActions: [],
+		postActions: [
+			{
+				'$ctx.set': ['data.user.mood', 'bad'],
 			},
 		],
 	},
